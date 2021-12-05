@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { IArticle } from '../types';
+import * as React from 'react'
+import { IArticle } from '../types'
 
 type Props = {
-  article: IArticle;
-  deleteArticle: (id: string) => void;
-};
+  article: IArticle
+  deleteArticle: (id: string) => void
+}
 
 const Article = ({ article, deleteArticle }: Props) => {
   return (
@@ -21,7 +21,7 @@ const Article = ({ article, deleteArticle }: Props) => {
         Delete
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default Article;
+export default Article

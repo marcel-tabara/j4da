@@ -1,10 +1,10 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import utilStyles from '../styles/utils.module.css';
-import styles from './layout.module.css';
+import Head from 'next/head'
+import Link from 'next/link'
+import utilStyles from '../styles/utils.module.css'
+import styles from './layout.module.css'
 
-const name = 'Ryland';
-export const siteTitle = 'Next.js Sample Website';
+const name = 'Ryland'
+export const siteTitle = 'Next.js Sample Website'
 
 export default function Layout({ children, home }) {
   return (
@@ -36,5 +36,5 @@ export default function Layout({ children, home }) {
         </div>
       )}
     </div>
-  );
+  )
 }

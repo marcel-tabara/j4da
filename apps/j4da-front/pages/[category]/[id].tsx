@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import Layout from '../../components/Layout';
-import { IArticle } from '../../types';
+import Head from 'next/head'
+import Layout from '../../components/Layout'
+import { IArticle } from '../../types'
 
 export default function Article({ postData }) {
   return (
@@ -35,7 +35,7 @@ export default function Article({ postData }) {
       <br />
       <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
     </Layout>
-  );
+  )
 }
 
 // export async function getStaticPaths() {
@@ -47,12 +47,12 @@ export default function Article({ postData }) {
 // }
 
 export async function getStaticProps() {
-  const res = await fetch('http://localhost:3333/api/article/articles');
-  const articles: IArticle[] = await res.json();
+  const res = await fetch('http://localhost:3333/api/article/articles')
+  const articles: IArticle[] = await res.json()
 
   return {
     props: {
       articles,
     },
-  };
+  }
 }
