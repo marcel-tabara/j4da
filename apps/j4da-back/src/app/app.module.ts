@@ -4,6 +4,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ArticleModule } from './article/article.module'
 import { CategoryModule } from './category/category.module'
+import { KeywordModule } from './keyword/keyword.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CategoryModule } from './category/category.module'
     }),
     ArticleModule,
     CategoryModule,
+    KeywordModule,
   ],
   controllers: [AppController],
   providers: [AppService],
