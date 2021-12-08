@@ -1,10 +1,10 @@
 import { Document } from 'mongoose'
 
-export interface Article extends Document {
+export interface Articles extends Document {
   readonly total: number
   readonly skip: number
   readonly limit: number
-  readonly articles: [
+  readonly data: [
     {
       readonly title: string
       readonly description: string

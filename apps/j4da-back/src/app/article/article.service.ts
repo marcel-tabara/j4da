@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { ArticleDTO } from './dto/article.dto'
+import { PaginationDto } from './dto/pagination.dto'
 import { Article } from './interfaces/article.interface'
 
 @Injectable()
@@ -10,8 +11,15 @@ export class ArticleService {
     @InjectModel('Article') private readonly articleModel: Model<Article>
   ) {}
 
-  async find(): Promise<Article[]> {
-    const articles = await this.articleModel.find().exec()
+  async find(paginationQuery: PaginationDto): Promise<Article[]> {
+    const { limit, skip, sort } = paginationQuery
+    const articles = await this.articleModel
+      .find()
+      .sort(sort)
+      .skip(2)
+      .limit(limit)
+      .exec()
+
     return articles
   }
 
@@ -20,7 +28,7 @@ export class ArticleService {
     return article
   }
 
-  async add(articleDTO: ArticleDTO): Promise<Article> {
+  async create(articleDTO: ArticleDTO): Promise<Article> {
     const newArticle = await new this.articleModel(articleDTO)
     return newArticle.save()
   }
@@ -34,7 +42,7 @@ export class ArticleService {
     return editedArticle
   }
 
-  async findByIdAndRemove(articleID): Promise<unknown> {
+  async findByIdAndRemove(articleID): Promise<Article> {
     const deletedArticle = await this.articleModel.findByIdAndRemove(articleID)
     return deletedArticle
   }

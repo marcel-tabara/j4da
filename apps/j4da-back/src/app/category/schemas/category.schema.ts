@@ -3,4 +3,10 @@ import * as mongoose from 'mongoose'
 export const CategorySchema = new mongoose.Schema({
   title: String,
   description: String,
+  subcategories: [
+    {
+      title: String,
+      description: String,
+    },
+  ],
 })

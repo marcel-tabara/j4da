@@ -4,7 +4,7 @@ import AddArticle from '../components/AddArticle'
 import Article from '../components/Article'
 import { IArticle } from '../types'
 
-const BASE_URL = 'http://localhost:3333/api/article/articles'
+const BASE_URL = 'http://localhost:3333/api/articles'
 
 export default function IndexPage({
   articles = [],
@@ -27,7 +27,6 @@ export default function IndexPage({
     const articles: IArticle[] = articleList.filter(
       (article: IArticle) => article.id !== id
     )
-    console.log(articles)
     setArticleList(articles)
   }
 

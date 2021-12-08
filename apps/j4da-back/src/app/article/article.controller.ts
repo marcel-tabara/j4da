@@ -14,17 +14,19 @@ import {
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { ArticleService } from './article.service'
 import { ArticleDTO } from './dto/article.dto'
+import { PaginationDto } from './dto/pagination.dto'
 
 @Controller('articles')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   @Get()
-  async find(@Res() res) {
-    const articles = await this.articleService.find()
-    return articles
-      ? res.status(HttpStatus.OK).json(articles)
-      : res.status(HttpStatus.NOT_FOUND).json(articles)
+  async findPaginated(@Res() res, @Query() paginationQuery: PaginationDto) {
+    const { limit, skip } = paginationQuery
+    const data = await this.articleService.find(paginationQuery)
+    return res
+      .status(HttpStatus.OK)
+      .json({ limit, skip, total: data.length, data })
   }
 
   @Get('/:_id')
@@ -36,9 +38,9 @@ export class ArticleController {
       : res.status(HttpStatus.NOT_FOUND)
   }
 
-  @Post('/add')
-  async add(@Res() res, @Body() articleDTO: ArticleDTO) {
-    const newArticle = await this.articleService.add(articleDTO)
+  @Post('/create')
+  async create(@Res() res, @Body() articleDTO: ArticleDTO) {
+    const newArticle = await this.articleService.create(articleDTO)
     return res.status(HttpStatus.OK).json({
       message: 'Article has been submitted successfully!',
       article: newArticle,

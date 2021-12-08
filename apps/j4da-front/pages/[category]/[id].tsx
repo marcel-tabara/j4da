@@ -47,9 +47,8 @@ export default function Article({ postData }) {
 // }
 
 export async function getStaticProps() {
-  const res = await fetch('http://localhost:3333/api/article/articles')
+  const res = await fetch('http://localhost:3333/api/articles')
   const articles: IArticle[] = await res.json()
-
   return {
     props: {
       articles,
