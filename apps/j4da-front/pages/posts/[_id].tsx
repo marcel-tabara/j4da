@@ -1,31 +1,76 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
+import { useForm } from 'react-hook-form'
 import { Main } from '../../templates/Main'
 import { IArticle, IArticles, IUrl } from '../../types'
 import { BASE_URL } from '../../utils/constants'
 
-type IPostProps = {
-  _id: string
-  title: string
-  description: string
-  date: string
-  image: string
-  body: string
+const Article = (props: IArticle) => {
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IArticle>()
+  const onSubmit = handleSubmit((data) => console.log(data))
+  const onClick = () => undefined
+  return (
+    <Main>
+      <div className="register-form">
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <label>Title</label>
+            <input
+              {...register('title')}
+              defaultValue={props.title}
+              className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="form-group">
+            <label>Slug</label>
+            <input
+              {...register('slug')}
+              defaultValue={props.slug}
+              className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="form-group">
+            <label>image</label>
+            <input
+              {...register('image')}
+              defaultValue={props.image}
+              className={`form-control ${errors.image ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              {...register('description')}
+              defaultValue={props.description}
+              className={`form-control ${
+                errors.description ? 'is-invalid' : ''
+              }`}
+            />
+          </div>
+          <div className="form-group">
+            <label>Content</label>
+            <textarea
+              {...register('body')}
+              defaultValue={props.body}
+              className={`form-control ${errors.body ? 'is-invalid' : ''}`}
+            />
+          </div>
+
+          <div className="form-group">
+            <button type="submit" className="btn btn-primary" onClick={onClick}>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </Main>
+  )
 }
-
-const DisplayPost = (props: IPostProps) => (
-  <Main>
-    <h1 className="text-center font-bold text-3xl text-gray-900">
-      {props.title}
-    </h1>
-    <div className="text-center text-sm mb-8">{new Date(props.date)}</div>
-
-    <div
-      // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: props.body }}
-    />
-  </Main>
-)
 
 export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
   const res = await fetch(`${BASE_URL}/articles`)
@@ -42,7 +87,7 @@ export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps<IPostProps, IUrl> = async ({
+export const getStaticProps: GetStaticProps<IArticles, IUrl> = async ({
   params,
 }) => {
   const res = await fetch(`${BASE_URL}/articles/${params._id}`)
@@ -60,4 +105,4 @@ export const getStaticProps: GetStaticProps<IPostProps, IUrl> = async ({
   }
 }
 
-export default DisplayPost
+export default Article
