@@ -8,7 +8,9 @@ export class ArticleDTO {
       readonly description: string
       readonly body: string
       readonly author: string
-      readonly date_posted: string
+      readonly date: string
+      readonly slug: string
+      readonly image: string
     }
   ]
 }

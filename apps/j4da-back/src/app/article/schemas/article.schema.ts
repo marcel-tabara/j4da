@@ -5,5 +5,7 @@ export const ArticleSchema = new mongoose.Schema({
   description: String,
   body: String,
   author: String,
-  date_posted: String,
+  date: String,
+  slug: String,
+  image: String,
 })

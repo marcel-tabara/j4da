@@ -1,58 +1,29 @@
-import { InferGetStaticPropsType } from 'next'
-import * as React from 'react'
-import AddArticle from '../components/AddArticle'
-import Article from '../components/Article'
-import { IArticle } from '../types'
+import { GetStaticProps } from 'next'
+import React from 'react'
+import { Articles } from '../components/Articles'
+import { Main } from '../templates/Main'
+import { IArticles, IArticlesProps } from '../types'
+import { Config } from '../utils/Config'
+import { BASE_URL } from '../utils/constants'
 
-const BASE_URL = 'http://localhost:3333/api/articles'
+const Index = (props: IArticlesProps) => (
+  <Main>
+    <Articles posts={props.posts} pagination={props.pagination} />
+  </Main>
+)
 
-export default function IndexPage({
-  articles = [],
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const [articleList, setArticleList] = React.useState(articles)
-
-  const addArticle = async (e: React.FormEvent, formData: IArticle) => {
-    e.preventDefault()
-    const article: IArticle = {
-      title: formData.title,
-      description: formData.description,
-      body: formData.body,
-      author: 'test',
-      date_posted: new Date().toISOString(),
-    }
-    setArticleList([article, ...articleList])
-  }
-
-  const deleteArticle = async (id: string) => {
-    const articles: IArticle[] = articleList.filter(
-      (article: IArticle) => article.id !== id
-    )
-    setArticleList(articles)
-  }
-
-  if (!articleList) return <h1>Loading...</h1>
-
-  return (
-    <main className="container">
-      <AddArticle saveArticle={addArticle} />
-      {articleList.map((article: IArticle) => (
-        <Article
-          key={article.id}
-          deleteArticle={deleteArticle}
-          article={article}
-        />
-      ))}
-    </main>
-  )
-}
-
-export async function getStaticProps() {
-  const res = await fetch(BASE_URL)
-  const articles: IArticle[] = await res.json()
+export const getStaticProps: GetStaticProps<IArticlesProps> = async () => {
+  const res = await fetch(`${BASE_URL}/articles`)
+  const articles: IArticles = await res.json()
+  const posts = articles.data
+  const pagination = {}
 
   return {
     props: {
-      articles,
+      posts: posts.slice(0, Config.pagination_size),
+      pagination,
     },
   }
 }
+
+export default Index

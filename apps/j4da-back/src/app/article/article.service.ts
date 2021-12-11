@@ -16,15 +16,15 @@ export class ArticleService {
     const articles = await this.articleModel
       .find()
       .sort(sort)
-      .skip(2)
+      .skip(skip)
       .limit(limit)
       .exec()
 
     return articles
   }
 
-  async findById(articleID): Promise<Article> {
-    const article = await this.articleModel.findById(articleID).exec()
+  async findById(_id): Promise<Article> {
+    const article = await this.articleModel.findById(_id).exec()
     return article
   }
 
@@ -33,17 +33,17 @@ export class ArticleService {
     return newArticle.save()
   }
 
-  async findByIdAndUpdate(articleID, articleDTO: ArticleDTO): Promise<Article> {
+  async findByIdAndUpdate(_id, articleDTO: ArticleDTO): Promise<Article> {
     const editedArticle = await this.articleModel.findByIdAndUpdate(
-      articleID,
+      _id,
       articleDTO,
       { new: true }
     )
     return editedArticle
   }
 
-  async findByIdAndRemove(articleID): Promise<Article> {
-    const deletedArticle = await this.articleModel.findByIdAndRemove(articleID)
+  async findByIdAndRemove(_id): Promise<Article> {
+    const deletedArticle = await this.articleModel.findByIdAndRemove(_id)
     return deletedArticle
   }
 }
