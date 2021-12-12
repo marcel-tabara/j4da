@@ -25,9 +25,11 @@ export class KeywordService {
     return newKeyword.save()
   }
 
-  async findByIdAndUpdate(_id, keywordDTO: KeywordDTO): Promise<Keyword> {
+  async findByIdAndUpdate(
+    keywordDTO: KeywordDTO & { _id: string }
+  ): Promise<Keyword> {
     const editedKeyword = await this.keywordModel.findByIdAndUpdate(
-      _id,
+      keywordDTO._id,
       keywordDTO,
       { new: true }
     )

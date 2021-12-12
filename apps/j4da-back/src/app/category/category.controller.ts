@@ -34,27 +34,23 @@ export class CategoryController {
 
   @Post('/add')
   async add(@Res() res, @Body() categoryDTO: CategoryDTO) {
-    const newCategory = await this.categoryService.add(categoryDTO)
+    const category = await this.categoryService.add(categoryDTO)
     return res.status(HttpStatus.OK).json({
-      message: 'Category has been submitted successfully!',
-      category: newCategory,
+      message: 'success',
+      category,
     })
   }
 
   @Put('/update')
   async findByIdAndUpdate(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id,
-    @Body() categoryDTO: CategoryDTO
+    @Body() categoryDTO: CategoryDTO & { _id: string }
   ) {
-    const editedCategory = await this.categoryService.findByIdAndUpdate(
-      _id,
-      categoryDTO
-    )
-    if (!editedCategory) throw new NotFoundException('Category does not exist!')
+    const category = await this.categoryService.findByIdAndUpdate(categoryDTO)
+    if (!category) throw new NotFoundException('Category does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Category has been successfully updated',
-      category: editedCategory,
+      message: 'success',
+      category,
     })
   }
 
@@ -63,12 +59,11 @@ export class CategoryController {
     @Res() res,
     @Query('_id', new ValidateObjectId()) _id
   ) {
-    const deletedCategory = await this.categoryService.findByIdAndRemove(_id)
-    if (!deletedCategory)
-      throw new NotFoundException('Category does not exist!')
+    const category = await this.categoryService.findByIdAndRemove(_id)
+    if (!category) throw new NotFoundException('Category does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Category has been deleted!',
-      category: deletedCategory,
+      message: 'success',
+      category: category,
     })
   }
 }

@@ -18,7 +18,16 @@ const Article = (props: IArticle & { categories: ICategory[] }) => {
     )
     return category?.subcategories
   }
-  const onSubmit = handleSubmit((data) => console.log(data))
+  const onSubmit = handleSubmit((data) => {
+    console.log('########## data', data)
+    fetch(`${BASE_URL}/articles/update`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...data, _id: props._id }),
+    })
+  })
   const [subcategories, setSubcategories] = useState<ISubCategory>(
     getSubCat(props.category)
   )
@@ -244,7 +253,7 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const res = await fetch(`${BASE_URL}/articles/${params._id}`)
   const article: IArticle = await res.json()
-
+  console.log('########## article', article)
   const resCat = await fetch(`${BASE_URL}/categories`)
   const categories: ICategory[] = await resCat.json()
 

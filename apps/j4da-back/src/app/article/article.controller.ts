@@ -40,27 +40,23 @@ export class ArticleController {
 
   @Post('/create')
   async create(@Res() res, @Body() articleDTO: ArticleDTO) {
-    const newArticle = await this.articleService.create(articleDTO)
+    const article = await this.articleService.create(articleDTO)
     return res.status(HttpStatus.OK).json({
-      message: 'Article has been submitted successfully!',
-      article: newArticle,
+      message: 'success',
+      article,
     })
   }
 
   @Put('/update')
   async findByIdAndUpdate(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id,
-    @Body() articleDTO: ArticleDTO
+    @Body() articleDTO: ArticleDTO & { _id: string }
   ) {
-    const editedArticle = await this.articleService.findByIdAndUpdate(
-      _id,
-      articleDTO
-    )
-    if (!editedArticle) throw new NotFoundException('Article does not exist!')
+    const article = await this.articleService.findByIdAndUpdate(articleDTO)
+    if (!article) throw new NotFoundException('Article does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Article has been successfully updated',
-      article: editedArticle,
+      message: 'success',
+      article,
     })
   }
 
@@ -69,11 +65,11 @@ export class ArticleController {
     @Res() res,
     @Query('_id', new ValidateObjectId()) _id
   ) {
-    const deletedArticle = await this.articleService.findByIdAndRemove(_id)
-    if (!deletedArticle) throw new NotFoundException('Article does not exist!')
+    const article = await this.articleService.findByIdAndRemove(_id)
+    if (!article) throw new NotFoundException('Article does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Article has been deleted!',
-      article: deletedArticle,
+      message: 'success',
+      article,
     })
   }
 }

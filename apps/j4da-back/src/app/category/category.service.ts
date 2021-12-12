@@ -11,8 +11,8 @@ export class CategoryService {
   ) {}
 
   async find(): Promise<Category[]> {
-    const categorys = await this.categoryModel.find().exec()
-    return categorys
+    const categories = await this.categoryModel.find().exec()
+    return categories
   }
 
   async findById(_id): Promise<Category> {
@@ -21,21 +21,23 @@ export class CategoryService {
   }
 
   async add(categoryDTO: CategoryDTO): Promise<Category> {
-    const newCategory = await new this.categoryModel(categoryDTO)
-    return newCategory.save()
+    const category = await new this.categoryModel(categoryDTO)
+    return category.save()
   }
 
-  async findByIdAndUpdate(_id, categoryDTO: CategoryDTO): Promise<Category> {
-    const editedCategory = await this.categoryModel.findByIdAndUpdate(
-      _id,
+  async findByIdAndUpdate(
+    categoryDTO: CategoryDTO & { _id: string }
+  ): Promise<Category> {
+    const category = await this.categoryModel.findByIdAndUpdate(
+      categoryDTO._id,
       categoryDTO,
       { new: true }
     )
-    return editedCategory
+    return category
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
-    const deletedCategory = await this.categoryModel.findByIdAndRemove(_id)
-    return deletedCategory
+    const category = await this.categoryModel.findByIdAndRemove(_id)
+    return category
   }
 }

@@ -33,9 +33,11 @@ export class ArticleService {
     return newArticle.save()
   }
 
-  async findByIdAndUpdate(_id, articleDTO: ArticleDTO): Promise<Article> {
+  async findByIdAndUpdate(
+    articleDTO: ArticleDTO & { _id: string }
+  ): Promise<Article> {
     const editedArticle = await this.articleModel.findByIdAndUpdate(
-      _id,
+      articleDTO._id,
       articleDTO,
       { new: true }
     )

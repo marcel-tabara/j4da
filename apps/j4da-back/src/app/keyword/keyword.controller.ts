@@ -34,27 +34,23 @@ export class KeywordController {
 
   @Post('/add')
   async add(@Res() res, @Body() keywordDTO: KeywordDTO) {
-    const newKeyword = await this.keywordService.add(keywordDTO)
+    const keyword = await this.keywordService.add(keywordDTO)
     return res.status(HttpStatus.OK).json({
-      message: 'Keyword has been submitted successfully!',
-      keyword: newKeyword,
+      message: 'success',
+      keyword,
     })
   }
 
   @Put('/update')
   async findByIdAndUpdate(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id,
-    @Body() keywordDTO: KeywordDTO
+    @Body() keywordDTO: KeywordDTO & { _id: string }
   ) {
-    const editedKeyword = await this.keywordService.findByIdAndUpdate(
-      _id,
-      keywordDTO
-    )
-    if (!editedKeyword) throw new NotFoundException('Keyword does not exist!')
+    const keyword = await this.keywordService.findByIdAndUpdate(keywordDTO)
+    if (!keyword) throw new NotFoundException('Keyword does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Keyword has been successfully updated',
-      keyword: editedKeyword,
+      message: 'success',
+      keyword,
     })
   }
 
@@ -63,11 +59,11 @@ export class KeywordController {
     @Res() res,
     @Query('_id', new ValidateObjectId()) _id
   ) {
-    const deletedKeyword = await this.keywordService.findByIdAndRemove(_id)
-    if (!deletedKeyword) throw new NotFoundException('Keyword does not exist!')
+    const keyword = await this.keywordService.findByIdAndRemove(_id)
+    if (!keyword) throw new NotFoundException('Keyword does not exist!')
     return res.status(HttpStatus.OK).json({
-      message: 'Keyword has been deleted!',
-      keyword: deletedKeyword,
+      message: 'success',
+      keyword,
     })
   }
 }
