@@ -6,7 +6,7 @@ import { ICategoriesProps, ICategory } from '../types'
 import { Config } from '../utils/Config'
 import { BASE_URL } from '../utils/constants'
 
-const Index = (props: ICategoriesProps) => (
+const CategoriesList = (props: ICategoriesProps) => (
   <Main>
     <Categories categories={props.categories} pagination={props.pagination} />
   </Main>
@@ -25,4 +25,4 @@ export const getStaticProps: GetStaticProps<ICategoriesProps> = async () => {
   }
 }
 
-export default Index
+export default CategoriesList

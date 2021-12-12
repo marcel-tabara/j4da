@@ -13,7 +13,7 @@ const Keyword = (props: IKeyword) => {
     formState: { errors },
   } = useForm<IKeyword>()
   const onSubmit = handleSubmit((data) => console.log(data))
-  const onClick = () => undefined
+
   return (
     <Main>
       <div className="register-form">
@@ -37,7 +37,7 @@ const Keyword = (props: IKeyword) => {
             />
           </div>
           <div className="form-group">
-            <button type="submit" className="btn btn-primary" onClick={onClick}>
+            <button type="submit" className="btn btn-primary">
               Save
             </button>
           </div>

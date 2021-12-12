@@ -1,22 +1,28 @@
 import Link from 'next/link'
 import React from 'react'
+import Table from 'react-bootstrap/Table'
 import { IKeywordsProps } from '../types'
 
 const Keywords = (props: IKeywordsProps) => (
   <>
-    <ul>
-      {props.keywords.map((elt) => (
-        <li key={elt._id} className="mb-3 flex justify-between">
-          <Link href="/keywords/[_id]" as={`/keywords/${elt._id}`}>
-            <a>
-              <h2>{elt.title}</h2>
-            </a>
-          </Link>
-
-          <div className="text-right">{elt.description}</div>
-        </li>
-      ))}
-    </ul>
+    <Table responsive="sm">
+      <thead>
+        <tr>
+          <th>Keywords</th>
+        </tr>
+      </thead>
+      <tbody>
+        {props.keywords.map((elt) => (
+          <tr key={elt._id}>
+            <td>
+              <Link href="/keywords/[_id]" as={`/keywords/${elt._id}`}>
+                {elt.title}
+              </Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   </>
 )
 

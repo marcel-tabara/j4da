@@ -1,11 +1,23 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+import Nav from 'react-bootstrap/Nav'
 
-type INavbarProps = {
-  children: ReactNode
+const Navbar = () => {
+  return (
+    <Nav variant="pills">
+      <Nav.Item>
+        <Nav.Link href="/">Home</Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link href="/articles">Articles</Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link href="/keywords">Keywords</Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link href="/categories">Categories</Nav.Link>
+      </Nav.Item>
+    </Nav>
+  )
 }
-
-const Navbar = (props: INavbarProps) => (
-  <ul className="navbar flex flex-wrap text-xl">{props.children}</ul>
-)
 
 export { Navbar }

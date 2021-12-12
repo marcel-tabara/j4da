@@ -13,7 +13,6 @@ const Category = (props: ICategory) => {
     formState: { errors },
   } = useForm<ICategory>()
   const onSubmit = handleSubmit((data) => console.log(data))
-  const onClick = () => undefined
 
   return (
     <Main>
@@ -38,7 +37,7 @@ const Category = (props: ICategory) => {
             />
           </div>
           <div className="form-group">
-            <button type="submit" className="btn btn-primary" onClick={onClick}>
+            <button type="submit" className="btn btn-primary">
               Save
             </button>
           </div>

@@ -6,7 +6,7 @@ import { IKeyword, IKeywordsProps } from '../types'
 import { Config } from '../utils/Config'
 import { BASE_URL } from '../utils/constants'
 
-const Index = (props: IKeywordsProps) => (
+const KeywordsList = (props: IKeywordsProps) => (
   <Main>
     <Keywords keywords={props.keywords} pagination={props.pagination} />
   </Main>
@@ -25,4 +25,4 @@ export const getStaticProps: GetStaticProps<IKeywordsProps> = async () => {
   }
 }
 
-export default Index
+export default KeywordsList

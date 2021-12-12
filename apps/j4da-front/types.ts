@@ -59,18 +59,18 @@ export interface ICategory {
 }
 
 export type IArticlesProps = {
-  posts: PostItems[]
-  pagination: never
+  articles: PostItems[]
+  pagination: Record<string, unknown>
 }
 
 export type ICategoriesProps = {
   categories: ICategory[]
-  pagination: never
+  pagination: Record<string, unknown>
 }
 
 export type IKeywordsProps = {
   keywords: IKeyword[]
-  pagination: never
+  pagination: Record<string, unknown>
 }
 
 export type PostItems = {

@@ -13,7 +13,7 @@ const Article = (props: IArticle) => {
     formState: { errors },
   } = useForm<IArticle>()
   const onSubmit = handleSubmit((data) => console.log(data))
-  const onClick = () => undefined
+
   return (
     <Main>
       <div className="register-form">
@@ -62,7 +62,7 @@ const Article = (props: IArticle) => {
           </div>
 
           <div className="form-group">
-            <button type="submit" className="btn btn-primary" onClick={onClick}>
+            <button type="submit" className="btn btn-primary">
               Save
             </button>
           </div>
@@ -87,7 +87,7 @@ export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps<IArticles, IUrl> = async ({
+export const getStaticProps: GetStaticProps<IArticle, IUrl> = async ({
   params,
 }) => {
   const res = await fetch(`${BASE_URL}/articles/${params._id}`)
@@ -101,6 +101,8 @@ export const getStaticProps: GetStaticProps<IArticles, IUrl> = async ({
       date: post.date,
       image: post.image,
       body: post.body,
+      slug: post.slug,
+      author: post.author,
     },
   }
 }
