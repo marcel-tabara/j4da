@@ -21,6 +21,7 @@ export class ArticleDTO {
       readonly slug: string
       readonly category: string
       readonly subcategory: string
+      readonly app: string
     }
   ]
 }

@@ -1,48 +1,15 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { CategoryForm } from '../../forms/CategoryForm'
 import { Main } from '../../templates/Main'
-import { ICategory, IUrl } from '../../types'
+import { IApp, ICategory, IUrl } from '../../types'
 import { BASE_URL } from '../../utils/constants'
 
-const Category = (props: ICategory) => {
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ICategory>()
-  const onSubmit = handleSubmit((data) => console.log(data))
-
+const Category = (props: ICategory & { apps: IApp[] }) => {
+  console.log('########## props', props)
   return (
     <Main>
-      <div className="register-form">
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              {...register('title')}
-              defaultValue={props.title}
-              className={`form-control ${errors.title ? 'is-invalid' : ''}`}
-            />
-          </div>
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              {...register('description')}
-              defaultValue={props.description}
-              className={`form-control ${
-                errors.description ? 'is-invalid' : ''
-              }`}
-            />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
+      <CategoryForm props={props} />
     </Main>
   )
 }
@@ -61,18 +28,24 @@ export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps<ICategory, IUrl> = async ({
-  params,
-}) => {
-  const res = await fetch(`${BASE_URL}/categories/${params._id}`)
-  const category: ICategory = await res.json()
+export const getStaticProps: GetStaticProps<
+  ICategory & { apps: IApp[] },
+  IUrl
+> = async ({ params }) => {
+  const resCat = await fetch(`${BASE_URL}/categories/${params._id}`)
+  const category: ICategory = await resCat.json()
+
+  const resApp = await fetch(`${BASE_URL}/apps`)
+  const apps: IApp[] = await resApp.json()
 
   return {
     props: {
-      _id: category._id,
-      title: category.title,
-      description: category.description,
+      _id: category._id || '',
+      title: category.title || '',
+      description: category.description || '',
       subcategories: category.subcategories,
+      app: category.app || '',
+      apps,
     },
   }
 }

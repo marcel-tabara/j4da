@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose'
 
-export const ArticleSchema = new mongoose.Schema({
+export const AppSchema = new mongoose.Schema({
   keyOverride: String,
   url: String,
   title: String,
@@ -15,8 +15,4 @@ export const ArticleSchema = new mongoose.Schema({
   body: String,
   publisherName: String,
   publisherLogo: String,
-  slug: String,
-  category: String,
-  subcategory: String,
-  app: String,
 })

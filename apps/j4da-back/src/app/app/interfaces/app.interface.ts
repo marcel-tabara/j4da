@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-export interface Article extends Document {
+export interface App extends Document {
   readonly keyOverride?: string
   readonly url: string
   readonly title: string
@@ -15,8 +15,4 @@ export interface Article extends Document {
   readonly body: string
   readonly publisherName: string
   readonly publisherLogo: string
-  readonly slug: string
-  readonly category: string
-  readonly subcategory: string
-  readonly app: string
 }
