@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { IApp, ICategory, ISubCategories, ISubCategory } from '../types'
 import { BASE_URL } from '../utils/constants'
 
@@ -17,13 +17,6 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
     handleSubmit,
     formState: { errors },
   } = useForm<any>()
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: 'subcategories',
-      keyName: 'title',
-    }
-  )
 
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
@@ -47,9 +40,9 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
     router.replace('/categories')
   })
   const onAddSubcat = () => {
-    const newCat: ISubCategories = { ...subcats }
-    newCat.concat({ title: '', description: '' })
-    // setSubcats(newCat)
+    const newCat: ISubCategories = [...subcats]
+    newCat.push({ title: '', description: '' })
+    setSubcats(newCat)
   }
   return (
     <div className="register-form">

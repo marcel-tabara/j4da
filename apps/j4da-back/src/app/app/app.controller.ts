@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Res,
 } from '@nestjs/common'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
@@ -44,7 +43,7 @@ export class AppController {
   @Put(':_id/update')
   async findByIdAndUpdate(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id,
+    @Param('_id', new ValidateObjectId()) _id,
     @Body() appDTO: AppDTO
   ) {
     const app = await this.appService.findByIdAndUpdate(_id, appDTO)
@@ -58,7 +57,7 @@ export class AppController {
   @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id
+    @Param('_id', new ValidateObjectId()) _id
   ) {
     const app = await this.appService.findByIdAndRemove(_id)
     if (!app) throw new NotFoundException('App does not exist!')

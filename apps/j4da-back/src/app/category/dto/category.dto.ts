@@ -1,11 +1,11 @@
 export class CategoryDTO {
   readonly title: string
   readonly description: string
+  readonly app: string
   readonly subcategories: [
     {
       readonly title: string
       readonly description: string
-      readonly app: string
     }
   ]
 }

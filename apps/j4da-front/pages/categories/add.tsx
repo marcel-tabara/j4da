@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps<
       _id: '',
       title: '',
       description: '',
-      subcategories: undefined,
+      subcategories: [{ title: '', description: '' }],
       app: '',
       apps,
     },
