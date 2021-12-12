@@ -1,11 +1,21 @@
 import { Document } from 'mongoose'
 
 export interface Article extends Document {
+  readonly keyOverride?: string
+  readonly url: string
   readonly title: string
+  readonly images: ReadonlyArray<string>
+  readonly section: string
+  readonly keywords: string
+  readonly dateCreated: string
+  readonly datePublished: string
+  readonly dateModified?: string
+  readonly authorName: string | string[]
   readonly description: string
   readonly body: string
-  readonly author: string
-  readonly date: string
+  readonly publisherName: string
+  readonly publisherLogo: string
   readonly slug: string
-  readonly image: string
+  readonly category: string
+  readonly subcategory: string
 }
