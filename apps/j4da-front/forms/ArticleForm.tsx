@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
@@ -13,28 +14,39 @@ interface IArticleFormProps {
   props: IArticle & { categories: ICategory[] } & { apps: IApp[] }
   onChaneCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
   subcategories: ISubCategories
-  apps: IApp[]
 }
 
 const ArticleForm = ({
   props,
   onChaneCategory,
   subcategories,
-  apps,
 }: IArticleFormProps) => {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IArticle>()
   const onSubmit = handleSubmit((data) => {
-    fetch(`${BASE_URL}/articles/update`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...data, _id: props._id }),
-    })
+    if (props._id) {
+      fetch(`${BASE_URL}/articles/${props._id}/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...data, _id: props._id }),
+      })
+    } else {
+      fetch(`${BASE_URL}/articles/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+    }
+
+    router.replace('/articles')
   })
   return (
     <div className="register-form">

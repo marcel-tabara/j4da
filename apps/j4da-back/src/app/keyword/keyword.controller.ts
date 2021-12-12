@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Res,
 } from '@nestjs/common'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
@@ -41,12 +40,13 @@ export class KeywordController {
     })
   }
 
-  @Put('/update')
+  @Put(':_id/update')
   async findByIdAndUpdate(
     @Res() res,
+    @Param('_id', new ValidateObjectId()) _id,
     @Body() keywordDTO: KeywordDTO & { _id: string }
   ) {
-    const keyword = await this.keywordService.findByIdAndUpdate(keywordDTO)
+    const keyword = await this.keywordService.findByIdAndUpdate(_id, keywordDTO)
     if (!keyword) throw new NotFoundException('Keyword does not exist!')
     return res.status(HttpStatus.OK).json({
       message: 'success',
@@ -54,10 +54,10 @@ export class KeywordController {
     })
   }
 
-  @Delete('/delete')
+  @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id
+    @Param('_id', new ValidateObjectId()) _id
   ) {
     const keyword = await this.keywordService.findByIdAndRemove(_id)
     if (!keyword) throw new NotFoundException('Keyword does not exist!')

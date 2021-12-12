@@ -6,7 +6,6 @@ import { IApp, ICategory, IUrl } from '../../types'
 import { BASE_URL } from '../../utils/constants'
 
 const Category = (props: ICategory & { apps: IApp[] }) => {
-  console.log('########## props', props)
   return (
     <Main>
       <CategoryForm props={props} />

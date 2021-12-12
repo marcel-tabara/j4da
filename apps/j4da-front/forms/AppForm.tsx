@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { IKeyword } from '../types'
+import { IApp } from '../types'
 import { BASE_URL } from '../utils/constants'
 
-interface IKeywordFormProps {
-  props: IKeyword
+interface IAppFormProps {
+  props: IApp
 }
 
-const KeywordForm = ({ props }: IKeywordFormProps) => {
+const AppForm = ({ props }: IAppFormProps) => {
   const router = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IKeyword>()
+  } = useForm<IApp>()
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
-      fetch(`${BASE_URL}/keywords/${props._id}/update`, {
+      fetch(`${BASE_URL}/apps/${props._id}/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
         body: JSON.stringify({ ...data, _id: props._id }),
       })
     } else {
-      fetch(`${BASE_URL}/keywords/add`, {
+      fetch(`${BASE_URL}/apps/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,14 +34,14 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
       })
     }
 
-    router.replace('/keywords')
+    router.replace('/apps')
   })
 
   return (
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>Keyword Title</label>
+          <label>App Title</label>
           <input
             {...register('title')}
             defaultValue={props.title}
@@ -49,7 +49,7 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>Keyword Description</label>
+          <label>App Description</label>
           <textarea
             {...register('description')}
             defaultValue={props.description}
@@ -66,4 +66,4 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
   )
 }
 
-export { KeywordForm }
+export { AppForm }

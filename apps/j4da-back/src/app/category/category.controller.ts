@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Res,
 } from '@nestjs/common'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
@@ -41,12 +40,16 @@ export class CategoryController {
     })
   }
 
-  @Put('/update')
+  @Put(':_id/update')
   async findByIdAndUpdate(
     @Res() res,
+    @Param('_id', new ValidateObjectId()) _id,
     @Body() categoryDTO: CategoryDTO & { _id: string }
   ) {
-    const category = await this.categoryService.findByIdAndUpdate(categoryDTO)
+    const category = await this.categoryService.findByIdAndUpdate(
+      _id,
+      categoryDTO
+    )
     if (!category) throw new NotFoundException('Category does not exist!')
     return res.status(HttpStatus.OK).json({
       message: 'success',
@@ -54,10 +57,10 @@ export class CategoryController {
     })
   }
 
-  @Delete('/delete')
+  @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id
+    @Param('_id', new ValidateObjectId()) _id
   ) {
     const category = await this.categoryService.findByIdAndRemove(_id)
     if (!category) throw new NotFoundException('Category does not exist!')

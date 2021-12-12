@@ -41,12 +41,13 @@ export class AppController {
     })
   }
 
-  @Put('/update')
+  @Put(':_id/update')
   async findByIdAndUpdate(
     @Res() res,
-    @Body() appDTO: AppDTO & { _id: string }
+    @Query('_id', new ValidateObjectId()) _id,
+    @Body() appDTO: AppDTO
   ) {
-    const app = await this.appService.findByIdAndUpdate(appDTO)
+    const app = await this.appService.findByIdAndUpdate(_id, appDTO)
     if (!app) throw new NotFoundException('App does not exist!')
     return res.status(HttpStatus.OK).json({
       message: 'success',
@@ -54,7 +55,7 @@ export class AppController {
     })
   }
 
-  @Delete('/delete')
+  @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
     @Query('_id', new ValidateObjectId()) _id

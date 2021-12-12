@@ -35,9 +35,21 @@ export const getStaticProps: GetStaticProps<IApp, IUrl> = async ({
 
   return {
     props: {
-      _id: app._id,
-      title: app.title,
-      description: app.description,
+      _id: app?._id,
+      keyOverride: app?.keyOverride,
+      url: app?.url,
+      title: app?.title,
+      images: app?.images,
+      section: app?.section,
+      keywords: app?.keywords,
+      dateCreated: app?.dateCreated,
+      datePublished: app?.datePublished,
+      dateModified: app?.dateModified,
+      authorName: app?.authorName,
+      description: app?.description,
+      body: app?.body,
+      publisherName: app?.publisherName,
+      publisherLogo: app?.publisherLogo,
     },
   }
 }

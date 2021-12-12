@@ -34,10 +34,11 @@ export class ArticleService {
   }
 
   async findByIdAndUpdate(
-    articleDTO: ArticleDTO & { _id: string }
+    _id: string,
+    articleDTO: ArticleDTO
   ): Promise<Article> {
     const editedArticle = await this.articleModel.findByIdAndUpdate(
-      articleDTO._id,
+      _id,
       articleDTO,
       { new: true }
     )

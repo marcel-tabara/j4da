@@ -32,7 +32,6 @@ export class ArticleController {
   @Get('/:_id')
   async findById(@Res() res, @Param('_id', new ValidateObjectId()) _id) {
     const article = await this.articleService.findById(_id)
-    // if (!article) throw new NotFoundException('Article does not exist!');
     return article
       ? res.status(HttpStatus.OK).json(article)
       : res.status(HttpStatus.NOT_FOUND)
@@ -47,12 +46,13 @@ export class ArticleController {
     })
   }
 
-  @Put('/update')
+  @Put(':_id/update')
   async findByIdAndUpdate(
     @Res() res,
+    @Param('_id', new ValidateObjectId()) _id,
     @Body() articleDTO: ArticleDTO & { _id: string }
   ) {
-    const article = await this.articleService.findByIdAndUpdate(articleDTO)
+    const article = await this.articleService.findByIdAndUpdate(_id, articleDTO)
     if (!article) throw new NotFoundException('Article does not exist!')
     return res.status(HttpStatus.OK).json({
       message: 'success',
@@ -60,10 +60,10 @@ export class ArticleController {
     })
   }
 
-  @Delete('/delete')
+  @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
-    @Query('_id', new ValidateObjectId()) _id
+    @Param('_id', new ValidateObjectId()) _id
   ) {
     const article = await this.articleService.findByIdAndRemove(_id)
     if (!article) throw new NotFoundException('Article does not exist!')

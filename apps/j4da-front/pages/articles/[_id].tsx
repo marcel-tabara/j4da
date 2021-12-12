@@ -80,6 +80,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       _id: article._id,
       keyOverride: article.keyOverride || '',
+      app: article.app || '',
       url: article.url || '',
       title: article.title || '',
       images: article.images || '',

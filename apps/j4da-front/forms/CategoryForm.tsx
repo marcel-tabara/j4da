@@ -1,12 +1,15 @@
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { IApp, ICategory, ISubCategories, ISubCategory } from '../types'
+import { BASE_URL } from '../utils/constants'
 
 interface ICategoryFormProps {
   props: ICategory & { apps: IApp[] }
 }
 
 const CategoryForm = ({ props }: ICategoryFormProps) => {
+  const router = useRouter()
   const [subcats, setSubcats] = useState<ISubCategories>(props.subcategories)
   const {
     control,
@@ -23,14 +26,25 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
   )
 
   const onSubmit = handleSubmit((data) => {
-    console.log('########## data', data)
-    // fetch(`${BASE_URL}/categories/update`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ ...data, _id: props._id }),
-    // })
+    if (props._id) {
+      fetch(`${BASE_URL}/categories/${props._id}/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...data, _id: props._id }),
+      })
+    } else {
+      fetch(`${BASE_URL}/categories/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+    }
+
+    router.replace('/categories')
   })
   const onAddSubcat = () => {
     const newCat: ISubCategories = { ...subcats }

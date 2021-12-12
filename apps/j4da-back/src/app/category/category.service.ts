@@ -26,10 +26,11 @@ export class CategoryService {
   }
 
   async findByIdAndUpdate(
+    _id: string,
     categoryDTO: CategoryDTO & { _id: string }
   ): Promise<Category> {
     const category = await this.categoryModel.findByIdAndUpdate(
-      categoryDTO._id,
+      _id,
       categoryDTO,
       { new: true }
     )

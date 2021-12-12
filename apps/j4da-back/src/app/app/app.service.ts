@@ -23,12 +23,10 @@ export class AppService {
     return newApp.save()
   }
 
-  async findByIdAndUpdate(appDTO: AppDTO & { _id: string }): Promise<App> {
-    const editedApp = await this.appModel.findByIdAndUpdate(
-      appDTO._id,
-      appDTO,
-      { new: true }
-    )
+  async findByIdAndUpdate(_id: string, appDTO: AppDTO): Promise<App> {
+    const editedApp = await this.appModel.findByIdAndUpdate(_id, appDTO, {
+      new: true,
+    })
     return editedApp
   }
 

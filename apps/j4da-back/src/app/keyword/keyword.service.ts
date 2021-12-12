@@ -26,10 +26,11 @@ export class KeywordService {
   }
 
   async findByIdAndUpdate(
-    keywordDTO: KeywordDTO & { _id: string }
+    _id: string,
+    keywordDTO: KeywordDTO
   ): Promise<Keyword> {
     const editedKeyword = await this.keywordModel.findByIdAndUpdate(
-      keywordDTO._id,
+      _id,
       keywordDTO,
       { new: true }
     )
