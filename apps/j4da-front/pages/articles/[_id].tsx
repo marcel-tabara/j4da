@@ -7,7 +7,7 @@ import {
   IArticle,
   IArticles,
   ICategory,
-  ISubCategories,
+  ISubCategory,
   IUrl,
 } from '../../types'
 import { BASE_URL } from '../../utils/constants'
@@ -17,14 +17,15 @@ const Article = (
     apps: IApp[]
   }
 ) => {
+  const [categories, setCategories] = useState<ICategory[]>([])
   const getSubCat = (cat: string) => {
-    const category = props.categories.find(
+    const category = categories.find(
       (category: ICategory) => category._id === cat
     )
     return category?.subcategories
   }
 
-  const [subcategories, setSubcategories] = useState<ISubCategories>(
+  const [subcategories, setSubcategories] = useState<ISubCategory[]>(
     getSubCat(props.category)
   )
 
@@ -32,7 +33,18 @@ const Article = (
     const cats = props.categories.find(
       (category: ICategory) => category._id === event.target.value
     )
-    setSubcategories(cats.subcategories)
+    setSubcategories(cats?.subcategories ?? [{ title: '', description: '' }])
+  }
+
+  const onChaneApp = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const cats = props.categories.filter(
+      (category: ICategory) => category.app === event.target.value
+    )
+
+    cats.length > 0 && setCategories(cats)
+    onChaneCategory({
+      target: { value: cats.length > 0 ? cats?.[0]?._id : [] },
+    } as React.ChangeEvent<HTMLSelectElement>)
   }
 
   return (
@@ -41,6 +53,8 @@ const Article = (
         props={props}
         subcategories={subcategories}
         onChaneCategory={onChaneCategory}
+        onChaneApp={onChaneApp}
+        categories={categories}
       />
     </Main>
   )
@@ -62,7 +76,7 @@ export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
 }
 
 export const getStaticProps: GetStaticProps<
-  IArticle & { categories: ICategory[] } & {
+  IArticle & {
     apps: IApp[]
   },
   IUrl

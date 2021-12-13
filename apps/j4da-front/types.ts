@@ -2,55 +2,47 @@ import { ReactNode } from 'react'
 
 export interface IApp {
   _id: string
-  keyOverride: string
-  url: string
-  title: string
-  images: string | string[]
-  section: string
-  keywords: string
-  dateCreated: string
-  datePublished: string
-  dateModified: string
-  authorName: string | string[]
-  description: string
-  body: string
-  publisherName: string
-  publisherLogo: string
+  keyOverride?: string
+  url?: string
+  title?: string
+  images?: string | string[]
+  section?: string
+  keywords?: string
+  dateCreated?: string
+  datePublished?: string
+  dateModified?: string
+  authorName?: string | string[]
+  description?: string
+  body?: string
+  publisherName?: string
+  publisherLogo?: string
 }
 
 export interface IKeyword {
   _id: string
-  title: string
-  description: string
-}
-
-export interface ICategory {
-  _id: string
-  title: string
-  description: string
-  subcategories: ISubCategories
-  app: string
+  title?: string
+  description?: string
 }
 
 export interface IArticle {
   _id: string
-  keyOverride: string
-  url: string
+  keyOverride?: string
+  url?: string
   title: string
-  images: string | string[]
-  section: string
-  keywords: string
-  dateCreated: string
-  datePublished: string
-  dateModified: string
-  authorName: string | string[]
-  description: string
-  body: string
-  publisherName: string
-  publisherLogo: string
-  slug: string
-  category: string
-  subcategory: string
+  images?: string | string[]
+  section?: string
+  keywords?: string
+  dateCreated?: string
+  datePublished?: string
+  dateModified?: string
+  authorName?: string | string[]
+  description?: string
+  body?: string
+  publisherName?: string
+  publisherLogo?: string
+  slug?: string
+  category?: string
+  subcategory?: string
   app: string
 }
 
@@ -61,15 +53,17 @@ export interface IArticles {
   data: IArticle[]
 }
 
-export interface ICategoryBase {
+export interface ISubCategory {
   title: string
   description: string
 }
-export type ISubCategories = [{ title: string; description: string }]
-export type ISubCategory = { title: string; description: string }
 
-export interface ICategory extends ICategoryBase {
-  subcategories: ISubCategories
+export interface ICategory {
+  _id: string
+  title: string
+  description?: string
+  app: string
+  subcategories?: ISubCategory[]
 }
 
 export interface IArticlesProps {
@@ -90,10 +84,6 @@ export interface IKeywordsProps {
 export interface IAppsProps {
   apps: IApp[]
   pagination: Record<string, unknown>
-}
-
-export interface PostItems {
-  [key: string]: string
 }
 
 export interface IMainProps {

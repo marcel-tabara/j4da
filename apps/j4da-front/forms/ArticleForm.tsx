@@ -1,25 +1,23 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import {
-  IApp,
-  IArticle,
-  ICategory,
-  ISubCategories,
-  ISubCategory,
-} from '../types'
+import { IApp, IArticle, ICategory, ISubCategory } from '../types'
 import { BASE_URL } from '../utils/constants'
 
 interface IArticleFormProps {
   props: IArticle & { categories: ICategory[] } & { apps: IApp[] }
   onChaneCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
-  subcategories: ISubCategories
+  onChaneApp: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  subcategories: ISubCategory[]
+  categories: ICategory[]
 }
 
 const ArticleForm = ({
   props,
   onChaneCategory,
-  subcategories,
+  onChaneApp,
+  categories = [],
+  subcategories = [],
 }: IArticleFormProps) => {
   const router = useRouter()
   const {
@@ -81,6 +79,7 @@ const ArticleForm = ({
             {...register('app')}
             defaultValue={props.app}
             name="category"
+            onChange={onChaneApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >
             <option key="app.select" value="">
@@ -105,7 +104,7 @@ const ArticleForm = ({
             <option key="category.select" value="">
               Select Category
             </option>
-            {props.categories.map((category: ICategory) => (
+            {categories.map((category: ICategory) => (
               <option key={category._id} value={category._id}>
                 {category.title}
               </option>

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { IApp, ICategory, ISubCategories, ISubCategory } from '../types'
+import { IApp, ICategory, ISubCategory } from '../types'
 import { BASE_URL } from '../utils/constants'
 
 interface ICategoryFormProps {
@@ -10,15 +10,15 @@ interface ICategoryFormProps {
 
 const CategoryForm = ({ props }: ICategoryFormProps) => {
   const router = useRouter()
-  const [subcats, setSubcats] = useState<ISubCategories>(props.subcategories)
+  const [subcats, setSubcats] = useState<ISubCategory[]>(props.subcategories)
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<any>()
+  } = useForm<ICategory>()
 
   const onSubmit = handleSubmit((data) => {
+    console.log('########## data', data)
     if (props._id) {
       fetch(`${BASE_URL}/categories/${props._id}/update`, {
         method: 'PUT',
@@ -40,7 +40,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
     router.replace('/categories')
   })
   const onAddSubcat = () => {
-    const newCat: ISubCategories = [...subcats]
+    const newCat: ISubCategory[] = [...subcats]
     newCat.push({ title: '', description: '' })
     setSubcats(newCat)
   }
@@ -68,7 +68,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
           <select
             {...register('app')}
             defaultValue={props.app}
-            name="category"
+            name="app"
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >
             <option key="app.select" value="">
