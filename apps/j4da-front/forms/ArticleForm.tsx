@@ -78,7 +78,7 @@ const ArticleForm = ({
           <select
             {...register('app')}
             defaultValue={props.app}
-            name="category"
+            name="app"
             onChange={onChaneApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >

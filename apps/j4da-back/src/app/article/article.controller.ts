@@ -37,7 +37,7 @@ export class ArticleController {
       : res.status(HttpStatus.NOT_FOUND)
   }
 
-  @Post('/create')
+  @Post('/add')
   async create(@Res() res, @Body() articleDTO: ArticleDTO) {
     const article = await this.articleService.create(articleDTO)
     return res.status(HttpStatus.OK).json({

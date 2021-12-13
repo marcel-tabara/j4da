@@ -17,7 +17,9 @@ const Article = (
     apps: IApp[]
   }
 ) => {
-  const [categories, setCategories] = useState<ICategory[]>([])
+  const getDefaultCats = () =>
+    props.app ? props.categories.filter((cat) => cat.app === props.app) : []
+  const [categories, setCategories] = useState<ICategory[]>(getDefaultCats())
   const getSubCat = (cat: string) => {
     const category = categories.find(
       (category: ICategory) => category._id === cat
