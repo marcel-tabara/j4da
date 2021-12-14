@@ -22,6 +22,7 @@ export interface IKeyword {
   _id: string
   title?: string
   description?: string
+  count?: number
 }
 
 export interface IArticle {

@@ -33,15 +33,15 @@ const Apps = (props: IAppsProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.apps.map((elt) => (
-            <tr key={elt._id}>
+          {props.apps.map((app) => (
+            <tr key={app._id}>
               <td>
-                <Link href="/apps/[_id]" as={`/apps/${elt._id}`}>
-                  {elt.title}
+                <Link href="/apps/[_id]" as={`/apps/${app._id}`}>
+                  {app.title}
                 </Link>
               </td>
               <td>
-                <Icon.ArrowRight onClick={onDelete} id={elt._id} />
+                <Icon.Trash onClick={onDelete} id={app._id} />
               </td>
             </tr>
           ))}

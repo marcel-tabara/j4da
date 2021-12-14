@@ -37,6 +37,24 @@ export class KeywordService {
     return editedKeyword
   }
 
+  async findManyAndUpdate(keywords: string[]): Promise<string> {
+    try {
+      await this.keywordModel.bulkWrite(
+        keywords.map((keyword) => ({
+          updateOne: {
+            filter: { title: keyword, description: '' },
+            update: { $inc: { count: 1 } },
+            upsert: true,
+          },
+        }))
+      )
+    } catch (error) {
+      return error.message
+    }
+
+    return 'success'
+  }
+
   async findByIdAndRemove(_id): Promise<unknown> {
     const deletedKeyword = await this.keywordModel.findByIdAndRemove(_id)
     return deletedKeyword

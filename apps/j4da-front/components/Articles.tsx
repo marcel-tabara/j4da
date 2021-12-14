@@ -29,19 +29,21 @@ const Articles = (props: IArticlesProps) => {
         <thead>
           <tr>
             <th>Articles</th>
+            <th>App</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {props.articles.map((elt) => (
-            <tr key={elt._id}>
+          {props.articles.map((article) => (
+            <tr key={article._id}>
               <td>
-                <Link href="/articles/[_id]" as={`/articles/${elt._id}`}>
-                  {elt.title}
+                <Link href="/articles/[_id]" as={`/articles/${article._id}`}>
+                  {article.title}
                 </Link>
               </td>
+              <td>{article.app}</td>
               <td>
-                <Icon.ArrowRight onClick={onDelete} id={elt._id} />
+                <Icon.Trash onClick={onDelete} id={article._id} />
               </td>
             </tr>
           ))}

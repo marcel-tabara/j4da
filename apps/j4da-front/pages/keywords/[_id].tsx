@@ -38,6 +38,7 @@ export const getStaticProps: GetStaticProps<IKeyword, IUrl> = async ({
       _id: keyword._id,
       title: keyword.title,
       description: keyword.description,
+      count: keyword.count,
     },
   }
 }

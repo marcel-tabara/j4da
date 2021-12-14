@@ -54,6 +54,16 @@ export class KeywordController {
     })
   }
 
+  @Post('/bulkupsert')
+  async findManyAndUpdate(@Res() res, @Body() keywords: string[]) {
+    const upsertmany = await this.keywordService.findManyAndUpdate(keywords)
+
+    return res.status(HttpStatus.OK).json({
+      message: 'success',
+      upsertmany,
+    })
+  }
+
   @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,

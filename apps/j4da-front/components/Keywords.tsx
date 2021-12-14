@@ -32,15 +32,15 @@ const Keywords = (props: IKeywordsProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.keywords.map((elt) => (
-            <tr key={elt._id}>
+          {props.keywords.map((keyword) => (
+            <tr key={keyword._id}>
               <td>
-                <Link href="/keywords/[_id]" as={`/keywords/${elt._id}`}>
-                  {elt.title}
+                <Link href="/keywords/[_id]" as={`/keywords/${keyword._id}`}>
+                  {keyword.title}
                 </Link>
               </td>
               <td>
-                <Icon.ArrowRight onClick={onDelete} id={elt._id} />
+                <Icon.Trash onClick={onDelete} id={keyword._id} />
               </td>
             </tr>
           ))}

@@ -57,6 +57,14 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
           />
         </div>
         <div className="form-group">
+          <label>Keyword Count</label>
+          <input
+            {...register('count')}
+            defaultValue={props.count}
+            className={`form-control ${errors.count ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
           <button type="submit" className="btn btn-primary">
             Save
           </button>

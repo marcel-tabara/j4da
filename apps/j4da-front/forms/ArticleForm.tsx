@@ -43,6 +43,15 @@ const ArticleForm = ({
         body: JSON.stringify(data),
       })
     }
+    if (data.keywords) {
+      fetch(`${BASE_URL}/keywords/bulkupsert`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data.keywords.split(',')),
+      })
+    }
 
     router.replace('/articles')
   })

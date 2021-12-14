@@ -33,15 +33,20 @@ const Categories = (props: ICategoriesProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.categories.map((elt) => (
-            <tr key={elt._id}>
+          {props.categories.map((category) => (
+            <tr key={category._id}>
               <td>
-                <Link href="/categories/[_id]" as={`/categories/${elt._id}`}>
-                  {elt.title}
+                <Link
+                  href="/categories/[_id]"
+                  as={`/categories/${category._id}`}
+                >
+                  {category.title}
                 </Link>
+                <br />
+                {category.subcategories.map((subcat) => subcat.title + ' | ')}
               </td>
               <td>
-                <Icon.ArrowRight onClick={onDelete} id={elt._id} />
+                <Icon.Trash onClick={onDelete} id={category._id} />
               </td>
             </tr>
           ))}
