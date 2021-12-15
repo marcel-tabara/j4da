@@ -18,7 +18,6 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
   } = useForm<ICategory>()
 
   const onSubmit = handleSubmit((data) => {
-    console.log('########## data', data)
     if (props._id) {
       fetch(`${BASE_URL}/categories/${props._id}/update`, {
         method: 'PUT',
