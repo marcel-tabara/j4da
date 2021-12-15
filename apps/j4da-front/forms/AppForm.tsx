@@ -41,14 +41,6 @@ const AppForm = ({ props }: IAppFormProps) => {
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>keyOverride</label>
-          <input
-            {...register('keyOverride')}
-            defaultValue={props.keyOverride}
-            className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
           <label>url</label>
           <input
             {...register('url')}
@@ -86,34 +78,6 @@ const AppForm = ({ props }: IAppFormProps) => {
             {...register('keywords')}
             defaultValue={props.keywords}
             className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
-          <label>dateCreated</label>
-          <input
-            {...register('dateCreated')}
-            defaultValue={props.dateCreated}
-            className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
-          <label>datePublished</label>
-          <input
-            {...register('datePublished')}
-            defaultValue={props.datePublished}
-            className={`form-control ${
-              errors.datePublished ? 'is-invalid' : ''
-            }`}
-          />
-        </div>
-        <div className="form-group">
-          <label>dateModified</label>
-          <input
-            {...register('dateModified')}
-            defaultValue={new Date().toISOString()}
-            className={`form-control ${
-              errors.dateModified ? 'is-invalid' : ''
-            }`}
           />
         </div>
         <div className="form-group">
@@ -158,6 +122,42 @@ const AppForm = ({ props }: IAppFormProps) => {
             className={`form-control ${
               errors.publisherLogo ? 'is-invalid' : ''
             }`}
+          />
+        </div>
+        <div className="form-group">
+          <label>dateCreated</label>
+          <input
+            {...register('dateCreated')}
+            defaultValue={props.dateCreated}
+            className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
+          <label>datePublished</label>
+          <input
+            {...register('datePublished')}
+            defaultValue={props.datePublished}
+            className={`form-control ${
+              errors.datePublished ? 'is-invalid' : ''
+            }`}
+          />
+        </div>
+        <div className="form-group">
+          <label>dateModified</label>
+          <input
+            {...register('dateModified')}
+            defaultValue={new Date().toISOString()}
+            className={`form-control ${
+              errors.dateModified ? 'is-invalid' : ''
+            }`}
+          />
+        </div>
+        <div className="form-group">
+          <label>keyOverride</label>
+          <input
+            {...register('keyOverride')}
+            defaultValue={props.keyOverride}
+            className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
           />
         </div>
 

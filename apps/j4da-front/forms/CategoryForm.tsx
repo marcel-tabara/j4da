@@ -18,13 +18,17 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
   } = useForm<ICategory>()
 
   const onSubmit = handleSubmit((data) => {
+    const newData = {
+      ...data,
+      subcategories: data.subcategories.filter((e) => e.title.length > 0),
+    }
     if (props._id) {
       fetch(`${BASE_URL}/categories/${props._id}/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...data, _id: props._id }),
+        body: JSON.stringify({ ...newData, _id: props._id }),
       })
     } else {
       fetch(`${BASE_URL}/categories/add`, {
@@ -32,7 +36,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(newData),
       })
     }
 
@@ -80,6 +84,8 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
             ))}
           </select>
         </div>
+        <h3>Subcategories</h3>
+
         {subcats.map((subcategory: ISubCategory, index: number) => (
           <div key={`${subcategory.title}_${index}`}>
             <div>
@@ -106,10 +112,12 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
             </div>
           </div>
         ))}
-        <div className="form-group">
+
+        <div className="btn-group btn-block">
           <button type="submit" className="btn btn-primary">
             Save
           </button>
+
           <button
             type="button"
             className="btn btn-primary"

@@ -76,14 +76,6 @@ const ArticleForm = ({
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>keyOverride</label>
-          <input
-            {...register('keyOverride')}
-            defaultValue={props.keyOverride}
-            className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
           <label>url</label>
           <input
             {...register('url')}
@@ -97,6 +89,14 @@ const ArticleForm = ({
             {...register('title')}
             defaultValue={props.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
+          <label>slug</label>
+          <input
+            {...register('slug')}
+            defaultValue={props.slug}
+            className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
@@ -180,34 +180,6 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>dateCreated</label>
-          <input
-            {...register('dateCreated')}
-            defaultValue={props.dateCreated}
-            className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
-          <label>datePublished</label>
-          <input
-            {...register('datePublished')}
-            defaultValue={props.datePublished}
-            className={`form-control ${
-              errors.datePublished ? 'is-invalid' : ''
-            }`}
-          />
-        </div>
-        <div className="form-group">
-          <label>dateModified</label>
-          <input
-            {...register('dateModified')}
-            defaultValue={new Date().toISOString()}
-            className={`form-control ${
-              errors.dateModified ? 'is-invalid' : ''
-            }`}
-          />
-        </div>
-        <div className="form-group">
           <label>authorName</label>
           <input
             {...register('authorName')}
@@ -252,11 +224,39 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>slug</label>
+          <label>dateCreated</label>
           <input
-            {...register('slug')}
-            defaultValue={props.slug}
-            className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
+            {...register('dateCreated')}
+            defaultValue={props.dateCreated}
+            className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
+          <label>datePublished</label>
+          <input
+            {...register('datePublished')}
+            defaultValue={props.datePublished}
+            className={`form-control ${
+              errors.datePublished ? 'is-invalid' : ''
+            }`}
+          />
+        </div>
+        <div className="form-group">
+          <label>dateModified</label>
+          <input
+            {...register('dateModified')}
+            defaultValue={new Date().toISOString()}
+            className={`form-control ${
+              errors.dateModified ? 'is-invalid' : ''
+            }`}
+          />
+        </div>
+        <div className="form-group">
+          <label>keyOverride</label>
+          <input
+            {...register('keyOverride')}
+            defaultValue={props.keyOverride}
+            className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
           />
         </div>
 
