@@ -42,8 +42,34 @@ export class KeywordService {
       await this.keywordModel.bulkWrite(
         keywords.map((keyword) => ({
           updateOne: {
-            filter: { title: keyword, description: '' },
+            filter: { title: keyword },
             update: { $inc: { count: 1 } },
+            upsert: true,
+          },
+        }))
+      )
+    } catch (error) {
+      return error.message
+    }
+
+    return 'success'
+  }
+
+  async findManyAndRemove(keywords: string[]): Promise<string> {
+    try {
+      await this.keywordModel.bulkWrite(
+        keywords.map((keyword) => ({
+          updateOne: {
+            filter: { title: keyword },
+            update: { $inc: { count: -1 } },
+            upsert: false,
+          },
+        }))
+      )
+      await this.keywordModel.bulkWrite(
+        keywords.map((keyword) => ({
+          deleteOne: {
+            filter: { title: keyword, count: { $lte: 0 } },
             upsert: true,
           },
         }))

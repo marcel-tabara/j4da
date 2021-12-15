@@ -43,13 +43,30 @@ const ArticleForm = ({
         body: JSON.stringify(data),
       })
     }
-    if (data.keywords) {
+
+    const oldKeywords = props.keywords.split(',')
+    const newKeywords = data.keywords.split(',')
+
+    const a = oldKeywords.filter((e) => !newKeywords.includes(e))
+    const b = newKeywords.filter((e) => !oldKeywords.includes(e))
+
+    if (a.length > 0) {
+      fetch(`${BASE_URL}/keywords/bulkremove`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(a),
+      })
+    }
+
+    if (b.length > 0) {
       fetch(`${BASE_URL}/keywords/bulkupsert`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data.keywords.split(',')),
+        body: JSON.stringify(b),
       })
     }
 
