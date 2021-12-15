@@ -15,10 +15,10 @@ export class ArticleService {
   async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
     const articles = await this.articleModel.find().exec()
     const articlesKeywords = articles
-      .map((article: Article) => {
-        return article.keywords.split(',').map((e) => {
+      .map((article: Article) =>
+        article.keywords.split(',').map((keyword) => {
           return {
-            keyword: e,
+            keyword,
             category: article.category,
             subcategory: article.subcategory,
             slug: article.slug,
@@ -26,7 +26,7 @@ export class ArticleService {
             priority: article.priority,
           }
         })
-      })
+      )
       .reduce((a, b) => a.concat(b))
 
     return articlesKeywords as ArticlesKeywords[]
@@ -34,19 +34,16 @@ export class ArticleService {
 
   async find(paginationQuery: PaginationDto): Promise<Article[]> {
     const { limit, skip, sort } = paginationQuery
-    const articles = await this.articleModel
+    return await this.articleModel
       .find()
       .sort(sort)
       .skip(skip)
       .limit(limit)
       .exec()
-
-    return articles
   }
 
   async findById(_id): Promise<Article> {
-    const article = await this.articleModel.findById(_id).exec()
-    return article
+    return await this.articleModel.findById(_id).exec()
   }
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
@@ -58,16 +55,12 @@ export class ArticleService {
     _id: string,
     articleDTO: ArticleDTO
   ): Promise<Article> {
-    const editedArticle = await this.articleModel.findByIdAndUpdate(
-      _id,
-      articleDTO,
-      { new: true }
-    )
-    return editedArticle
+    return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
+      new: true,
+    })
   }
 
   async findByIdAndRemove(_id): Promise<Article> {
-    const deletedArticle = await this.articleModel.findByIdAndRemove(_id)
-    return deletedArticle
+    return await this.articleModel.findByIdAndRemove(_id)
   }
 }

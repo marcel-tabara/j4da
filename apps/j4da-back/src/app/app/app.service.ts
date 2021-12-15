@@ -9,13 +9,11 @@ export class AppService {
   constructor(@InjectModel('App') private readonly appModel: Model<App>) {}
 
   async find(): Promise<App[]> {
-    const apps = await this.appModel.find().exec()
-    return apps || []
+    return await this.appModel.find().exec()
   }
 
   async findById(_id): Promise<App> {
-    const app = await this.appModel.findById(_id).exec()
-    return app
+    return await this.appModel.findById(_id).exec()
   }
 
   async add(appDTO: AppDTO): Promise<App> {
@@ -24,14 +22,12 @@ export class AppService {
   }
 
   async findByIdAndUpdate(_id: string, appDTO: AppDTO): Promise<App> {
-    const editedApp = await this.appModel.findByIdAndUpdate(_id, appDTO, {
+    return await this.appModel.findByIdAndUpdate(_id, appDTO, {
       new: true,
     })
-    return editedApp
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
-    const deletedApp = await this.appModel.findByIdAndRemove(_id)
-    return deletedApp
+    return await this.appModel.findByIdAndRemove(_id)
   }
 }

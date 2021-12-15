@@ -11,13 +11,11 @@ export class CategoryService {
   ) {}
 
   async find(): Promise<Category[]> {
-    const categories = await this.categoryModel.find().exec()
-    return categories
+    return await this.categoryModel.find().exec()
   }
 
   async findById(_id): Promise<Category> {
-    const category = await this.categoryModel.findById(_id).exec()
-    return category
+    return await this.categoryModel.findById(_id).exec()
   }
 
   async add(categoryDTO: CategoryDTO): Promise<Category> {
@@ -29,16 +27,12 @@ export class CategoryService {
     _id: string,
     categoryDTO: CategoryDTO & { _id: string }
   ): Promise<Category> {
-    const category = await this.categoryModel.findByIdAndUpdate(
-      _id,
-      categoryDTO,
-      { new: true }
-    )
-    return category
+    return await this.categoryModel.findByIdAndUpdate(_id, categoryDTO, {
+      new: true,
+    })
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
-    const category = await this.categoryModel.findByIdAndRemove(_id)
-    return category
+    return await this.categoryModel.findByIdAndRemove(_id)
   }
 }

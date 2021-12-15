@@ -11,13 +11,11 @@ export class KeywordService {
   ) {}
 
   async find(): Promise<Keyword[]> {
-    const keywords = await this.keywordModel.find().exec()
-    return keywords
+    return await this.keywordModel.find().exec()
   }
 
   async findById(_id): Promise<Keyword> {
-    const keyword = await this.keywordModel.findById(_id).exec()
-    return keyword
+    return await this.keywordModel.findById(_id).exec()
   }
 
   async add(keywordDTO: KeywordDTO): Promise<Keyword> {
@@ -29,12 +27,9 @@ export class KeywordService {
     _id: string,
     keywordDTO: KeywordDTO
   ): Promise<Keyword> {
-    const editedKeyword = await this.keywordModel.findByIdAndUpdate(
-      _id,
-      keywordDTO,
-      { new: true }
-    )
-    return editedKeyword
+    return await this.keywordModel.findByIdAndUpdate(_id, keywordDTO, {
+      new: true,
+    })
   }
 
   async findManyAndUpdate(keywords: string[]): Promise<string> {
@@ -82,7 +77,6 @@ export class KeywordService {
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
-    const deletedKeyword = await this.keywordModel.findByIdAndRemove(_id)
-    return deletedKeyword
+    return await this.keywordModel.findByIdAndRemove(_id)
   }
 }
