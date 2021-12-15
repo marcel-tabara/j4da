@@ -29,6 +29,12 @@ export class ArticleController {
       .json({ limit, skip, total: data.length, data })
   }
 
+  @Get('/articlesKeywords')
+  async articlesKeywords(@Res() res) {
+    const data = await this.articleService.findArticlesKeywords()
+    return res.status(HttpStatus.OK).json(data)
+  }
+
   @Get('/:_id')
   async findById(@Res() res, @Param('_id', new ValidateObjectId()) _id) {
     const article = await this.articleService.findById(_id)

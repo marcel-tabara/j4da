@@ -19,4 +19,5 @@ export interface Article extends Document {
   readonly category: string
   readonly subcategory: string
   readonly app: string
+  readonly priority: number
 }

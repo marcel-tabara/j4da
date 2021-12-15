@@ -1,5 +1,14 @@
 import { ReactNode } from 'react'
 
+export interface ArticlesKeywords {
+  keyword: string
+  url: string
+  slug: string
+  category: string
+  subcategory: string
+  priority: number
+}
+
 export interface IApp {
   _id: string
   keyOverride?: string
@@ -45,6 +54,7 @@ export interface IArticle {
   category?: string
   subcategory?: string
   app: string
+  priority: number
 }
 
 export interface IArticles {

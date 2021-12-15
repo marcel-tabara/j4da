@@ -2,7 +2,14 @@ import { GetStaticProps } from 'next'
 import React, { useState } from 'react'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { Main } from '../../templates/Main'
-import { IApp, IArticle, ICategory, ISubCategory, IUrl } from '../../types'
+import {
+  ArticlesKeywords,
+  IApp,
+  IArticle,
+  ICategory,
+  ISubCategory,
+  IUrl,
+} from '../../types'
 import { BASE_URL } from '../../utils/constants'
 
 const Article = (
@@ -56,6 +63,8 @@ const Article = (
 export const getStaticProps: GetStaticProps<
   IArticle & {
     apps: IApp[]
+  } & {
+    articlesKeywords: ArticlesKeywords[]
   },
   IUrl
 > = async () => {
@@ -65,9 +74,15 @@ export const getStaticProps: GetStaticProps<
   const resApp = await fetch(`${BASE_URL}/apps`)
   const apps: IApp[] = await resApp.json()
 
+  const resArticlesKeywords = await fetch(
+    `${BASE_URL}/articles/articlesKeywords`
+  )
+  const articlesKeywords: ArticlesKeywords[] = await resArticlesKeywords.json()
+
   return {
     props: {
       _id: '',
+      priority: 0,
       keyOverride: '',
       app: '',
       url: '',
@@ -75,9 +90,9 @@ export const getStaticProps: GetStaticProps<
       images: '',
       section: '',
       keywords: '',
-      dateCreated: '',
-      datePublished: '',
-      dateModified: '',
+      dateCreated: new Date().toISOString(),
+      datePublished: new Date().toISOString(),
+      dateModified: new Date().toISOString(),
       authorName: '',
       description: '',
       body: '',
@@ -88,6 +103,7 @@ export const getStaticProps: GetStaticProps<
       subcategory: '',
       categories,
       apps,
+      articlesKeywords,
     },
   }
 }
