@@ -38,7 +38,7 @@ const Article = (
     const cats = props.categories.find(
       (category: ICategory) => category._id === event.target.value
     )
-    setSubcategories(cats?.subcategories ?? [{ title: '', description: '' }])
+    setSubcategories(cats?.subcategories ?? [])
   }
 
   const onChaneApp = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -46,9 +46,9 @@ const Article = (
       (category: ICategory) => category.app === event.target.value
     )
 
-    cats.length > 0 && setCategories(cats)
+    setCategories(cats || [])
     onChaneCategory({
-      target: { value: cats.length > 0 ? cats?.[0]?._id : [] },
+      target: { value: '' },
     } as React.ChangeEvent<HTMLSelectElement>)
   }
 
