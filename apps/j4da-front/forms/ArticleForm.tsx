@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
 import { IApp, IArticle, ICategory, ISubCategory } from '../types'
+import { extractKeywords } from '../utils/analysis'
 import { BASE_URL } from '../utils/constants'
 
 interface IArticleFormProps {
@@ -21,10 +23,24 @@ const ArticleForm = ({
 }: IArticleFormProps) => {
   const router = useRouter()
   const {
+    watch,
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IArticle>()
+  const getDefaultBodyKeywords = () => extractKeywords(props.body)
+  const [bodyKeywords, setBodyKeywords] = useState(getDefaultBodyKeywords())
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
+    props.keywords.split(',')
+  )
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type)
+    )
+    return () => subscription.unsubscribe()
+  }, [watch])
+
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
       fetch(`${BASE_URL}/articles/${props._id}/update`, {
@@ -72,6 +88,20 @@ const ArticleForm = ({
 
     router.replace('/articles')
   })
+  const onBodyChange = (e) => {
+    extractKeywords(e.target.value)
+  }
+  const onAddKeyword = (event) => {
+    const newSelectedKeywords = [...selectedKeywords].concat(event.target.id)
+    setSelectedKeywords(newSelectedKeywords)
+  }
+  const onRemoveKeyword = (event) => {
+    const newSelectedKeywords = selectedKeywords.filter(
+      (e) => e !== event.target.id
+    )
+    setSelectedKeywords(newSelectedKeywords)
+  }
+
   return (
     <div className="register-form">
       <form onSubmit={onSubmit}>
@@ -196,10 +226,53 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
+          <label>body keywords</label>
+          <Accordion>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>
+                Total Keywords: {bodyKeywords.length}
+              </Accordion.Header>
+              <Accordion.Body>
+                <div className="container">
+                  {bodyKeywords.map((e) => (
+                    <a key={e[0]} id={e[0]} onClick={onAddKeyword}>
+                      {e[0]} : {e[1]}
+                    </a>
+                  ))}
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </div>
+        <div className="form-group">
+          <label>body keywords</label>
+          <Accordion>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>
+                Total Selected Keywords: {selectedKeywords.length}
+              </Accordion.Header>
+              <Accordion.Body>
+                <div className="container">
+                  <ul className="list-unstyled card-columns">
+                    {selectedKeywords.map((e) => (
+                      <li key={e}>
+                        <a id={e} onClick={onRemoveKeyword}>
+                          {e}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </div>
+        <div className="form-group">
           <label>body</label>
           <textarea
             {...register('body')}
             defaultValue={props.body}
+            // onChange={onBodyChange}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
         </div>
