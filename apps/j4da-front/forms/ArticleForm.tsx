@@ -94,12 +94,21 @@ const ArticleForm = ({
   const onAddKeyword = (event) => {
     const newSelectedKeywords = [...selectedKeywords].concat(event.target.id)
     setSelectedKeywords(newSelectedKeywords)
+
+    const newBodyKeywords = bodyKeywords.filter(
+      (keyword) => keyword[0] !== event.target.id
+    )
+    setBodyKeywords(newBodyKeywords)
   }
   const onRemoveKeyword = (event) => {
     const newSelectedKeywords = selectedKeywords.filter(
       (e) => e !== event.target.id
     )
     setSelectedKeywords(newSelectedKeywords)
+    const newBodyKeywords = getDefaultBodyKeywords().filter(
+      (keyword) => !newSelectedKeywords.includes(keyword[0])
+    )
+    setBodyKeywords(newBodyKeywords)
   }
 
   return (
@@ -232,12 +241,17 @@ const ArticleForm = ({
               <Accordion.Header>
                 Total Keywords: {bodyKeywords.length}
               </Accordion.Header>
-              <Accordion.Body>
+              <Accordion.Body className="accordion-box">
                 <div className="container">
                   {bodyKeywords.map((e) => (
-                    <a key={e[0]} id={e[0]} onClick={onAddKeyword}>
+                    <li
+                      key={e[0]}
+                      id={e[0]}
+                      onClick={onAddKeyword}
+                      className="accordion-list"
+                    >
                       {e[0]} : {e[1]}
-                    </a>
+                    </li>
                   ))}
                 </div>
               </Accordion.Body>
@@ -245,17 +259,17 @@ const ArticleForm = ({
           </Accordion>
         </div>
         <div className="form-group">
-          <label>body keywords</label>
+          <label>selected keywords</label>
           <Accordion>
             <Accordion.Item eventKey="0">
               <Accordion.Header>
                 Total Selected Keywords: {selectedKeywords.length}
               </Accordion.Header>
-              <Accordion.Body>
+              <Accordion.Body className="accordion-box">
                 <div className="container">
                   <ul className="list-unstyled card-columns">
                     {selectedKeywords.map((e) => (
-                      <li key={e}>
+                      <li key={e} className="accordion-list">
                         <a id={e} onClick={onRemoveKeyword}>
                           {e}
                         </a>

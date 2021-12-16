@@ -1,13 +1,9 @@
-@tailwind base;
-
-a {
-  @apply text-blue-700;
+.accordion-list {
+  display: block;
+  width: 20%;
+  float: left;
 }
-
-a:hover {
-  @apply underline;
+.accordion-box {
+  height: 300px;
+  overflow: auto;
 }
-
-@tailwind components;
-
-@tailwind utilities;
