@@ -29,10 +29,19 @@ export class ArticleController {
       .json({ limit, skip, total: data.length, data })
   }
 
-  @Get('/articlesKeywords')
-  async articlesKeywords(@Res() res) {
-    const data = await this.articleService.findArticlesKeywords()
+  @Get('/articleKeywords')
+  async articleKeywords(@Res() res) {
+    const data = await this.articleService.findArticleKeywords()
     return res.status(HttpStatus.OK).json(data)
+  }
+
+  @Post('/extractKeywords')
+  async extractKeywords(@Res() res, @Body() article: { article: string }) {
+    const result = await this.articleService.extractKeywords(article.article)
+    return res.status(HttpStatus.OK).json({
+      message: 'success',
+      result,
+    })
   }
 
   @Get('/:_id')

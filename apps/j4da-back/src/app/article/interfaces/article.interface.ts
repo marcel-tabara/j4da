@@ -1,6 +1,7 @@
 import { Document } from 'mongoose'
 
 export interface Article extends Document {
+  readonly _id?: string
   readonly keyOverride?: string
   readonly url: string
   readonly title: string

@@ -17,7 +17,7 @@ const Article = (
   props: IArticle & { categories: ICategory[] } & {
     apps: IApp[]
   } & {
-    articlesKeywords: ArticlesKeywords[]
+    articleKeywords: ArticlesKeywords[]
   }
 ) => {
   const getDefaultCats = () =>
@@ -84,7 +84,7 @@ export const getStaticProps: GetStaticProps<
   IArticle & {
     apps: IApp[]
   } & {
-    articlesKeywords: ArticlesKeywords[]
+    articleKeywords: ArticlesKeywords[]
   },
   IUrl
 > = async ({ params }) => {
@@ -98,9 +98,9 @@ export const getStaticProps: GetStaticProps<
   const apps: IApp[] = await resApp.json()
 
   const resArticlesKeywords = await fetch(
-    `${BASE_URL}/articles/articlesKeywords`
+    `${BASE_URL}/articles/articleKeywords`
   )
-  const articlesKeywords: ArticlesKeywords[] = await resArticlesKeywords.json()
+  const articleKeywords: ArticlesKeywords[] = await resArticlesKeywords.json()
 
   return {
     props: {
@@ -126,7 +126,7 @@ export const getStaticProps: GetStaticProps<
       subcategory: article.subcategory || '',
       categories,
       apps,
-      articlesKeywords,
+      articleKeywords,
     },
   }
 }

@@ -7,4 +7,5 @@ export interface ArticlesKeywords extends Document {
   readonly category: string
   readonly subcategory: string
   readonly priority: number
+  readonly _id: string
 }

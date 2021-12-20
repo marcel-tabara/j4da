@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
+import rake from 'rake-js'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { ArticlesKeywords } from './interfaces/article-keywords.interface'
@@ -12,9 +13,9 @@ export class ArticleService {
     @InjectModel('Article') private readonly articleModel: Model<Article>
   ) {}
 
-  async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
+  async findArticleKeywords(): Promise<ArticlesKeywords[]> {
     const articles = await this.articleModel.find().exec()
-    const articlesKeywords = articles
+    const articleKeywords = articles
       .map((article: Article) =>
         article.keywords.split(',').map((keyword) => {
           return {
@@ -29,7 +30,11 @@ export class ArticleService {
       )
       .reduce((a, b) => a.concat(b))
 
-    return articlesKeywords as ArticlesKeywords[]
+    return articleKeywords as ArticlesKeywords[]
+  }
+
+  async extractKeywords(article: string): Promise<string[]> {
+    return rake(article, { language: 'english' })
   }
 
   async find(paginationQuery: PaginationDto): Promise<Article[]> {

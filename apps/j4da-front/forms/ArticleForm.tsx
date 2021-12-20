@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { articleService } from '../services'
 import { IApp, IArticle, ICategory, ISubCategory } from '../types'
-import { extractKeywords } from '../utils/analysis'
 import { BASE_URL } from '../utils/constants'
 
 interface IArticleFormProps {
@@ -21,17 +22,23 @@ const ArticleForm = ({
   categories = [],
   subcategories = [],
 }: IArticleFormProps) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(articleService.actions.getArticles())
+  }, [dispatch])
   const router = useRouter()
   const {
-    watch,
-    register,
     handleSubmit,
+    register,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<IArticle>()
-  const getDefaultBodyKeywords = () => extractKeywords(props.body)
-  const [bodyKeywords, setBodyKeywords] = useState(getDefaultBodyKeywords())
+
+  const [bodyKeywords, setBodyKeywords] = useState([])
+  const [defaultBodyKeywords, setDefaultBodyKeywords] = useState([])
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
-    props.keywords.split(',')
+    !props.keywords.length ? [] : props.keywords.split(',')
   )
 
   useEffect(() => {
@@ -40,6 +47,27 @@ const ArticleForm = ({
     )
     return () => subscription.unsubscribe()
   }, [watch])
+
+  const extractKeywords = async (article: string): Promise<string[]> => {
+    const res = await fetch(`${BASE_URL}/articles/extractKeywords`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ article }),
+    })
+    const extracted = await res.json()
+
+    return extracted.result
+  }
+
+  const getDefaultBodyKeywords = useCallback(() => {
+    extractKeywords(props.body).then((keywords) => {
+      setDefaultBodyKeywords(keywords)
+      setBodyKeywords(keywords)
+    })
+  }, [props.body])
+  getDefaultBodyKeywords()
 
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
@@ -88,15 +116,16 @@ const ArticleForm = ({
 
     router.replace('/articles')
   })
-  const onBodyChange = (e) => {
-    extractKeywords(e.target.value)
+  const onBodyChange = async (e) => {
+    setBodyKeywords(await extractKeywords(e.target.value))
   }
   const onAddKeyword = (event) => {
     const newSelectedKeywords = [...selectedKeywords].concat(event.target.id)
     setSelectedKeywords(newSelectedKeywords)
+    setValue('keywords', newSelectedKeywords.toString())
 
     const newBodyKeywords = bodyKeywords.filter(
-      (keyword) => keyword[0] !== event.target.id
+      (keyword) => keyword !== event.target.id
     )
     setBodyKeywords(newBodyKeywords)
   }
@@ -105,10 +134,15 @@ const ArticleForm = ({
       (e) => e !== event.target.id
     )
     setSelectedKeywords(newSelectedKeywords)
-    const newBodyKeywords = getDefaultBodyKeywords().filter(
-      (keyword) => !newSelectedKeywords.includes(keyword[0])
+    setValue('keywords', newSelectedKeywords.toString())
+
+    const newBodyKeywords = defaultBodyKeywords.filter(
+      (keyword) => !newSelectedKeywords.includes(keyword)
     )
     setBodyKeywords(newBodyKeywords)
+  }
+  const onChangeKeywords = (e) => {
+    setSelectedKeywords(e.target.value.split(','))
   }
 
   return (
@@ -214,7 +248,8 @@ const ArticleForm = ({
           <label>keywords</label>
           <input
             {...register('keywords')}
-            defaultValue={props.keywords}
+            onBlur={onChangeKeywords}
+            defaultValue={selectedKeywords.toString()}
             className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
           />
         </div>
@@ -245,12 +280,12 @@ const ArticleForm = ({
                 <div className="container">
                   {bodyKeywords.map((e) => (
                     <li
-                      key={e[0]}
-                      id={e[0]}
+                      key={e.split(' ').join('_')}
+                      id={e}
                       onClick={onAddKeyword}
                       className="accordion-list"
                     >
-                      {e[0]} : {e[1]}
+                      {e}
                     </li>
                   ))}
                 </div>
@@ -269,10 +304,13 @@ const ArticleForm = ({
                 <div className="container">
                   <ul className="list-unstyled card-columns">
                     {selectedKeywords.map((e) => (
-                      <li key={e} className="accordion-list">
-                        <a id={e} onClick={onRemoveKeyword}>
-                          {e}
-                        </a>
+                      <li
+                        key={e.split(' ').join('_').concat('_selected')}
+                        className="accordion-list"
+                        id={e}
+                        onClick={onRemoveKeyword}
+                      >
+                        {e}
                       </li>
                     ))}
                   </ul>
@@ -286,7 +324,7 @@ const ArticleForm = ({
           <textarea
             {...register('body')}
             defaultValue={props.body}
-            // onChange={onBodyChange}
+            onBlur={onBodyChange}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
         </div>
