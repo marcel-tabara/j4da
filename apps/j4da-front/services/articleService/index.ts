@@ -42,7 +42,7 @@ const articleService = createGenericSlice({
       state.data.articleById.data = action.payload
       state.data.articleById.status = 'available'
     },
-    getArticleKeywords: (state) => {
+    getArticleKeywords: (state, action: PayloadAction<string>) => {
       state.data.articleKeywords.status = 'loading'
     },
     setArticleKeywords: (state, action: PayloadAction<IArticlesKeywords>) => {

@@ -31,7 +31,22 @@ export function* watchGetArticleById({ payload }: TaskAction) {
   }
 }
 
+export function* watchExtractKeywords({ payload }: TaskAction) {
+  try {
+    const extractedKeywords = yield http.post<string>(
+      '/articles/extractKeywords',
+      JSON.stringify({ article: payload })
+    )
+    yield put(
+      articleService.actions.setExtractedKeywords(extractedKeywords.data)
+    )
+  } catch (error) {
+    yield put(alertService.actions.setAlert(error.message))
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest('articles/getArticles', watchGetArticles)
   yield takeLatest('articles/getArticleById', watchGetArticleById)
+  yield takeLatest('articles/extractKeywords', watchExtractKeywords)
 }

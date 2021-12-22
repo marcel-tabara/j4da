@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
+import { useApps } from '../../hooks/useApps'
+import { useCategories } from '../../hooks/useCategories'
+import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
-import {
-  appService,
-  articleService,
-  categoryService,
-  keywordService,
-} from '../../services'
+import { articleService } from '../../services'
 import { Main } from '../../templates/Main'
 import { ICategory, ISubCategory } from '../../utils/types'
 
@@ -18,11 +16,11 @@ const Article = () => {
   const {
     query: { _id },
   } = useRouter()
+  useCategories()
+  useApps()
+  useKeywords()
 
   useEffect(() => {
-    dispatch(categoryService.actions.getCategories())
-    dispatch(keywordService.actions.getKeywords())
-    dispatch(appService.actions.getApps())
     _id && dispatch(articleService.actions.getArticleById(_id as string))
   }, [dispatch, _id])
 

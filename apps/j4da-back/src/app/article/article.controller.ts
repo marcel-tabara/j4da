@@ -37,11 +37,10 @@ export class ArticleController {
 
   @Post('/extractKeywords')
   async extractKeywords(@Res() res, @Body() article: { article: string }) {
-    const result = await this.articleService.extractKeywords(article.article)
-    return res.status(HttpStatus.OK).json({
-      message: 'success',
-      result,
-    })
+    const extractedKeywords = await this.articleService.extractKeywords(
+      article.article
+    )
+    return res.status(HttpStatus.OK).json(extractedKeywords)
   }
 
   @Get('/:_id')

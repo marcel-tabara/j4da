@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
+import { useSelectors } from '../hooks/useSelectors'
 import { articleService } from '../services'
 import { BASE_URL } from '../utils/constants'
 import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
@@ -50,26 +51,27 @@ const ArticleForm = ({
     return () => subscription.unsubscribe()
   }, [watch])
 
-  const extractKeywords = async (article: string): Promise<string[]> => {
-    const res = await fetch(`${BASE_URL}/articles/extractKeywords`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ article }),
-    })
-    const extracted = await res.json()
+  const extractKeywords = useCallback(
+    (text: string) => {
+      dispatch(articleService.actions.extractKeywords(text))
+    },
+    [dispatch]
+  )
 
-    return extracted.result
-  }
+  const { extractedKeywords } = useSelectors()
 
-  const getDefaultBodyKeywords = useCallback(() => {
-    // extractKeywords(props.body).then((keywords) => {
-    //   setDefaultBodyKeywords(keywords)
-    //   setBodyKeywords(keywords)
-    // })
-  }, [article.body])
-  getDefaultBodyKeywords()
+  useEffect(
+    () => extractKeywords(article.body),
+    [article.body, extractKeywords]
+  )
+  useEffect(() => {
+    setBodyKeywords(extractedKeywords)
+  }, [extractedKeywords])
+  useEffect(() => {
+    extractedKeywords &&
+      !defaultBodyKeywords.length &&
+      setDefaultBodyKeywords(extractedKeywords)
+  }, [extractedKeywords, defaultBodyKeywords])
 
   const onSubmit = handleSubmit((data) => {
     if (article._id) {
@@ -97,6 +99,7 @@ const ArticleForm = ({
     const b = newKeywords.filter((e) => !oldKeywords.includes(e))
 
     if (a.length > 0) {
+      // dispatch(keywordService.actions.)
       fetch(`${BASE_URL}/keywords/bulkremove`, {
         method: 'POST',
         headers: {
@@ -119,7 +122,7 @@ const ArticleForm = ({
     router.replace('/articles')
   })
   const onBodyChange = async (e) => {
-    setBodyKeywords(await extractKeywords(e.target.value))
+    extractKeywords(e.target.value)
   }
   const onAddKeyword = (event) => {
     const newSelectedKeywords = [...selectedKeywords].concat(event.target.id)
@@ -271,30 +274,32 @@ const ArticleForm = ({
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
-        <div className="form-group">
-          <label>body keywords</label>
-          <Accordion>
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>
-                Total Keywords: {bodyKeywords.length}
-              </Accordion.Header>
-              <Accordion.Body className="accordion-box">
-                <div className="container">
-                  {bodyKeywords.map((e) => (
-                    <li
-                      key={e.split(' ').join('_')}
-                      id={e}
-                      onClick={onAddKeyword}
-                      className="accordion-list"
-                    >
-                      {e}
-                    </li>
-                  ))}
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-        </div>
+        {bodyKeywords && (
+          <div className="form-group">
+            <label>body keywords</label>
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  Total Keywords: {bodyKeywords.length}
+                </Accordion.Header>
+                <Accordion.Body className="accordion-box">
+                  <div className="container">
+                    {bodyKeywords.map((e) => (
+                      <li
+                        key={e.split(' ').join('_')}
+                        id={e}
+                        onClick={onAddKeyword}
+                        className="accordion-list"
+                      >
+                        {e}
+                      </li>
+                    ))}
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+        )}
         <div className="form-group">
           <label>selected keywords</label>
           <Accordion>

@@ -8,12 +8,20 @@ import {
 } from '../services'
 
 export const useSelectors = () => {
-  const allArticles = useSelector(articleSelectors.articlesSelector)
-  const allApps = useSelector(appSelectors.appsSelector)
-  const allKeywords = useSelector(keywordSelectors.keywordsSelector)
-  const allCategories = useSelector(categorySelectors.categoriesSelector)
-  const articleById = useSelector(articleSelectors.articleByIdSelector)
+  const { data: allArticles } = useSelector(articleSelectors.articlesSelector)
+  const { data: allApps } = useSelector(appSelectors.appsSelector)
+  const { data: allKeywords } = useSelector(keywordSelectors.keywordsSelector)
+  const { data: allCategories } = useSelector(
+    categorySelectors.categoriesSelector
+  )
+  const { data: articleById } = useSelector(
+    articleSelectors.articleByIdSelector
+  )
   const alerts = useSelector(alertSelectors.alertsSelector)
+
+  const { data: extractedKeywords } = useSelector(
+    articleSelectors.extractedKeywordsSelector
+  )
 
   return {
     allArticles,
@@ -21,6 +29,7 @@ export const useSelectors = () => {
     allKeywords,
     allCategories,
     articleById,
+    extractedKeywords,
     alerts,
   }
 }
