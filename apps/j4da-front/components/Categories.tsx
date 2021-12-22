@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { ICategoriesProps } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { ICategoriesProps } from '../utils/types'
 
 const Categories = (props: ICategoriesProps) => {
   const router = useRouter()
@@ -33,7 +33,7 @@ const Categories = (props: ICategoriesProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.categories.map((category) => (
+          {(props?.categories ?? []).map((category) => (
             <tr key={category._id}>
               <td>
                 <Link

@@ -4,23 +4,25 @@ import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { articleService } from '../services'
-import { IApp, IArticle, ICategory, ISubCategory } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
 
 interface IArticleFormProps {
-  props: IArticle & { categories: ICategory[] } & { apps: IApp[] }
   onChaneCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
   onChaneApp: (event: React.ChangeEvent<HTMLSelectElement>) => void
   subcategories: ISubCategory[]
   categories: ICategory[]
+  article: IArticle
+  allApps: IApp[]
 }
 
 const ArticleForm = ({
-  props,
   onChaneCategory,
   onChaneApp,
   categories = [],
   subcategories = [],
+  article,
+  allApps,
 }: IArticleFormProps) => {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -38,7 +40,7 @@ const ArticleForm = ({
   const [bodyKeywords, setBodyKeywords] = useState([])
   const [defaultBodyKeywords, setDefaultBodyKeywords] = useState([])
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
-    !props.keywords.length ? [] : props.keywords.split(',')
+    !article.keywords.length ? [] : article.keywords.split(',')
   )
 
   useEffect(() => {
@@ -62,21 +64,21 @@ const ArticleForm = ({
   }
 
   const getDefaultBodyKeywords = useCallback(() => {
-    extractKeywords(props.body).then((keywords) => {
-      setDefaultBodyKeywords(keywords)
-      setBodyKeywords(keywords)
-    })
-  }, [props.body])
+    // extractKeywords(props.body).then((keywords) => {
+    //   setDefaultBodyKeywords(keywords)
+    //   setBodyKeywords(keywords)
+    // })
+  }, [article.body])
   getDefaultBodyKeywords()
 
   const onSubmit = handleSubmit((data) => {
-    if (props._id) {
-      fetch(`${BASE_URL}/articles/${props._id}/update`, {
+    if (article._id) {
+      fetch(`${BASE_URL}/articles/${article._id}/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...data, _id: props._id }),
+        body: JSON.stringify({ ...data, _id: article._id }),
       })
     } else {
       fetch(`${BASE_URL}/articles/add`, {
@@ -88,7 +90,7 @@ const ArticleForm = ({
       })
     }
 
-    const oldKeywords = props.keywords.split(',')
+    const oldKeywords = article.keywords.split(',')
     const newKeywords = data.keywords.split(',')
 
     const a = oldKeywords.filter((e) => !newKeywords.includes(e))
@@ -152,7 +154,7 @@ const ArticleForm = ({
           <label>url</label>
           <input
             {...register('url')}
-            defaultValue={props.url}
+            defaultValue={article.url}
             className={`form-control ${errors.url ? 'is-invalid' : ''}`}
           />
         </div>
@@ -160,7 +162,7 @@ const ArticleForm = ({
           <label>title</label>
           <input
             {...register('title')}
-            defaultValue={props.title}
+            defaultValue={article.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -168,7 +170,7 @@ const ArticleForm = ({
           <label>slug</label>
           <input
             {...register('slug')}
-            defaultValue={props.slug}
+            defaultValue={article.slug}
             className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
           />
         </div>
@@ -176,7 +178,7 @@ const ArticleForm = ({
           <label>app</label>
           <select
             {...register('app')}
-            defaultValue={props.app}
+            defaultValue={article.app}
             name="app"
             onChange={onChaneApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
@@ -184,7 +186,7 @@ const ArticleForm = ({
             <option key="app.select" value="">
               Select App
             </option>
-            {props.apps.map((app: IApp) => (
+            {allApps.map((app: IApp) => (
               <option key={app._id} value={app._id}>
                 {app.title}
               </option>
@@ -195,7 +197,7 @@ const ArticleForm = ({
           <label>category</label>
           <select
             {...register('category')}
-            defaultValue={props.category}
+            defaultValue={article.category}
             name="category"
             onChange={onChaneCategory}
             className={`form-control ${errors.category ? 'is-invalid' : ''}`}
@@ -232,7 +234,7 @@ const ArticleForm = ({
           <label>images</label>
           <input
             {...register('images')}
-            defaultValue={props.images}
+            defaultValue={article.images}
             className={`form-control ${errors.images ? 'is-invalid' : ''}`}
           />
         </div>
@@ -240,7 +242,7 @@ const ArticleForm = ({
           <label>section</label>
           <input
             {...register('section')}
-            defaultValue={props.section}
+            defaultValue={article.section}
             className={`form-control ${errors.section ? 'is-invalid' : ''}`}
           />
         </div>
@@ -257,7 +259,7 @@ const ArticleForm = ({
           <label>authorName</label>
           <input
             {...register('authorName')}
-            defaultValue={props.authorName}
+            defaultValue={article.authorName}
             className={`form-control ${errors.authorName ? 'is-invalid' : ''}`}
           />
         </div>
@@ -265,7 +267,7 @@ const ArticleForm = ({
           <label>description</label>
           <textarea
             {...register('description')}
-            defaultValue={props.description}
+            defaultValue={article.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
@@ -323,7 +325,7 @@ const ArticleForm = ({
           <label>body</label>
           <textarea
             {...register('body')}
-            defaultValue={props.body}
+            defaultValue={article.body}
             onBlur={onBodyChange}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
@@ -332,7 +334,7 @@ const ArticleForm = ({
           <label>publisherName</label>
           <input
             {...register('publisherName')}
-            defaultValue={props.publisherName}
+            defaultValue={article.publisherName}
             className={`form-control ${
               errors.publisherName ? 'is-invalid' : ''
             }`}
@@ -342,7 +344,7 @@ const ArticleForm = ({
           <label>publisherLogo</label>
           <input
             {...register('publisherLogo')}
-            defaultValue={props.publisherLogo}
+            defaultValue={article.publisherLogo}
             className={`form-control ${
               errors.publisherLogo ? 'is-invalid' : ''
             }`}
@@ -352,7 +354,7 @@ const ArticleForm = ({
           <label>dateCreated</label>
           <input
             {...register('dateCreated')}
-            defaultValue={props.dateCreated}
+            defaultValue={article.dateCreated}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -360,7 +362,7 @@ const ArticleForm = ({
           <label>datePublished</label>
           <input
             {...register('datePublished')}
-            defaultValue={props.datePublished}
+            defaultValue={article.datePublished}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
             }`}
@@ -380,7 +382,7 @@ const ArticleForm = ({
           <label>keyOverride</label>
           <input
             {...register('keyOverride')}
-            defaultValue={props.keyOverride}
+            defaultValue={article.keyOverride}
             className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
           />
         </div>

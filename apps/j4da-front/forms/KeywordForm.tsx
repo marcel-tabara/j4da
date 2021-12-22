@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { IKeyword } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { IKeyword } from '../utils/types'
 
 interface IKeywordFormProps {
   props: IKeyword

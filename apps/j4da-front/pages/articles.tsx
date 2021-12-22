@@ -1,29 +1,27 @@
-import { GetStaticProps } from 'next'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Spinner } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import { Articles } from '../components/Articles'
+import { articleSelectors, articleService } from '../services'
 import { Main } from '../templates/Main'
-import { IArticles, IArticlesProps } from '../types'
-import { Config } from '../utils/Config'
-import { BASE_URL } from '../utils/constants'
 
-const ArticlesList = (props: IArticlesProps) => (
-  <Main>
-    <Articles articles={props.articles} pagination={props.pagination} />
-  </Main>
-)
-
-export const getStaticProps: GetStaticProps<IArticlesProps> = async () => {
-  const res = await fetch(`${BASE_URL}/articles`)
-  const articles: IArticles = await res.json()
-  const posts = articles.data
+const ArticlesList = () => {
+  const dispatch = useDispatch()
+  const articles = useSelector(articleSelectors.articlesSelector)
   const pagination = {}
 
-  return {
-    props: {
-      articles: posts.slice(0, Config.pagination_size),
-      pagination,
-    },
-  }
+  useEffect(() => {
+    dispatch(articleService.actions.getArticles())
+  }, [dispatch])
+  return (
+    <Main>
+      {!articles?.data ? (
+        <Spinner animation="grow" />
+      ) : (
+        <Articles articles={articles?.data ?? []} pagination={pagination} />
+      )}
+    </Main>
+  )
 }
 
 export default ArticlesList

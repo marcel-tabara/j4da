@@ -1,27 +1,38 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
-import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
+import { Spinner } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
-import { Main } from '../../templates/Main'
+import { useSelectors } from '../../hooks/useSelectors'
 import {
-  ArticlesKeywords,
-  IApp,
-  IArticle,
-  IArticles,
-  ICategory,
-  ISubCategory,
-  IUrl,
-} from '../../types'
-import { BASE_URL } from '../../utils/constants'
+  appService,
+  articleService,
+  categoryService,
+  keywordService,
+} from '../../services'
+import { Main } from '../../templates/Main'
+import { ICategory, ISubCategory } from '../../utils/types'
 
-const Article = (
-  props: IArticle & { categories: ICategory[] } & {
-    apps: IApp[]
-  } & {
-    articleKeywords: ArticlesKeywords[]
-  }
-) => {
+const Article = () => {
+  const dispatch = useDispatch()
+  const {
+    query: { _id },
+  } = useRouter()
+
+  useEffect(() => {
+    dispatch(categoryService.actions.getCategories())
+    dispatch(keywordService.actions.getKeywords())
+    dispatch(appService.actions.getApps())
+    _id && dispatch(articleService.actions.getArticleById(_id as string))
+  }, [dispatch, _id])
+
+  const { allArticles, allApps, allKeywords, allCategories, articleById } =
+    useSelectors()
+
   const getDefaultCats = () =>
-    props.app ? props.categories.filter((cat) => cat.app === props.app) : []
+    articleById?.app
+      ? allCategories.filter((cat) => cat.app === articleById.app)
+      : []
   const [categories, setCategories] = useState<ICategory[]>(getDefaultCats())
   const getSubCat = (cat: string) => {
     const category = categories.find(
@@ -31,18 +42,18 @@ const Article = (
   }
 
   const [subcategories, setSubcategories] = useState<ISubCategory[]>(
-    getSubCat(props.category)
+    getSubCat(articleById?.category)
   )
 
   const onChaneCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const cats = props.categories.find(
+    const cats = allCategories.find(
       (category: ICategory) => category._id === event.target.value
     )
     setSubcategories(cats?.subcategories ?? [])
   }
 
   const onChaneApp = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const cats = props.categories.filter(
+    const cats = allCategories.filter(
       (category: ICategory) => category.app === event.target.value
     )
 
@@ -54,81 +65,86 @@ const Article = (
 
   return (
     <Main>
-      <ArticleForm
-        props={props}
-        subcategories={subcategories}
-        onChaneCategory={onChaneCategory}
-        onChaneApp={onChaneApp}
-        categories={categories}
-      />
+      {!articleById ? (
+        <Spinner animation="grow" />
+      ) : (
+        <ArticleForm
+          subcategories={subcategories}
+          onChaneCategory={onChaneCategory}
+          onChaneApp={onChaneApp}
+          categories={categories}
+          article={articleById}
+          allApps={allApps}
+        />
+      )}
     </Main>
   )
 }
 
-export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
-  const res = await fetch(`${BASE_URL}/articles`)
-  const articles: IArticles = await res.json()
-  const posts = articles.data
+// export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
+//   const res = await fetch(`${BASE_URL}/articles`)
+//   const articles: IArticles = await res.json()
+//   const posts = articles.data
 
-  return {
-    paths: posts.map((post) => ({
-      params: {
-        _id: post._id,
-      },
-    })),
-    fallback: false,
-  }
-}
+//   return {
+//     paths: posts.map((post) => ({
+//       params: {
+//         _id: post._id,
+//       },
+//     })),
+//     fallback: false,
+//   }
+// }
 
-export const getStaticProps: GetStaticProps<
-  IArticle & {
-    apps: IApp[]
-  } & {
-    articleKeywords: ArticlesKeywords[]
-  },
-  IUrl
-> = async ({ params }) => {
-  const res = await fetch(`${BASE_URL}/articles/${params._id}`)
-  const article: IArticle = await res.json()
+// export const getStaticProps: GetStaticProps<
+//   IArticle & {
+//     apps: IApp[]
+//   } & {
+//     articleKeywords: IArticlesKeywords[]
+//   },
+//   IUrl
+// > = async ({ params }) => {
+//   const res = await fetch(`${BASE_URL}/articles/${params._id}`)
+//   const article: IArticle = await res.json()
 
-  const resCat = await fetch(`${BASE_URL}/categories`)
-  const categories: ICategory[] = await resCat.json()
+//   const resCat = await fetch(`${BASE_URL}/categories`)
+//   const categories: ICategory[] = await resCat.json()
 
-  const resApp = await fetch(`${BASE_URL}/apps`)
-  const apps: IApp[] = await resApp.json()
+//   const resApp = await fetch(`${BASE_URL}/apps`)
+//   const apps: IApp[] = await resApp.json()
 
-  const resArticlesKeywords = await fetch(
-    `${BASE_URL}/articles/articleKeywords`
-  )
-  const articleKeywords: ArticlesKeywords[] = await resArticlesKeywords.json()
+//   const resArticlesKeywords = await fetch(
+//     `${BASE_URL}/articles/articleKeywords`
+//   )
+//   const articleKeywords: IArticlesKeywords[] = await resArticlesKeywords.json()
 
-  return {
-    props: {
-      _id: article._id,
-      priority: article.priority || 0,
-      keyOverride: article.keyOverride || '',
-      app: article.app || '',
-      url: article.url || '',
-      title: article.title || '',
-      images: article.images || '',
-      section: article.section || '',
-      keywords: article.keywords || '',
-      dateCreated: article.dateCreated || '',
-      datePublished: new Date().toISOString(),
-      dateModified: new Date().toISOString(),
-      authorName: article.authorName || '',
-      description: article.description || '',
-      body: article.body || '',
-      publisherName: article.publisherName || '',
-      publisherLogo: article.publisherLogo || '',
-      slug: article.slug || '',
-      category: article.category || '',
-      subcategory: article.subcategory || '',
-      categories,
-      apps,
-      articleKeywords,
-    },
-  }
-}
+//   return {
+//     props: {
+//       _id: article._id,
+//       priority: article.priority || 0,
+//       keyOverride: article.keyOverride || '',
+//       app: article.app || '',
+//       url: article.url || '',
+//       title: article.title || '',
+//       images: article.images || '',
+//       section: article.section || '',
+//       keywords: article.keywords || '',
+//       dateCreated: article.dateCreated || '',
+//       datePublished: new Date().toISOString(),
+//       dateModified: new Date().toISOString(),
+//       authorName: article.authorName || '',
+//       description: article.description || '',
+//       body: article.body || '',
+//       publisherName: article.publisherName || '',
+//       publisherLogo: article.publisherLogo || '',
+//       slug: article.slug || '',
+//       category: article.category || '',
+//       subcategory: article.subcategory || '',
+//       categories,
+//       apps,
+//       articleKeywords,
+//     },
+//   }
+// }
 
 export default Article

@@ -1,16 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { ICategory } from '../../utils/types'
+import { createGenericSlice } from '../utils/genericSlice'
+import * as categorySelectors from './selectors'
 
-const categoryService = createSlice({
-  name: 'articles',
-  initialState: {
-    category: [],
-  },
+const initialState = {
+  data: undefined as ICategory[],
+  status: undefined,
+}
+
+const categoryService = createGenericSlice({
+  name: 'categories',
+  initialState,
   reducers: {
-    getCcategories: () => undefined,
-    setCategories: (state, action) => {
-      state.category = action.payload
+    getCategories: (state) => {
+      state.status = 'loading'
+    },
+    setCategories: (state, action: PayloadAction<ICategory[]>) => {
+      state.data = action.payload
+      state.status = 'available'
     },
   },
 })
 
 export { categoryService }
+export { categorySelectors }

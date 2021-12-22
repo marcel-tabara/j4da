@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { IApp, ICategory, ISubCategory } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { IApp, ICategory, ISubCategory } from '../utils/types'
 
 interface ICategoryFormProps {
   props: ICategory & { apps: IApp[] }

@@ -2,7 +2,7 @@ import { GetStaticProps } from 'next'
 import React from 'react'
 import { KeywordForm } from '../../forms/KeywordForm'
 import { Main } from '../../templates/Main'
-import { IKeyword, IUrl } from '../../types'
+import { IKeyword, IUrl } from '../../utils/types'
 
 const Keyword = (props: IKeyword) => {
   return (

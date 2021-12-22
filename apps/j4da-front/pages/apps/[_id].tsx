@@ -2,8 +2,8 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import { AppForm } from '../../forms/AppForm'
 import { Main } from '../../templates/Main'
-import { IApp, IUrl } from '../../types'
 import { BASE_URL } from '../../utils/constants'
+import { IApp, IUrl } from '../../utils/types'
 
 const App = (props: IApp) => {
   return (

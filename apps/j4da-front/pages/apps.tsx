@@ -1,28 +1,22 @@
-import { GetStaticProps } from 'next'
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { Apps } from '../components/Apps'
+import { useApps } from '../hooks/useApps'
 import { Main } from '../templates/Main'
-import { IApp, IAppsProps } from '../types'
-import { Config } from '../utils/Config'
-import { BASE_URL } from '../utils/constants'
 
-const AppsList = (props: IAppsProps) => (
-  <Main>
-    <Apps apps={props.apps} pagination={props.pagination} />
-  </Main>
-)
-
-export const getStaticProps: GetStaticProps<IAppsProps> = async () => {
-  const res = await fetch(`${BASE_URL}/apps`)
-  const apps: IApp[] = await res.json()
+const AppsList = () => {
+  const { apps, status } = useApps()
   const pagination = {}
 
-  return {
-    props: {
-      apps: apps.slice(0, Config.pagination_size),
-      pagination,
-    },
-  }
+  return (
+    <Main>
+      {status !== 'available' ? (
+        <Spinner animation="grow" />
+      ) : (
+        <Apps apps={apps} pagination={pagination} />
+      )}
+    </Main>
+  )
 }
 
 export default AppsList

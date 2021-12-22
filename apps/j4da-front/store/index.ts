@@ -4,19 +4,22 @@ import createSagaMiddleware from 'redux-saga'
 import { rootReducer } from './reducer'
 import rootSaga from './saga'
 
-const store = () => {
-  const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
+const middleware = [...getDefaultMiddleware(), logger, sagaMiddleware]
 
-  const store = configureStore({
-    reducer: rootReducer,
-    middleware: [logger, sagaMiddleware, ...getDefaultMiddleware()],
-  })
+const preloadedState = {}
 
-  sagaMiddleware.run(rootSaga)
+const store = configureStore({
+  reducer: rootReducer,
+  middleware,
+  devTools: process.env.NODE_ENV !== 'production',
+  preloadedState,
+})
 
-  return store
-}
+sagaMiddleware.run(rootSaga)
 
-//export type RootState = ReturnType<typeof store().getState>
+export type AppDispatch = typeof store.dispatch
+export type AppStore = typeof store
+export type RootState = ReturnType<typeof store.getState>
 
 export default store

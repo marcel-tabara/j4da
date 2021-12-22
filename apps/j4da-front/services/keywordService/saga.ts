@@ -1,14 +1,14 @@
 import { put, takeLatest } from 'redux-saga/effects'
-import { keywordService } from '.'
-import { get } from '../utils/utils'
-import { IKeyword } from './../../types'
+import { alertService, keywordService } from '../'
+import { IKeyword } from '../../utils/types'
+import { http } from '../utils/http'
 
 export function* watchGetKeywords() {
   try {
-    const keywords: IKeyword[] = yield get('/keywords')
-    yield put(keywordService.actions.setKeywords(keywords))
+    const keywords = yield http.get<IKeyword[]>('/keywords')
+    yield put(keywordService.actions.setKeywords(keywords.data))
   } catch (error) {
-    console.log('########## error', error)
+    yield put(alertService.actions.setAlert(error.message))
   }
 }
 

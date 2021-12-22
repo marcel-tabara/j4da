@@ -15,9 +15,9 @@ export class ArticleService {
 
   async findArticleKeywords(): Promise<ArticlesKeywords[]> {
     const articles = await this.articleModel.find().exec()
-    const articleKeywords = articles
+    const articleKeywords = (articles || [])
       .map((article: Article) =>
-        article.keywords.split(',').map((keyword) => {
+        (article.keywords || '').split(',').map((keyword) => {
           return {
             keyword,
             category: article.category,

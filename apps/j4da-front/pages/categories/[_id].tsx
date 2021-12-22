@@ -2,8 +2,8 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import React from 'react'
 import { CategoryForm } from '../../forms/CategoryForm'
 import { Main } from '../../templates/Main'
-import { IApp, ICategory, IUrl } from '../../types'
 import { BASE_URL } from '../../utils/constants'
+import { IApp, ICategory, IUrl } from '../../utils/types'
 
 const Category = (props: ICategory & { apps: IApp[] }) => {
   return (

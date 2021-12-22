@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { IArticlesProps } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { IArticlesProps } from '../utils/types'
 
 const Articles = (props: IArticlesProps) => {
   const router = useRouter()
@@ -34,11 +34,11 @@ const Articles = (props: IArticlesProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.articles.map((article) => (
+          {(props?.articles ?? []).map((article) => (
             <tr key={article._id}>
               <td>
                 <Link href="/articles/[_id]" as={`/articles/${article._id}`}>
-                  {article.title}
+                  {article.title || 'No title'}
                 </Link>
               </td>
               <td>{article.app}</td>

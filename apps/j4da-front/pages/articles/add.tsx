@@ -2,15 +2,15 @@ import { GetStaticProps } from 'next'
 import React, { useState } from 'react'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { Main } from '../../templates/Main'
+import { BASE_URL } from '../../utils/constants'
 import {
-  ArticlesKeywords,
   IApp,
   IArticle,
+  IArticlesKeywords,
   ICategory,
   ISubCategory,
   IUrl,
-} from '../../types'
-import { BASE_URL } from '../../utils/constants'
+} from '../../utils/types'
 
 const Article = (
   props: IArticle & { categories: ICategory[] } & {
@@ -64,7 +64,7 @@ export const getStaticProps: GetStaticProps<
   IArticle & {
     apps: IApp[]
   } & {
-    articleKeywords: ArticlesKeywords[]
+    articleKeywords: IArticlesKeywords[]
   },
   IUrl
 > = async () => {
@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps<
   const resArticlesKeywords = await fetch(
     `${BASE_URL}/articles/articleKeywords`
   )
-  const articleKeywords: ArticlesKeywords[] = await resArticlesKeywords.json()
+  const articleKeywords: IArticlesKeywords[] = await resArticlesKeywords.json()
 
   return {
     props: {

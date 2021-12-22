@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { IKeywordsProps } from '../types'
 import { BASE_URL } from '../utils/constants'
+import { IKeywordsProps } from '../utils/types'
 
 const Keywords = (props: IKeywordsProps) => {
   const router = useRouter()
@@ -32,7 +32,7 @@ const Keywords = (props: IKeywordsProps) => {
           </tr>
         </thead>
         <tbody>
-          {props.keywords.map((keyword) => (
+          {(props?.keywords ?? []).map((keyword) => (
             <tr key={keyword._id}>
               <td>
                 <Link href="/keywords/[_id]" as={`/keywords/${keyword._id}`}>

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Navbar } from '../navigation/Navbar'
-import { IMainProps } from '../types'
+import { NavBar } from '../components/Navbar'
+import { IMainProps } from '../utils/types'
 
 const Main = (props: IMainProps) => (
   <div className="antialiased w-full text-gray-700 px-3 md:px-0">
     <div className="max-w-screen-md mx-auto">
-      <Navbar />
+      <NavBar />
       <div className="text-xl py-5">{props.children}</div>
     </div>
   </div>

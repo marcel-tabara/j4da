@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export interface ArticlesKeywords {
+export interface IArticlesKeywords {
   keyword: string
   url: string
   slug: string
