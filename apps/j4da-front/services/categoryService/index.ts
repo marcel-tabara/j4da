@@ -19,6 +19,15 @@ const categoryService = createGenericSlice({
       state.data = action.payload
       state.status = 'available'
     },
+    createCategory: (state, action: PayloadAction<ICategory>) => {
+      state.status = 'loading'
+    },
+    updateCategory: (state, action: PayloadAction<ICategory>) => {
+      state.status = 'loading'
+    },
+    deleteCategory: (state, action: PayloadAction<string>) => {
+      state.status = 'loading'
+    },
   },
 })
 

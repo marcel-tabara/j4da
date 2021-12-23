@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { keywordService } from '../services'
 import { IKeyword } from '../utils/types'
 
 interface IKeywordFormProps {
@@ -9,6 +10,7 @@ interface IKeywordFormProps {
 }
 
 const KeywordForm = ({ props }: IKeywordFormProps) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const {
     register,
@@ -17,21 +19,11 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
   } = useForm<IKeyword>()
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
-      fetch(`${BASE_URL}/keywords/${props._id}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...data, _id: props._id }),
-      })
+      dispatch(
+        keywordService.actions.updateKeyword({ ...data, _id: props._id })
+      )
     } else {
-      fetch(`${BASE_URL}/keywords/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      dispatch(keywordService.actions.createKeyword(data))
     }
 
     router.replace('/keywords')

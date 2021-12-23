@@ -85,14 +85,7 @@ const ArticleForm = ({
         )
       )
     } else {
-      dispatch(articleService.actions.createArticle(data))
-      fetch(`${BASE_URL}/articles/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      dispatch(articleByIdService.actions.createArticle(data))
     }
 
     const oldKeywords = article.keywords.split(',')

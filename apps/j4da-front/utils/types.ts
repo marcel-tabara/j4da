@@ -1,3 +1,4 @@
+import { Action } from '@reduxjs/toolkit'
 import { ReactNode } from 'react'
 
 export interface IArticlesKeywords {
@@ -103,4 +104,13 @@ export interface IMainProps {
 
 export type IUrl = {
   _id: string
+}
+
+export interface TaskAction<T> extends Action, ITask<T> {
+  type: string
+}
+
+interface ITask<T> {
+  id: number
+  payload: T
 }

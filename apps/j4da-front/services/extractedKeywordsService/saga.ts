@@ -1,8 +1,9 @@
 import { put, takeLatest } from 'redux-saga/effects'
 import { alertService, extractedKeywordsService } from '../'
+import { TaskAction } from '../../utils/types'
 import { http } from '../utils/http'
 
-export function* watchExtractKeywords({ type, payload }) {
+export function* watchExtractKeywords({ type, payload }: TaskAction<string>) {
   try {
     const extractedKeywords = yield http.post<string>(
       '/articles/extractKeywords',

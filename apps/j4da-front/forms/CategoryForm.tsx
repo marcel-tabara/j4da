@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { categoryService } from '../services'
 import { IApp, ICategory, ISubCategory } from '../utils/types'
 
 interface ICategoryFormProps {
@@ -9,6 +10,7 @@ interface ICategoryFormProps {
 }
 
 const CategoryForm = ({ props }: ICategoryFormProps) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const [subcats, setSubcats] = useState<ISubCategory[]>(props.subcategories)
   const {
@@ -23,21 +25,11 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
       subcategories: data.subcategories.filter((e) => e.title.length > 0),
     }
     if (props._id) {
-      fetch(`${BASE_URL}/categories/${props._id}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...newData, _id: props._id }),
-      })
+      dispatch(
+        categoryService.actions.updateCategory({ ...newData, _id: props._id })
+      )
     } else {
-      fetch(`${BASE_URL}/categories/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newData),
-      })
+      dispatch(categoryService.actions.createCategory(newData))
     }
 
     router.replace('/categories')

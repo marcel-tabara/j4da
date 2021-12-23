@@ -25,6 +25,9 @@ const articleByIdService = createGenericSlice({
     updateArticle: (state, action: PayloadAction<IArticle>) => {
       state.status = 'loading'
     },
+    deleteArticle: (state, action: PayloadAction<string>) => {
+      state.status = 'loading'
+    },
   },
 })
 

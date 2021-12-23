@@ -19,6 +19,15 @@ const appService = createGenericSlice({
       state.data = action.payload
       state.status = 'available'
     },
+    createApp: (state, action: PayloadAction<IApp>) => {
+      state.status = 'loading'
+    },
+    updateApp: (state, action: PayloadAction<IApp>) => {
+      state.status = 'loading'
+    },
+    deleteApp: (state, action: PayloadAction<string>) => {
+      state.status = 'loading'
+    },
   },
 })
 

@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { appService } from '../services'
 import { IApp } from '../utils/types'
 
 interface IAppFormProps {
@@ -10,6 +11,7 @@ interface IAppFormProps {
 
 const AppForm = ({ props }: IAppFormProps) => {
   const router = useRouter()
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -17,21 +19,9 @@ const AppForm = ({ props }: IAppFormProps) => {
   } = useForm<IApp>()
   const onSubmit = handleSubmit((data) => {
     if (props._id) {
-      fetch(`${BASE_URL}/apps/${props._id}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...data, _id: props._id }),
-      })
+      dispatch(appService.actions.updateApp({ ...data, _id: props._id }))
     } else {
-      fetch(`${BASE_URL}/apps/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      dispatch(appService.actions.createApp(data))
     }
 
     router.replace('/apps')
