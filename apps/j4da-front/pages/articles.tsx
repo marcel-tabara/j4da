@@ -15,10 +15,13 @@ const ArticlesList = () => {
   }, [dispatch])
   return (
     <Main>
-      {!articles?.data ? (
+      {articles.status !== 'available' ? (
         <Spinner animation="grow" />
       ) : (
-        <Articles articles={articles?.data ?? []} pagination={pagination} />
+        <Articles
+          articles={articles?.data.data ?? []}
+          pagination={pagination}
+        />
       )}
     </Main>
   )

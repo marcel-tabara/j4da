@@ -4,7 +4,11 @@ import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { useSelectors } from '../hooks/useSelectors'
-import { articleService } from '../services'
+import {
+  articleByIdService,
+  articleService,
+  extractedKeywordsService,
+} from '../services'
 import { BASE_URL } from '../utils/constants'
 import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
 
@@ -41,7 +45,7 @@ const ArticleForm = ({
   const [bodyKeywords, setBodyKeywords] = useState([])
   const [defaultBodyKeywords, setDefaultBodyKeywords] = useState([])
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
-    !article.keywords.length ? [] : article.keywords.split(',')
+    !article?.keywords?.length ? [] : article.keywords.split(',')
   )
 
   useEffect(() => {
@@ -53,7 +57,7 @@ const ArticleForm = ({
 
   const extractKeywords = useCallback(
     (text: string) => {
-      dispatch(articleService.actions.extractKeywords(text))
+      dispatch(extractedKeywordsService.actions.extractKeywords(text))
     },
     [dispatch]
   )
@@ -75,14 +79,13 @@ const ArticleForm = ({
 
   const onSubmit = handleSubmit((data) => {
     if (article._id) {
-      fetch(`${BASE_URL}/articles/${article._id}/update`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...data, _id: article._id }),
-      })
+      dispatch(
+        articleByIdService.actions.setArticleById(
+          JSON.stringify({ ...data, _id: article._id })
+        )
+      )
     } else {
+      dispatch(articleService.actions.createArticle(data))
       fetch(`${BASE_URL}/articles/add`, {
         method: 'POST',
         headers: {

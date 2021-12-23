@@ -7,7 +7,7 @@ import { useApps } from '../../hooks/useApps'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
-import { articleService } from '../../services'
+import { articleByIdService } from '../../services'
 import { Main } from '../../templates/Main'
 import { ICategory, ISubCategory } from '../../utils/types'
 
@@ -21,11 +21,10 @@ const Article = () => {
   useKeywords()
 
   useEffect(() => {
-    _id && dispatch(articleService.actions.getArticleById(_id as string))
+    _id && dispatch(articleByIdService.actions.getArticleById(_id as string))
   }, [dispatch, _id])
 
-  const { allArticles, allApps, allKeywords, allCategories, articleById } =
-    useSelectors()
+  const { allApps, allCategories, articleById } = useSelectors()
 
   const getDefaultCats = () =>
     articleById?.app

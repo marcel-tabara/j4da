@@ -27,6 +27,10 @@ export const createGenericSlice = <
     name,
     initialState,
     reducers: {
+      reset(state) {
+        state.status = undefined
+        state.data = undefined
+      },
       start(state) {
         state.status = 'loading'
       },
