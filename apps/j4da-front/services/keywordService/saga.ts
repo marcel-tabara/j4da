@@ -14,7 +14,7 @@ export function* watchGetKeywords() {
 
 export function* watchCreateKeyword({ payload }: TaskAction<IKeyword>) {
   try {
-    yield http.post<IKeyword>(`/keywords/add`)
+    yield http.post<IKeyword>(`/keywords/add`, payload)
     yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -23,7 +23,7 @@ export function* watchCreateKeyword({ payload }: TaskAction<IKeyword>) {
 
 export function* watchUpdateKeyword({ payload }: TaskAction<IKeyword>) {
   try {
-    yield http.put<IKeyword>(`/keywords/${payload._id}/update`)
+    yield http.put<IKeyword>(`/keywords/${payload._id}/update`, payload)
     yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))

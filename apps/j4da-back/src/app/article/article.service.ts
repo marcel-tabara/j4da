@@ -60,6 +60,7 @@ export class ArticleService {
     _id: string,
     articleDTO: ArticleDTO
   ): Promise<Article> {
+    console.log('########## articleDTO', articleDTO)
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
     })
