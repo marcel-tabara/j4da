@@ -3,20 +3,17 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { articleByIdService } from '../services'
 import { IArticlesProps } from '../utils/types'
 
 const Articles = (props: IArticlesProps) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const onAddArticle = () => router.replace('/articles/add')
   const onDelete = async (e) => {
     if (e.target.id) {
-      fetch(`${BASE_URL}/articles/${e.target.id}/delete`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      dispatch(articleByIdService.actions.deleteArticle(e.target.id))
       router.replace('/articles')
     }
   }

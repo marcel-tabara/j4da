@@ -3,20 +3,17 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { categoryService } from '../services'
 import { ICategoriesProps } from '../utils/types'
 
 const Categories = (props: ICategoriesProps) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const onAddCategory = () => router.replace('/categories/add')
   const onDelete = async (e) => {
     if (e.target.id) {
-      fetch(`${BASE_URL}/categories/${e.target.id}/delete`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      dispatch(categoryService.actions.deleteCategory(e.target.id))
       router.replace('/categories')
     }
   }

@@ -3,20 +3,17 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
-import { BASE_URL } from '../utils/constants'
+import { useDispatch } from 'react-redux'
+import { keywordService } from '../services'
 import { IKeywordsProps } from '../utils/types'
 
 const Keywords = (props: IKeywordsProps) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const onAddKeyword = () => router.replace('/keywords/add')
   const onDelete = async (e) => {
     if (e.target.id) {
-      fetch(`${BASE_URL}/keywords/${e.target.id}/delete`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      dispatch(keywordService.actions.deleteKeyword(e.target.id))
       router.replace('/keywords')
     }
   }

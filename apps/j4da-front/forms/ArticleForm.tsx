@@ -80,9 +80,7 @@ const ArticleForm = ({
   const onSubmit = handleSubmit((data) => {
     if (article._id) {
       dispatch(
-        articleByIdService.actions.setArticleById(
-          JSON.stringify({ ...data, _id: article._id })
-        )
+        articleByIdService.actions.updateArticle({ ...data, _id: article._id })
       )
     } else {
       dispatch(articleByIdService.actions.createArticle(data))

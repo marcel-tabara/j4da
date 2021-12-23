@@ -5,11 +5,11 @@ import { useApps } from '../hooks/useApps'
 import { Main } from '../templates/Main'
 
 const AppsList = () => {
-  const { apps, status } = useApps()
+  const { apps, available } = useApps()
   const pagination = {}
   return (
     <Main>
-      {status !== 'available' ? (
+      {!available ? (
         <Spinner animation="grow" />
       ) : (
         <Apps apps={apps} pagination={pagination} />

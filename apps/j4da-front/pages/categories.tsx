@@ -1,15 +1,20 @@
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { Categories } from '../components/Categories'
 import { useCategories } from '../hooks/useCategories'
 import { Main } from '../templates/Main'
 
 const CategoriesList = () => {
-  const { categories, status } = useCategories()
+  const { categories, available } = useCategories()
   const pagination = {}
 
   return (
     <Main>
-      <Categories categories={categories} pagination={pagination} />
+      {!available ? (
+        <Spinner animation="grow" />
+      ) : (
+        <Categories categories={categories} pagination={pagination} />
+      )}
     </Main>
   )
 }

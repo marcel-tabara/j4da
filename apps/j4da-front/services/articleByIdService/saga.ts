@@ -14,7 +14,7 @@ export function* watchGetArticleById({ type, payload }: TaskAction<string>) {
 
 export function* watchCreateArticle({ payload }: TaskAction<IArticle>) {
   try {
-    yield http.post<IArticle>(`/keywords/${payload._id}/update`)
+    yield http.post<IArticle>(`/articles/add`)
     yield put(articleByIdService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -23,7 +23,7 @@ export function* watchCreateArticle({ payload }: TaskAction<IArticle>) {
 
 export function* watchUpdateArticle({ payload }: TaskAction<IArticle>) {
   try {
-    yield http.put<IArticle>(`/keywords/${payload._id}/update`)
+    yield http.put<IArticle>(`/articles/${payload._id}/update`)
     yield put(articleByIdService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -32,7 +32,7 @@ export function* watchUpdateArticle({ payload }: TaskAction<IArticle>) {
 
 export function* watchDeleteArticle({ payload }: TaskAction<string>) {
   try {
-    yield http.post<string>(`/apps/${payload}/delete`)
+    yield http.delete<string>(`/articles/${payload}/delete`)
     yield put(articleByIdService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))

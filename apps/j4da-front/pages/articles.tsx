@@ -6,11 +6,11 @@ import { Main } from '../templates/Main'
 
 const ArticlesList = () => {
   const pagination = {}
-  const { articles, status } = useArticles()
+  const { articles, available } = useArticles()
 
   return (
     <Main>
-      {status !== 'available' ? (
+      {!available ? (
         <Spinner animation="grow" />
       ) : (
         <Articles articles={articles?.data ?? []} pagination={pagination} />

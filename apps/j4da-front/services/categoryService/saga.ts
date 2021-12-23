@@ -14,7 +14,7 @@ export function* watchGetCategories() {
 
 export function* watchCreateCategory({ payload }: TaskAction<ICategory>) {
   try {
-    yield http.post<ICategory>(`/categories/update`)
+    yield http.post<ICategory>(`/categories/add`)
     yield put(categoryService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -23,7 +23,7 @@ export function* watchCreateCategory({ payload }: TaskAction<ICategory>) {
 
 export function* watchUpdateCategory({ payload }: TaskAction<ICategory>) {
   try {
-    yield http.put<ICategory>(`/categories/${payload._id}/add`)
+    yield http.put<ICategory>(`/categories/${payload._id}/update`)
     yield put(categoryService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -32,7 +32,7 @@ export function* watchUpdateCategory({ payload }: TaskAction<ICategory>) {
 
 export function* watchDeleteCategory({ payload }: TaskAction<string>) {
   try {
-    yield http.post<string>(`/apps/${payload}/delete`)
+    yield http.delete<string>(`/categories/${payload}/delete`)
     yield put(categoryService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
