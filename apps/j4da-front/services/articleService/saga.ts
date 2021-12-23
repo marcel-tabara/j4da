@@ -6,9 +6,9 @@ import { http } from '../utils/http'
 export function* watchGetArticles() {
   try {
     const articles = yield http.get<IArticles>('/articles')
-    yield put(articleService.actions.setArticles(articles.data))
+    yield put(articleService.actions.success(articles.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
