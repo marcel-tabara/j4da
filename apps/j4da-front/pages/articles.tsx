@@ -1,27 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Spinner } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
 import { Articles } from '../components/Articles'
-import { articleSelectors, articleService } from '../services'
+import { useArticles } from '../hooks/useArticles'
 import { Main } from '../templates/Main'
 
 const ArticlesList = () => {
-  const dispatch = useDispatch()
-  const articles = useSelector(articleSelectors.articlesSelector)
   const pagination = {}
+  const { articles, status } = useArticles()
 
-  useEffect(() => {
-    dispatch(articleService.actions.getArticles())
-  }, [dispatch])
   return (
     <Main>
-      {articles.status !== 'available' ? (
+      {status !== 'available' ? (
         <Spinner animation="grow" />
       ) : (
-        <Articles
-          articles={articles?.data.data ?? []}
-          pagination={pagination}
-        />
+        <Articles articles={articles?.data ?? []} pagination={pagination} />
       )}
     </Main>
   )

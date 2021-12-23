@@ -7,7 +7,6 @@ import { Main } from '../templates/Main'
 const AppsList = () => {
   const { apps, status } = useApps()
   const pagination = {}
-  console.log('########## apps', apps)
   return (
     <Main>
       {status !== 'available' ? (

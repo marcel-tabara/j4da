@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import {
   alertService,
+  appByIdService,
   appService,
   articleByIdService,
   articleService,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   keywordService: keywordService.reducer,
   categoryService: categoryService.reducer,
   appService: appService.reducer,
+  appByIdService: appByIdService.reducer,
 })
 
 export { rootReducer }

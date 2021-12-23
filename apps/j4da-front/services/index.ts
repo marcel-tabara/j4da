@@ -1,4 +1,5 @@
 export { alertSelectors, alertService } from './alertService'
+export { appByIdSelectors, appByIdService } from './appByIdService'
 export { appSelectors, appService, appServiceReducer } from './appService'
 export { articleByIdSelectors, articleByIdService } from './articleByIdService'
 export { articleSelectors, articleService } from './articleService'
