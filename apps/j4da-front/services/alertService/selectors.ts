@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
+import { RootState } from '../../store'
 
-const alerts = (state: { alertService: { alerts: string[] } }) =>
-  state.alertService.alerts
+const alerts = (state: RootState) => state.alertService
 
 export const alertsSelector = createSelector(alerts, (items) => items)

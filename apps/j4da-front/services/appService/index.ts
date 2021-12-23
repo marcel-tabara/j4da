@@ -5,7 +5,8 @@ import * as appSelectors from './selectors'
 
 const initialState = {
   data: undefined as IApp[],
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const appService = createGenericSlice({
@@ -13,20 +14,16 @@ const appService = createGenericSlice({
   initialState,
   reducers: {
     getApps: (state) => {
-      state.status = 'loading'
-    },
-    setApps: (state, action: PayloadAction<IApp[]>) => {
-      state.data = action.payload
-      state.status = 'available'
+      state.fetching = true
     },
     createApp: (state, action: PayloadAction<IApp>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     updateApp: (state, action: PayloadAction<IApp>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     deleteApp: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
   },
 })

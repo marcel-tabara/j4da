@@ -1,14 +1,21 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { IArticle } from '../../utils/types'
+import { createGenericSlice } from '../utils/genericSlice'
 import * as alertSelectors from './selectors'
 
-const alertService = createSlice({
-  name: 'alerts',
-  initialState: {
-    alerts: [],
-  },
+const initialState = {
+  data: undefined as IArticle,
+  available: false,
+  fetching: false,
+}
+
+const alertService = createGenericSlice({
+  name: 'appById',
+  initialState,
   reducers: {
-    getAlerts: () => undefined,
-    setAlert: (state, action: PayloadAction<string>) => undefined,
+    getAlerts: (state, action: PayloadAction<string>) => {
+      state.fetching = true
+    },
   },
 })
 

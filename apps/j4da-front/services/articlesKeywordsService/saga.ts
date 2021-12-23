@@ -8,11 +8,9 @@ export function* watchGetArticlesKeywords() {
     const articlesKeywords = yield http.get<IArticlesKeywords>(
       '/articles/articlesKeywords'
     )
-    yield put(
-      articlesKeywordsService.actions.getArticlesKeywords(articlesKeywords)
-    )
+    yield put(articlesKeywordsService.actions.success(articlesKeywords))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 

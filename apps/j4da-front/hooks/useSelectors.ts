@@ -10,40 +10,64 @@ import {
 } from '../services'
 
 export const useSelectors = () => {
-  const { data: articleById, status: articleByIdStatus } = useSelector(
-    articleByIdSelectors.articleByIdSelector
-  )
-  const { data: allArticles, status: allArticlesStatus } = useSelector(
-    articleSelectors.articlesSelector
-  )
-  const { data: allApps, status: allAppsStatus } = useSelector(
-    appSelectors.appsSelector
-  )
-  const { data: allKeywords, status: allKeywordsStatus } = useSelector(
-    keywordSelectors.keywordsSelector
-  )
-  const { data: allCategories, status: allCategoriesStatus } = useSelector(
-    categorySelectors.categoriesSelector
-  )
+  const {
+    data: articleById,
+    available: articleByIdAvailable,
+    fetching: articleByIdFetching,
+  } = useSelector(articleByIdSelectors.articleByIdSelector)
 
-  const alerts = useSelector(alertSelectors.alertsSelector)
+  const {
+    data: allArticles,
+    available: allArticlesAvailable,
+    fetching: allArticlesFetching,
+  } = useSelector(articleSelectors.articlesSelector)
+  const {
+    data: allApps,
+    available: allAppsAvailable,
+    fetching: allAppsFetching,
+  } = useSelector(appSelectors.appsSelector)
 
-  const { data: extractedKeywords, status: extractedKeywordsStatus } =
+  const {
+    data: allKeywords,
+    available: allKeywordsAvailable,
+    fetching: allKeywordsFetching,
+  } = useSelector(keywordSelectors.keywordsSelector)
+
+  const {
+    data: allCategories,
+    available: allCategoriesAvailable,
+    fetching: allCategoriesFetching,
+  } = useSelector(categorySelectors.categoriesSelector)
+
+  const {
+    data: allAlerts,
+    available: allAlertsAvailable,
+    fetching: allAlertsFetching,
+  } = useSelector(alertSelectors.alertsSelector)
+
+  const { data: extractedKeywords, available: extractedKeywordsAvailable } =
     useSelector(extractedKeywordsSelectors.extractedKeywordsSelector)
 
   return {
     allArticles,
-    allArticlesStatus,
+    allArticlesAvailable,
+    allArticlesFetching,
     allApps,
-    allAppsStatus,
+    allAppsAvailable,
+    allAppsFetching,
     allKeywords,
-    allKeywordsStatus,
+    allKeywordsAvailable,
+    allKeywordsFetching,
     allCategories,
-    allCategoriesStatus,
+    allCategoriesAvailable,
+    allCategoriesFetching,
     articleById,
-    articleByIdStatus,
+    articleByIdAvailable,
+    articleByIdFetching,
     extractedKeywords,
-    extractedKeywordsStatus,
-    alerts,
+    extractedKeywordsAvailable,
+    allAlerts,
+    allAlertsAvailable,
+    allAlertsFetching,
   }
 }

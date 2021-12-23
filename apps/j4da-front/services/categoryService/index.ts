@@ -5,7 +5,8 @@ import * as categorySelectors from './selectors'
 
 const initialState = {
   data: undefined as ICategory[],
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const categoryService = createGenericSlice({
@@ -13,20 +14,16 @@ const categoryService = createGenericSlice({
   initialState,
   reducers: {
     getCategories: (state) => {
-      state.status = 'loading'
-    },
-    setCategories: (state, action: PayloadAction<ICategory[]>) => {
-      state.data = action.payload
-      state.status = 'available'
+      state.fetching = true
     },
     createCategory: (state, action: PayloadAction<ICategory>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     updateCategory: (state, action: PayloadAction<ICategory>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     deleteCategory: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
   },
 })

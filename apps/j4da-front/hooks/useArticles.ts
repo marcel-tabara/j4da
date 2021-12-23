@@ -1,19 +1,25 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { articleSelectors, articleService } from '../services'
-import { StatusType } from '../services/utils/genericSlice'
 import { IArticles } from '../utils/types'
 
-export const useArticles = (): { articles: IArticles; status: StatusType } => {
+export const useArticles = (): {
+  articles: IArticles
+  available: boolean
+  fetching: boolean
+} => {
   const dispatch = useDispatch()
-  const { data, status } = useSelector(articleSelectors.articlesSelector)
+  const { data, available, fetching } = useSelector(
+    articleSelectors.articlesSelector
+  )
 
   useEffect(() => {
-    !status && dispatch(articleService.actions.getArticles())
-  }, [dispatch, status])
+    !available && !fetching && dispatch(articleService.actions.getArticles())
+  }, [available, dispatch, fetching])
 
   return {
     articles: data,
-    status,
+    available,
+    fetching,
   }
 }

@@ -1,19 +1,25 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { keywordSelectors, keywordService } from '../services'
-import { StatusType } from '../services/utils/genericSlice'
 import { IKeyword } from '../utils/types'
 
-export const useKeywords = (): { keywords: IKeyword[]; status: StatusType } => {
+export const useKeywords = (): {
+  keywords: IKeyword[]
+  available: boolean
+  fetching: boolean
+} => {
   const dispatch = useDispatch()
-  const { data, status } = useSelector(keywordSelectors.keywordsSelector)
+  const { data, available, fetching } = useSelector(
+    keywordSelectors.keywordsSelector
+  )
 
   useEffect(() => {
-    !status && dispatch(keywordService.actions.getKeywords())
-  }, [dispatch, status])
+    !available && !fetching && dispatch(keywordService.actions.getKeywords())
+  }, [available, dispatch, fetching])
 
   return {
     keywords: data,
-    status,
+    available,
+    fetching,
   }
 }

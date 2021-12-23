@@ -5,10 +5,10 @@ import {
   ValidateSliceCaseReducers,
 } from '@reduxjs/toolkit'
 
-export type StatusType = 'loading' | 'available' | 'error' | undefined
 export interface GenericState<T> {
   data?: T
-  status?: StatusType
+  available?: boolean
+  fetching: boolean
 }
 
 export const createGenericSlice = <
@@ -28,11 +28,12 @@ export const createGenericSlice = <
     initialState,
     reducers: {
       reset(state) {
-        state.status = undefined
         state.data = undefined
+        state.available = undefined
+        state.fetching = false
       },
       start(state) {
-        state.status = 'loading'
+        state.fetching = true
       },
       /**
        * If you want to write to values of the state that depend on the generic
@@ -43,7 +44,8 @@ export const createGenericSlice = <
        */
       success(state: GenericState<T>, action: PayloadAction<T>) {
         state.data = action.payload
-        state.status = 'available'
+        state.available = true
+        state.fetching = false
       },
       ...reducers,
     },

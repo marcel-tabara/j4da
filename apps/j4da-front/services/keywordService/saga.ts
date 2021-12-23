@@ -6,9 +6,9 @@ import { http } from '../utils/http'
 export function* watchGetKeywords() {
   try {
     const keywords = yield http.get<IKeyword[]>('/keywords')
-    yield put(keywordService.actions.setKeywords(keywords.data))
+    yield put(keywordService.actions.success(keywords.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -17,7 +17,7 @@ export function* watchCreateKeyword({ payload }: TaskAction<IKeyword>) {
     yield http.post<IKeyword>(`/categories/update`)
     yield put(keywordService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -26,7 +26,7 @@ export function* watchUpdateKeyword({ payload }: TaskAction<IKeyword>) {
     yield http.put<IKeyword>(`/categories/${payload._id}/add`)
     yield put(keywordService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -35,7 +35,7 @@ export function* watchDeleteKeyword({ payload }: TaskAction<string>) {
     yield http.post<string>(`/apps/${payload}/delete`)
     yield put(keywordService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 

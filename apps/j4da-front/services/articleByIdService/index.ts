@@ -5,7 +5,8 @@ import * as articleByIdSelectors from './selectors'
 
 const initialState = {
   data: undefined as IArticle,
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const articleByIdService = createGenericSlice({
@@ -13,20 +14,16 @@ const articleByIdService = createGenericSlice({
   initialState,
   reducers: {
     getArticleById: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
-    },
-    setArticleById: (state, action) => {
-      state.data = action.payload
-      state.status = 'available'
+      state.fetching = true
     },
     createArticle: (state, action: PayloadAction<IArticle>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     updateArticle: (state, action: PayloadAction<IArticle>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     deleteArticle: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
   },
 })

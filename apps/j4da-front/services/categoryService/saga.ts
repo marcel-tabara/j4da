@@ -6,9 +6,9 @@ import { http } from '../utils/http'
 export function* watchGetCategories() {
   try {
     const categories = yield http.get<ICategory[]>('/categories')
-    yield put(categoryService.actions.setCategories(categories.data))
+    yield put(categoryService.actions.success(categories.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -17,7 +17,7 @@ export function* watchCreateCategory({ payload }: TaskAction<ICategory>) {
     yield http.post<ICategory>(`/categories/update`)
     yield put(categoryService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -26,7 +26,7 @@ export function* watchUpdateCategory({ payload }: TaskAction<ICategory>) {
     yield http.put<ICategory>(`/categories/${payload._id}/add`)
     yield put(categoryService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -35,7 +35,7 @@ export function* watchDeleteCategory({ payload }: TaskAction<string>) {
     yield http.post<string>(`/apps/${payload}/delete`)
     yield put(categoryService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 

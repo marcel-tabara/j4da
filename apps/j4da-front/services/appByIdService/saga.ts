@@ -6,9 +6,9 @@ import { http } from '../utils/http'
 export function* watchGetAppById({ type, payload }: TaskAction<string>) {
   try {
     const app = yield http.get<IApp>(`/apps/${payload}`)
-    yield put(appByIdService.actions.setAppById(app.data))
+    yield put(appByIdService.actions.success(app.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -17,7 +17,7 @@ export function* watchCreateApp({ payload }: TaskAction<IApp>) {
     yield http.post<IApp>(`/keywords/${payload._id}/update`)
     yield put(appByIdService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -26,7 +26,7 @@ export function* watchUpdateApp({ payload }: TaskAction<IApp>) {
     yield http.put<IApp>(`/keywords/${payload._id}/update`)
     yield put(appByIdService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -35,7 +35,7 @@ export function* watchDeleteApp({ payload }: TaskAction<string>) {
     yield http.post<string>(`/apps/${payload}/delete`)
     yield put(appByIdService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 

@@ -9,13 +9,9 @@ export function* watchExtractKeywords({ type, payload }: TaskAction<string>) {
       '/articles/extractKeywords',
       JSON.stringify({ article: payload })
     )
-    yield put(
-      extractedKeywordsService.actions.setExtractedKeywords(
-        extractedKeywords.data
-      )
-    )
+    yield put(extractedKeywordsService.actions.success(extractedKeywords.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 

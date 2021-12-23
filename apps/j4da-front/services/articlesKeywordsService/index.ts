@@ -5,7 +5,8 @@ import * as articlesKeywordsSelectors from './selectors'
 
 const initialState = {
   data: undefined as IArticlesKeywords,
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const articlesKeywordsService = createGenericSlice({
@@ -13,11 +14,7 @@ const articlesKeywordsService = createGenericSlice({
   initialState,
   reducers: {
     getArticlesKeywords: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
-    },
-    setArticlesKeywords: (state, action: PayloadAction<IArticlesKeywords>) => {
-      state.data = action.payload
-      state.status = 'available'
+      state.fetching = true
     },
   },
 })

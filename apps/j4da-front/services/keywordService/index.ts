@@ -5,7 +5,8 @@ import * as keywordSelectors from './selectors'
 
 const initialState = {
   data: undefined as IKeyword[],
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const keywordService = createGenericSlice({
@@ -13,20 +14,16 @@ const keywordService = createGenericSlice({
   initialState,
   reducers: {
     getKeywords: (state) => {
-      state.status = 'loading'
-    },
-    setKeywords: (state, action: PayloadAction<IKeyword[]>) => {
-      state.data = action.payload
-      state.status = 'available'
+      state.fetching = true
     },
     createKeyword: (state, action: PayloadAction<IKeyword>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     updateKeyword: (state, action: PayloadAction<IKeyword>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
     deleteKeyword: (state, action: PayloadAction<string>) => {
-      state.status = 'loading'
+      state.fetching = true
     },
   },
 })

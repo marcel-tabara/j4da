@@ -3,19 +3,16 @@ import * as extractedKeywordsSelectors from './selectors'
 
 const initialState = {
   data: undefined as string[],
-  status: undefined,
+  available: false,
+  fetching: false,
 }
 
 const extractedKeywordsService = createGenericSlice({
   name: 'extractedKeywords',
   initialState,
   reducers: {
-    setExtractedKeywords: (state, action) => {
-      state.data = action.payload
-      state.status = 'available'
-    },
     extractKeywords: (state, action) => {
-      state.status = 'loading'
+      state.fetching = true
     },
   },
 })

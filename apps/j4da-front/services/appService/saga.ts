@@ -6,9 +6,9 @@ import { http } from '../utils/http'
 export function* watchGetApps() {
   try {
     const apps = yield http.get<IApp[]>('/apps')
-    yield put(appService.actions.setApps(apps?.data))
+    yield put(appService.actions.success(apps?.data))
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -17,7 +17,7 @@ export function* watchCreateApp({ payload }: TaskAction<IApp>) {
     yield http.put<IApp>(`/apps/${payload._id}/update`)
     yield put(appService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -26,7 +26,7 @@ export function* watchUpdateApp({ payload }: TaskAction<IApp>) {
     yield http.post<IApp>(`/apps/add`)
     yield put(appService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
@@ -35,7 +35,7 @@ export function* watchDeleteApp({ payload }: TaskAction<string>) {
     yield http.post<IApp>(`/apps/${payload}/delete`)
     yield put(appService.actions.reset())
   } catch (error) {
-    yield put(alertService.actions.setAlert(error.message))
+    yield put(alertService.actions.success(error.message))
   }
 }
 
