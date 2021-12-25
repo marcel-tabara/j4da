@@ -42,8 +42,12 @@ const Categories = (props: ICategoriesProps) => {
                 <br />
                 {category.subcategories.map((subcat) => subcat.title + ' | ')}
               </td>
-              <td>
-                <Icon.Trash onClick={onDelete} id={category._id} />
+              <td align="right">
+                <Icon.Trash
+                  onClick={onDelete}
+                  id={category._id}
+                  className="pointer"
+                />
               </td>
             </tr>
           ))}

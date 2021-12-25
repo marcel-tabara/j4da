@@ -25,6 +25,12 @@ const keywordService = createGenericSlice({
     deleteKeyword: (state, action: PayloadAction<string>) => {
       state.fetching = true
     },
+    bulkremove: (state, action: PayloadAction<string[]>) => {
+      state.fetching = true
+    },
+    bulkupsert: (state, action: PayloadAction<string[]>) => {
+      state.fetching = true
+    },
   },
 })
 

@@ -37,8 +37,12 @@ const Apps = (props: IAppsProps) => {
                   {app.title}
                 </Link>
               </td>
-              <td>
-                <Icon.Trash onClick={onDelete} id={app._id} />
+              <td align="right">
+                <Icon.Trash
+                  onClick={onDelete}
+                  id={app._id}
+                  className="pointer"
+                />
               </td>
             </tr>
           ))}

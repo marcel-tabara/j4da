@@ -7,3 +7,7 @@
   height: 300px;
   overflow: auto;
 }
+.pointer {
+  cursor: pointer;
+  padding: 10;
+}

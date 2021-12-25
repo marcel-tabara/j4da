@@ -41,7 +41,7 @@ export function* watchDeleteCategory({ payload }: TaskAction<string>) {
 
 export default function* rootSaga() {
   yield takeLatest('categories/getCategories', watchGetCategories)
-  yield takeLatest('categories/createCategories', watchCreateCategory)
-  yield takeLatest('categories/updateCategories', watchUpdateCategory)
-  yield takeLatest('categories/deleteCategories', watchDeleteCategory)
+  yield takeLatest('categories/createCategory', watchCreateCategory)
+  yield takeLatest('categories/updateCategory', watchUpdateCategory)
+  yield takeLatest('categories/deleteCategory', watchDeleteCategory)
 }

@@ -12,36 +12,6 @@ export function* watchGetArticleById({ type, payload }: TaskAction<string>) {
   }
 }
 
-export function* watchCreateArticle({ payload }: TaskAction<IArticle>) {
-  try {
-    yield http.post<IArticle>(`/articles/add`, payload)
-    yield put(articleByIdService.actions.reset())
-  } catch (error) {
-    yield put(alertService.actions.success(error.message))
-  }
-}
-
-export function* watchUpdateArticle({ payload }: TaskAction<IArticle>) {
-  try {
-    yield http.put<IArticle>(`/articles/${payload._id}/update`, payload)
-    yield put(articleByIdService.actions.reset())
-  } catch (error) {
-    yield put(alertService.actions.success(error.message))
-  }
-}
-
-export function* watchDeleteArticle({ payload }: TaskAction<string>) {
-  try {
-    yield http.delete<string>(`/articles/${payload}/delete`)
-    yield put(articleByIdService.actions.reset())
-  } catch (error) {
-    yield put(alertService.actions.success(error.message))
-  }
-}
-
 export default function* rootSaga() {
   yield takeLatest('articleById/getArticleById', watchGetArticleById)
-  yield takeLatest('articleById/createArticle', watchCreateArticle)
-  yield takeLatest('articleById/updateArticle', watchUpdateArticle)
-  yield takeLatest('articleById/deleteArticle', watchDeleteArticle)
 }

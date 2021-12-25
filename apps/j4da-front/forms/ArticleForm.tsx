@@ -1,20 +1,12 @@
-import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { useSelectors } from '../hooks/useSelectors'
-import {
-  articleByIdService,
-  articleService,
-  extractedKeywordsService,
-} from '../services'
-import { BASE_URL } from '../utils/constants'
+import { useArticleForm } from '../hooks/useArticleForm'
 import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
 
 interface IArticleFormProps {
-  onChaneCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
-  onChaneApp: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeApp: (event: React.ChangeEvent<HTMLSelectElement>) => void
   subcategories: ISubCategory[]
   categories: ICategory[]
   article: IArticle
@@ -22,18 +14,13 @@ interface IArticleFormProps {
 }
 
 const ArticleForm = ({
-  onChaneCategory,
-  onChaneApp,
+  onChangeCategory,
+  onChangeApp,
   categories = [],
   subcategories = [],
   article,
   allApps,
 }: IArticleFormProps) => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(articleService.actions.getArticles())
-  }, [dispatch])
-  const router = useRouter()
   const {
     handleSubmit,
     register,
@@ -42,107 +29,22 @@ const ArticleForm = ({
     formState: { errors },
   } = useForm<IArticle>()
 
-  const [bodyKeywords, setBodyKeywords] = useState([])
-  const [defaultBodyKeywords, setDefaultBodyKeywords] = useState([])
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
-    !article?.keywords?.length ? [] : article.keywords.split(',')
-  )
-
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    )
-    return () => subscription.unsubscribe()
-  }, [watch])
-
-  const extractKeywords = useCallback(
-    (text: string) => {
-      dispatch(extractedKeywordsService.actions.extractKeywords(text))
-    },
-    [dispatch]
-  )
-
-  const { extractedKeywords } = useSelectors()
-
-  useEffect(
-    () => extractKeywords(article.body),
-    [article.body, extractKeywords]
-  )
-  useEffect(() => {
-    setBodyKeywords(extractedKeywords)
-  }, [extractedKeywords])
-  useEffect(() => {
-    extractedKeywords &&
-      !defaultBodyKeywords.length &&
-      setDefaultBodyKeywords(extractedKeywords)
-  }, [extractedKeywords, defaultBodyKeywords])
-
-  const onSubmit = handleSubmit((data) => {
-    if (article._id) {
-      dispatch(
-        articleByIdService.actions.updateArticle({ ...data, _id: article._id })
-      )
-    } else {
-      dispatch(articleByIdService.actions.createArticle(data))
-    }
-
-    const oldKeywords = article.keywords.split(',')
-    const newKeywords = data.keywords.split(',')
-
-    const a = oldKeywords.filter((e) => !newKeywords.includes(e))
-    const b = newKeywords.filter((e) => !oldKeywords.includes(e))
-
-    if (a.length > 0) {
-      // dispatch(keywordService.actions.)
-      fetch(`${BASE_URL}/keywords/bulkremove`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(a),
-      })
-    }
-
-    if (b.length > 0) {
-      fetch(`${BASE_URL}/keywords/bulkupsert`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(b),
-      })
-    }
-
-    router.replace('/articles')
+  const {
+    bodyKeywords,
+    selectedKeywords,
+    onSubmit,
+    onBodyChange,
+    onChangeKeywords,
+    onAddKeyword,
+    onRemoveKeyword,
+  } = useArticleForm({
+    article,
+    onChangeApp,
+    onChangeCategory,
+    watch,
+    handleSubmit,
+    setValue,
   })
-  const onBodyChange = async (e) => {
-    extractKeywords(e.target.value)
-  }
-  const onAddKeyword = (event) => {
-    const newSelectedKeywords = [...selectedKeywords].concat(event.target.id)
-    setSelectedKeywords(newSelectedKeywords)
-    setValue('keywords', newSelectedKeywords.toString())
-
-    const newBodyKeywords = bodyKeywords.filter(
-      (keyword) => keyword !== event.target.id
-    )
-    setBodyKeywords(newBodyKeywords)
-  }
-  const onRemoveKeyword = (event) => {
-    const newSelectedKeywords = selectedKeywords.filter(
-      (e) => e !== event.target.id
-    )
-    setSelectedKeywords(newSelectedKeywords)
-    setValue('keywords', newSelectedKeywords.toString())
-
-    const newBodyKeywords = defaultBodyKeywords.filter(
-      (keyword) => !newSelectedKeywords.includes(keyword)
-    )
-    setBodyKeywords(newBodyKeywords)
-  }
-  const onChangeKeywords = (e) => {
-    setSelectedKeywords(e.target.value.split(','))
-  }
 
   return (
     <div className="register-form">
@@ -151,7 +53,7 @@ const ArticleForm = ({
           <label>url</label>
           <input
             {...register('url')}
-            defaultValue={article.url}
+            defaultValue={article?.url}
             className={`form-control ${errors.url ? 'is-invalid' : ''}`}
           />
         </div>
@@ -159,7 +61,7 @@ const ArticleForm = ({
           <label>title</label>
           <input
             {...register('title')}
-            defaultValue={article.title}
+            defaultValue={article?.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -167,7 +69,7 @@ const ArticleForm = ({
           <label>slug</label>
           <input
             {...register('slug')}
-            defaultValue={article.slug}
+            defaultValue={article?.slug}
             className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
           />
         </div>
@@ -175,15 +77,15 @@ const ArticleForm = ({
           <label>app</label>
           <select
             {...register('app')}
-            defaultValue={article.app}
+            defaultValue={article?.app}
             name="app"
-            onChange={onChaneApp}
+            onChange={onChangeApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >
             <option key="app.select" value="">
               Select App
             </option>
-            {allApps.map((app: IApp) => (
+            {(allApps || []).map((app: IApp) => (
               <option key={app._id} value={app._id}>
                 {app.title}
               </option>
@@ -194,16 +96,24 @@ const ArticleForm = ({
           <label>category</label>
           <select
             {...register('category')}
-            defaultValue={article.category}
+            value={article?.category}
             name="category"
-            onChange={onChaneCategory}
+            onChange={onChangeCategory}
             className={`form-control ${errors.category ? 'is-invalid' : ''}`}
           >
-            <option key="category.select" value="">
+            <option
+              key="category.select"
+              value=""
+              //selected={!article?.category}
+            >
               Select Category
             </option>
             {categories.map((category: ICategory) => (
-              <option key={category._id} value={category._id}>
+              <option
+                key={category._id}
+                value={category._id}
+                // selected={category._id === article?.category}
+              >
                 {category.title}
               </option>
             ))}
@@ -213,15 +123,23 @@ const ArticleForm = ({
           <label>subcategory</label>
           <select
             {...register('subcategory')}
-            defaultValue={subcategories?.[0]?.title || ''}
+            value={article?.subcategory}
             name="subcategory"
             className={`form-control ${errors.subcategory ? 'is-invalid' : ''}`}
           >
-            <option key="subcategory.select" value="">
+            <option
+              key="subcategory.select"
+              value=""
+              //selected={!article?.subcategory}
+            >
               Select SubCategory
             </option>
             {(subcategories || []).map((subcategory: ISubCategory) => (
-              <option key={subcategory.title} value={subcategory.title}>
+              <option
+                key={subcategory.title}
+                value={subcategory.title}
+                //selected={subcategory.title === article.subcategory}
+              >
                 {subcategory.title}
               </option>
             ))}
@@ -231,7 +149,7 @@ const ArticleForm = ({
           <label>images</label>
           <input
             {...register('images')}
-            defaultValue={article.images}
+            defaultValue={article?.images}
             className={`form-control ${errors.images ? 'is-invalid' : ''}`}
           />
         </div>
@@ -239,7 +157,7 @@ const ArticleForm = ({
           <label>section</label>
           <input
             {...register('section')}
-            defaultValue={article.section}
+            defaultValue={article?.section}
             className={`form-control ${errors.section ? 'is-invalid' : ''}`}
           />
         </div>
@@ -256,15 +174,16 @@ const ArticleForm = ({
           <label>authorName</label>
           <input
             {...register('authorName')}
-            defaultValue={article.authorName}
+            defaultValue={article?.authorName}
             className={`form-control ${errors.authorName ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
           <label>description</label>
           <textarea
+            rows={10}
             {...register('description')}
-            defaultValue={article.description}
+            defaultValue={article?.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
@@ -323,8 +242,9 @@ const ArticleForm = ({
         <div className="form-group">
           <label>body</label>
           <textarea
+            rows={20}
             {...register('body')}
-            defaultValue={article.body}
+            defaultValue={article?.body}
             onBlur={onBodyChange}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
@@ -333,7 +253,7 @@ const ArticleForm = ({
           <label>publisherName</label>
           <input
             {...register('publisherName')}
-            defaultValue={article.publisherName}
+            defaultValue={article?.publisherName}
             className={`form-control ${
               errors.publisherName ? 'is-invalid' : ''
             }`}
@@ -343,7 +263,7 @@ const ArticleForm = ({
           <label>publisherLogo</label>
           <input
             {...register('publisherLogo')}
-            defaultValue={article.publisherLogo}
+            defaultValue={article?.publisherLogo}
             className={`form-control ${
               errors.publisherLogo ? 'is-invalid' : ''
             }`}
@@ -353,7 +273,7 @@ const ArticleForm = ({
           <label>dateCreated</label>
           <input
             {...register('dateCreated')}
-            defaultValue={article.dateCreated}
+            defaultValue={article?.dateCreated}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -361,7 +281,7 @@ const ArticleForm = ({
           <label>datePublished</label>
           <input
             {...register('datePublished')}
-            defaultValue={article.datePublished}
+            defaultValue={article?.datePublished}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
             }`}
@@ -381,7 +301,7 @@ const ArticleForm = ({
           <label>keyOverride</label>
           <input
             {...register('keyOverride')}
-            defaultValue={article.keyOverride}
+            defaultValue={article?.keyOverride}
             className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
           />
         </div>

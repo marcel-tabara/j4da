@@ -87,7 +87,6 @@ class Http {
     data?: T,
     config?: AxiosRequestConfig
   ): Promise<R> {
-    console.log('########## data', data)
     return this.http.put<T, R>(url, data, config)
   }
 

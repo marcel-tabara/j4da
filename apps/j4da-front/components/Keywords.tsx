@@ -36,8 +36,12 @@ const Keywords = (props: IKeywordsProps) => {
                   {keyword.title}
                 </Link>
               </td>
-              <td>
-                <Icon.Trash onClick={onDelete} id={keyword._id} />
+              <td align="right">
+                <Icon.Trash
+                  onClick={onDelete}
+                  id={keyword._id}
+                  className="pointer"
+                />
               </td>
             </tr>
           ))}

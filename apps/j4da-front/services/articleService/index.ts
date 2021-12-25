@@ -1,3 +1,5 @@
+import { PayloadAction } from '@reduxjs/toolkit'
+import { IArticle } from '../../utils/types'
 import { createGenericSlice } from '../utils/genericSlice'
 import * as articleSelectors from './selectors'
 
@@ -12,6 +14,15 @@ const articleService = createGenericSlice({
   initialState,
   reducers: {
     getArticles: (state) => {
+      state.fetching = true
+    },
+    createArticle: (state, action: PayloadAction<IArticle>) => {
+      state.fetching = true
+    },
+    updateArticle: (state, action: PayloadAction<IArticle>) => {
+      state.fetching = true
+    },
+    deleteArticle: (state, action: PayloadAction<string>) => {
       state.fetching = true
     },
   },

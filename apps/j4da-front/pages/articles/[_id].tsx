@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
@@ -42,23 +42,29 @@ const ArticleById = () => {
     getSubCat(articleById?.category)
   )
 
-  const onChaneCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const cats = allCategories.find(
-      (category: ICategory) => category._id === event.target.value
-    )
-    setSubcategories(cats?.subcategories ?? [])
-  }
+  const onChangeCategory = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const cats = allCategories.find(
+        (category: ICategory) => category._id === event.target.value
+      )
+      setSubcategories(cats?.subcategories ?? [])
+    },
+    [allCategories]
+  )
 
-  const onChaneApp = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const cats = allCategories.filter(
-      (category: ICategory) => category.app === event.target.value
-    )
+  const onChangeApp = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const cats = allCategories.filter(
+        (category: ICategory) => category.app === event.target.value
+      )
 
-    setCategories(cats || [])
-    onChaneCategory({
-      target: { value: '' },
-    } as React.ChangeEvent<HTMLSelectElement>)
-  }
+      setCategories(cats || [])
+      onChangeCategory({
+        target: { value: '' },
+      } as React.ChangeEvent<HTMLSelectElement>)
+    },
+    [allCategories, onChangeCategory]
+  )
 
   return (
     <Main>
@@ -67,8 +73,8 @@ const ArticleById = () => {
       ) : (
         <ArticleForm
           subcategories={subcategories}
-          onChaneCategory={onChaneCategory}
-          onChaneApp={onChaneApp}
+          onChangeCategory={onChangeCategory}
+          onChangeApp={onChangeApp}
           categories={categories}
           article={articleById}
           allApps={allApps}
