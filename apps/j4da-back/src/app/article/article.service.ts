@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import * as fs from 'fs'
 import { Model } from 'mongoose'
 import rake from 'rake-js'
 import { KeywordService } from '../keyword/keyword.service'
@@ -7,6 +8,7 @@ import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { ArticlesKeywords } from './interfaces/article-keywords.interface'
 import { Article } from './interfaces/article.interface'
+import path = require('path')
 
 @Injectable()
 export class ArticleService {
@@ -55,6 +57,7 @@ export class ArticleService {
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
     const newArticle = await new this.articleModel(articleDTO)
+    generatFile(articleDTO)
     return newArticle.save()
   }
 
@@ -62,6 +65,9 @@ export class ArticleService {
     _id: string,
     articleDTO: ArticleDTO
   ): Promise<Article> {
+    const article = await this.articleModel.findById(_id)
+    removeFile(article)
+    generatFile(articleDTO)
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
     })
@@ -69,7 +75,26 @@ export class ArticleService {
 
   async findByIdAndRemove(_id): Promise<Article> {
     const article = await this.articleModel.findById(_id)
+    removeFile(article)
     await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
+}
+
+const generatFile = (article: ArticleDTO) => {
+  const filePath = getFilePath(article)
+  fs.appendFileSync(filePath, article.body)
+}
+
+const removeFile = (article: ArticleDTO) => {
+  const filePath = getFilePath(article)
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath)
+  }
+}
+
+const getFilePath = (article: ArticleDTO) => {
+  const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
+  const filePath = dirPath + article.slug + '.mdx'
+  return filePath
 }

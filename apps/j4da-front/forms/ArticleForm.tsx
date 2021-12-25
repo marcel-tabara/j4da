@@ -235,7 +235,7 @@ const ArticleForm = ({
               <MDEWrapper
                 value={value}
                 onChange={onChange}
-                onBlur={onBodyChange}
+                onBlur={() => onBodyChange(value)}
               />
             )}
           />

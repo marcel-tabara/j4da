@@ -45,27 +45,37 @@ export const useSelectors = () => {
     fetching: allAlertsFetching,
   } = useSelector(alertSelectors.alertsSelector)
 
-  const { data: extractedKeywords, available: extractedKeywordsAvailable } =
-    useSelector(extractedKeywordsSelectors.extractedKeywordsSelector)
+  const {
+    data: extractedKeywords,
+    available: extractedKeywordsAvailable,
+    fetching: extractedKeywordsFetching,
+  } = useSelector(extractedKeywordsSelectors.extractedKeywordsSelector)
 
   return {
     allArticles,
     allArticlesAvailable,
     allArticlesFetching,
+    //
     allApps,
     allAppsAvailable,
     allAppsFetching,
+    //
     allKeywords,
     allKeywordsAvailable,
     allKeywordsFetching,
+    //
     allCategories,
     allCategoriesAvailable,
     allCategoriesFetching,
+    //
     articleById,
     articleByIdAvailable,
     articleByIdFetching,
+    //
     extractedKeywords,
     extractedKeywordsAvailable,
+    extractedKeywordsFetching,
+    //
     allAlerts,
     allAlertsAvailable,
     allAlertsFetching,

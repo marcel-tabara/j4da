@@ -4,12 +4,12 @@
 /dist
 /tmp
 /out-tsc
+public
 
 # dependencies
 /node_modules
 
 # IDEs and editors
-/.vscode
 /.idea
 .project
 .classpath
@@ -20,7 +20,7 @@
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
+#!.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
