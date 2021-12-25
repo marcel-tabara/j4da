@@ -10,6 +10,7 @@ import {
   Put,
   Res,
 } from '@nestjs/common'
+import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { AppService } from './app.service'
 import { AppDTO } from './dto/app.dto'
@@ -21,7 +22,7 @@ export class AppController {
   @Get()
   async find(@Res() res) {
     const apps = await this.appService.find()
-    return res.status(HttpStatus.OK).json(apps)
+    return res.status(HttpStatus.OK).json(apps.sort(sortByTitle))
   }
 
   @Get('/:_id')

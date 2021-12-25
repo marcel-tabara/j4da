@@ -95,6 +95,6 @@ const removeFile = (article: ArticleDTO) => {
 
 const getFilePath = (article: ArticleDTO) => {
   const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
-  const filePath = dirPath + article.slug + '.mdx'
+  const filePath = dirPath + article.slug + '.md'
   return filePath
 }

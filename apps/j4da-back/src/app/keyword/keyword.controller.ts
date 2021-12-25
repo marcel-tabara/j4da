@@ -10,6 +10,7 @@ import {
   Put,
   Res,
 } from '@nestjs/common'
+import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { KeywordDTO } from './dto/keyword.dto'
 import { KeywordService } from './keyword.service'
@@ -21,7 +22,8 @@ export class KeywordController {
   @Get()
   async find(@Res() res) {
     const keywords = await this.keywordService.find()
-    return res.status(HttpStatus.OK).json(keywords)
+
+    return res.status(HttpStatus.OK).json(keywords.sort(sortByTitle))
   }
 
   @Get('/:_id')

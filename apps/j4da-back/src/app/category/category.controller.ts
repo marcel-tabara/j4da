@@ -10,6 +10,7 @@ import {
   Put,
   Res,
 } from '@nestjs/common'
+import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { CategoryService } from './category.service'
 import { CategoryDTO } from './dto/category.dto'
@@ -21,7 +22,7 @@ export class CategoryController {
   @Get()
   async find(@Res() res) {
     const categories = await this.categoryService.find()
-    return res.status(HttpStatus.OK).json(categories)
+    return res.status(HttpStatus.OK).json(categories.sort(sortByTitle))
   }
 
   @Get('/:_id')
