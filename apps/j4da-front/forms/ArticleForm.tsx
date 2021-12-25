@@ -1,6 +1,7 @@
 import React from 'react'
 import Accordion from 'react-bootstrap/Accordion'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { MDEWrapper } from '../components/MDEWrapper'
 import { useArticleForm } from '../hooks/useArticleForm'
 import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
 
@@ -26,6 +27,7 @@ const ArticleForm = ({
     register,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<IArticle>()
 
@@ -224,13 +226,14 @@ const ArticleForm = ({
           </Accordion>
         </div>
         <div className="form-group">
-          <label>body</label>
-          <textarea
-            rows={20}
-            {...register('body')}
+          <label>body mde</label>
+          <Controller
+            control={control}
+            name="body"
             defaultValue={article?.body}
-            onBlur={onBodyChange}
-            className={`form-control ${errors.body ? 'is-invalid' : ''}`}
+            render={({ field: { value, onChange } }) => (
+              <MDEWrapper value={value} onChange={onChange} />
+            )}
           />
         </div>
         <div className="form-group">

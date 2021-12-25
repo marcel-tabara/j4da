@@ -80,12 +80,8 @@ export const useArticleForm = ({
 
     const oldKeywords = article?.keywords.split(',') || []
     const newKeywords = data.keywords.split(',') || []
-    console.log('########## oldKeywords', oldKeywords)
-    console.log('########## newKeywords', newKeywords)
-    const a = oldKeywords.filter((e) => !newKeywords.includes(e))
-    const b = newKeywords.filter((e) => !oldKeywords.includes(e))
-    console.log('########## a', a)
-    console.log('########## b', b)
+    const a = oldKeywords.filter((e: string) => !newKeywords.includes(e))
+    const b = newKeywords.filter((e: string) => !oldKeywords.includes(e))
     if (a.length > 0) {
       dispatch(keywordService.actions.bulkremove(a))
     }
@@ -98,9 +94,12 @@ export const useArticleForm = ({
   })
   const onBodyChange = useCallback(
     async (e) => {
-      extractKeywords(e.target.value)
+      if (e.target?.value) {
+        setValue('body', e.target.value)
+        extractKeywords(e.target.value)
+      }
     },
-    [extractKeywords]
+    [extractKeywords, setValue]
   )
   const onAddKeyword = useCallback(
     (event) => {
