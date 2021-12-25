@@ -232,7 +232,11 @@ const ArticleForm = ({
             name="body"
             defaultValue={article?.body}
             render={({ field: { value, onChange } }) => (
-              <MDEWrapper value={value} onChange={onChange} />
+              <MDEWrapper
+                value={value}
+                onChange={onChange}
+                onBlur={onBodyChange}
+              />
             )}
           />
         </div>
