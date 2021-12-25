@@ -10,5 +10,6 @@ import { KeywordSchema } from './schemas/keyword.schema'
   ],
   controllers: [KeywordController],
   providers: [KeywordService],
+  exports: [KeywordService],
 })
 export class KeywordModule {}

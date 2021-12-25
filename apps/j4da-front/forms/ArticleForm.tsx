@@ -101,19 +101,11 @@ const ArticleForm = ({
             onChange={onChangeCategory}
             className={`form-control ${errors.category ? 'is-invalid' : ''}`}
           >
-            <option
-              key="category.select"
-              value=""
-              //selected={!article?.category}
-            >
+            <option key="category.select" value="">
               Select Category
             </option>
             {categories.map((category: ICategory) => (
-              <option
-                key={category._id}
-                value={category._id}
-                // selected={category._id === article?.category}
-              >
+              <option key={category._id} value={category._id}>
                 {category.title}
               </option>
             ))}
@@ -127,19 +119,11 @@ const ArticleForm = ({
             name="subcategory"
             className={`form-control ${errors.subcategory ? 'is-invalid' : ''}`}
           >
-            <option
-              key="subcategory.select"
-              value=""
-              //selected={!article?.subcategory}
-            >
+            <option key="subcategory.select" value="">
               Select SubCategory
             </option>
             {(subcategories || []).map((subcategory: ISubCategory) => (
-              <option
-                key={subcategory.title}
-                value={subcategory.title}
-                //selected={subcategory.title === article.subcategory}
-              >
+              <option key={subcategory.title} value={subcategory.title}>
                 {subcategory.title}
               </option>
             ))}

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import rake from 'rake-js'
+import { KeywordService } from '../keyword/keyword.service'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { ArticlesKeywords } from './interfaces/article-keywords.interface'
@@ -10,7 +11,8 @@ import { Article } from './interfaces/article.interface'
 @Injectable()
 export class ArticleService {
   constructor(
-    @InjectModel('Article') private readonly articleModel: Model<Article>
+    @InjectModel('Article') private readonly articleModel: Model<Article>,
+    private readonly keywordService: KeywordService
   ) {}
 
   async findArticleKeywords(): Promise<ArticlesKeywords[]> {
@@ -66,6 +68,8 @@ export class ArticleService {
   }
 
   async findByIdAndRemove(_id): Promise<Article> {
+    const article = await this.articleModel.findById(_id)
+    await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
 }

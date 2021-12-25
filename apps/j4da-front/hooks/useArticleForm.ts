@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
+  articleByIdService,
   articleService,
   extractedKeywordsService,
   keywordService,
@@ -24,6 +25,11 @@ export const useArticleForm = ({
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
     !article?.keywords?.length ? [] : article?.keywords.split(',')
   )
+  useEffect(() => {
+    return () => {
+      dispatch(articleByIdService.actions.reset())
+    }
+  }, [dispatch])
 
   useEffect(() => {
     article?.app &&
@@ -74,10 +80,12 @@ export const useArticleForm = ({
 
     const oldKeywords = article?.keywords.split(',') || []
     const newKeywords = data.keywords.split(',') || []
-
+    console.log('########## oldKeywords', oldKeywords)
+    console.log('########## newKeywords', newKeywords)
     const a = oldKeywords.filter((e) => !newKeywords.includes(e))
     const b = newKeywords.filter((e) => !oldKeywords.includes(e))
-
+    console.log('########## a', a)
+    console.log('########## b', b)
     if (a.length > 0) {
       dispatch(keywordService.actions.bulkremove(a))
     }
