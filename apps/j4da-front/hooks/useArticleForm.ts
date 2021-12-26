@@ -19,18 +19,18 @@ export const useArticleForm = ({
   const dispatch = useDispatch()
   const router = useRouter()
   const { extractedKeywords } = useSelectors()
-  const [bodyKeywords, setBodyKeywords] = useState([])
-  const [defaultBodyKeywords, setDefaultBodyKeywords] = useState([])
+  const [bodyKeywords, setBodyKeywords] = useState<string[]>([])
+  const [defaultBodyKeywords, setDefaultBodyKeywords] = useState<string[]>([])
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
     !article?.keywords?.length ? [] : article?.keywords.split(',')
   )
 
   useEffect(() => {
-    article?.app &&
+    Boolean(article?.app) &&
       onChangeApp({
         target: { value: article?.app },
       } as React.ChangeEvent<HTMLSelectElement>)
-    article?.category &&
+    Boolean(article?.category) &&
       onChangeCategory({
         target: { value: article?.category },
       } as React.ChangeEvent<HTMLSelectElement>)

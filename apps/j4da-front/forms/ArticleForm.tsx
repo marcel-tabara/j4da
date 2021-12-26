@@ -97,40 +97,60 @@ const ArticleForm = ({
         </div>
         <div className="form-group">
           <label>category</label>
-          <select
-            {...register('category')}
-            value={article?.category}
+          <Controller
+            control={control}
             name="category"
-            onChange={onChangeCategory}
-            className={`form-control ${errors.category ? 'is-invalid' : ''}`}
-          >
-            <option key="category.select" value="">
-              Select Category
-            </option>
-            {categories.map((category: ICategory) => (
-              <option key={category._id} value={category._id}>
-                {category.title}
-              </option>
-            ))}
-          </select>
+            defaultValue={article?.category}
+            render={({ field: { value, onChange } }) => (
+              <select
+                {...register('category')}
+                value={value}
+                onChange={(e) => {
+                  onChangeCategory(e)
+                  onChange(e)
+                }}
+                className={`form-control ${
+                  errors.category ? 'is-invalid' : ''
+                }`}
+              >
+                <option key="category.select" value="">
+                  Select Category
+                </option>
+                {(categories || []).map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.title}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
         <div className="form-group">
           <label>subcategory</label>
-          <select
-            {...register('subcategory')}
-            value={article?.subcategory}
+          <Controller
+            control={control}
             name="subcategory"
-            className={`form-control ${errors.subcategory ? 'is-invalid' : ''}`}
-          >
-            <option key="subcategory.select" value="">
-              Select SubCategory
-            </option>
-            {(subcategories || []).map((subcategory: ISubCategory) => (
-              <option key={subcategory.title} value={subcategory.title}>
-                {subcategory.title}
-              </option>
-            ))}
-          </select>
+            defaultValue={article?.subcategory}
+            render={({ field: { value, onChange } }) => (
+              <select
+                {...register('subcategory')}
+                value={value}
+                onChange={onChange}
+                className={`form-control ${
+                  errors.subcategory ? 'is-invalid' : ''
+                }`}
+              >
+                <option key="subcategory.select" value="">
+                  Select SubCategory
+                </option>
+                {(subcategories || []).map((subcategory) => (
+                  <option key={subcategory.title} value={subcategory.title}>
+                    {subcategory.title}
+                  </option>
+                ))}
+              </select>
+            )}
+          />
         </div>
         <div className="form-group">
           <label>images</label>
@@ -210,7 +230,7 @@ const ArticleForm = ({
               <Accordion.Body className="accordion-box">
                 <div className="container">
                   <ul className="list-unstyled card-columns">
-                    {selectedKeywords.map((e) => (
+                    {(selectedKeywords || []).map((e) => (
                       <li
                         key={e.split(' ').join('_').concat('_selected')}
                         className="accordion-list"

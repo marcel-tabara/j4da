@@ -40,7 +40,9 @@ const Categories = ({ categories }: ICategoriesProps) => {
                   {category.title}
                 </Link>
                 <br />
-                {category.subcategories.map((subcat) => subcat.title + ' | ')}
+                {(category?.subcategories ?? []).map(
+                  (subcat) => subcat.title + ' | '
+                )}
               </td>
               <td align="right">
                 <Icon.Trash
