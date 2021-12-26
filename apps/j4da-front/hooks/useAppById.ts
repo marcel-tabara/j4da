@@ -23,6 +23,11 @@ export const useAppById = (
       !appByIdFetching &&
       dispatch(appByIdService.actions.getAppById(_id))
   }, [_id, appByIdAvailable, dispatch, appByIdFetching])
+  useEffect(() => {
+    return () => {
+      dispatch(appByIdService.actions.reset())
+    }
+  }, [dispatch])
 
   return {
     appById,

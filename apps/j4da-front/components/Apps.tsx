@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { appService } from '../services'
 import { IAppsProps } from '../utils/types'
 
-const Apps = (props: IAppsProps) => {
+const Apps = ({ apps }: IAppsProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const onAddApp = () => router.replace('/apps/add')
@@ -30,7 +30,7 @@ const Apps = (props: IAppsProps) => {
           </tr>
         </thead>
         <tbody>
-          {(props?.apps ?? []).map((app) => (
+          {(apps ?? []).map((app) => (
             <tr key={app._id}>
               <td>
                 <Link href="/apps/[_id]" as={`/apps/${app._id}`}>

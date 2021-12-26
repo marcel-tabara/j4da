@@ -4,10 +4,10 @@ import { Main } from '../../templates/Main'
 import { IApp } from '../../utils/types'
 
 const App = () => {
-  const props = {} as IApp
+  const appById = {} as IApp
   return (
     <Main>
-      <AppForm props={props} />
+      <AppForm appById={appById} />
     </Main>
   )
 }

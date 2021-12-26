@@ -1,35 +1,23 @@
-import { GetStaticProps } from 'next'
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { CategoryForm } from '../../forms/CategoryForm'
+import { useApps } from '../../hooks/useApps'
 import { Main } from '../../templates/Main'
-import { BASE_URL } from '../../utils/constants'
-import { IApp, ICategory, IUrl } from '../../utils/types'
+import { ICategory } from '../../utils/types'
 
-const Category = (props: ICategory & { apps: IApp[] }) => {
+const Category = () => {
+  const categoryById = {} as ICategory
+  const { appsAvailable, apps } = useApps()
+
   return (
     <Main>
-      <CategoryForm props={props} />
+      {!appsAvailable ? (
+        <Spinner animation="grow" />
+      ) : (
+        <CategoryForm apps={apps} categoryById={categoryById} />
+      )}
     </Main>
   )
-}
-
-export const getStaticProps: GetStaticProps<
-  ICategory & { apps: IApp[] },
-  IUrl
-> = async ({ params }) => {
-  const resApp = await fetch(`${BASE_URL}/apps`)
-  const apps: IApp[] = await resApp.json()
-
-  return {
-    props: {
-      _id: '',
-      title: '',
-      description: '',
-      subcategories: [{ title: '', description: '' }],
-      app: '',
-      apps,
-    },
-  }
 }
 
 export default Category

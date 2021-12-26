@@ -4,10 +4,10 @@ import { Main } from '../../templates/Main'
 import { IKeyword } from '../../utils/types'
 
 const Keyword = () => {
-  const props = {} as IKeyword
+  const keywordById = {} as IKeyword
   return (
     <Main>
-      <KeywordForm props={props} />
+      <KeywordForm keywordById={keywordById} />
     </Main>
   )
 }

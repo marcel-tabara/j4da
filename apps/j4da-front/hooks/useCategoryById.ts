@@ -21,6 +21,11 @@ export const useCategoryById = (
       !categoryByIdFetching &&
       dispatch(categoryByIdService.actions.getCategoryById(_id))
   }, [_id, categoryByIdAvailable, dispatch, categoryByIdFetching])
+  useEffect(() => {
+    return () => {
+      dispatch(categoryByIdService.actions.reset())
+    }
+  }, [dispatch])
 
   return {
     categoryById,

@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
+import { useArticleById } from '../../hooks/useArticleById'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
-import { articleByIdService } from '../../services'
 import { Main } from '../../templates/Main'
 import { ICategory, ISubCategory } from '../../utils/types'
 
@@ -19,10 +19,7 @@ const ArticleById = () => {
   useCategories()
   useApps()
   useKeywords()
-
-  useEffect(() => {
-    _id && dispatch(articleByIdService.actions.getArticleById(_id as string))
-  }, [dispatch, _id])
+  useArticleById(_id as string)
 
   const { allApps, allCategories, articleById } = useSelectors()
 

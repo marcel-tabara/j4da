@@ -10,13 +10,12 @@ const Keyword = () => {
     query: { _id },
   } = useRouter()
   const { keywordById, keywordByIdAvailable } = useKeywordById(_id as string)
-
   return (
     <Main>
       {!keywordByIdAvailable ? (
         <Spinner animation="grow" />
       ) : (
-        <KeywordForm props={keywordById} />
+        <KeywordForm keywordById={keywordById} />
       )}
     </Main>
   )

@@ -18,11 +18,9 @@ const AppForm = ({ appById }: IAppFormProps) => {
     formState: { errors },
   } = useForm<IApp>()
   const onSubmit = handleSubmit((data) => {
-    if (appById._id) {
-      dispatch(appService.actions.updateApp({ ...data, _id: appById._id }))
-    } else {
-      dispatch(appService.actions.createApp(data))
-    }
+    appById._id
+      ? dispatch(appService.actions.updateApp({ ...data, _id: appById._id }))
+      : dispatch(appService.actions.createApp(data))
 
     router.replace('/apps')
   })

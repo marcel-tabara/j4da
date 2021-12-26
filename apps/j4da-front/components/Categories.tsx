@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { categoryService } from '../services'
 import { ICategoriesProps } from '../utils/types'
 
-const Categories = (props: ICategoriesProps) => {
+const Categories = ({ categories }: ICategoriesProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const onAddCategory = () => router.replace('/categories/add')
@@ -30,7 +30,7 @@ const Categories = (props: ICategoriesProps) => {
           </tr>
         </thead>
         <tbody>
-          {(props?.categories ?? []).map((category) => (
+          {(categories ?? []).map((category) => (
             <tr key={category._id}>
               <td>
                 <Link

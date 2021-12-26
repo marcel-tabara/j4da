@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
-  articleByIdService,
   articleService,
   extractedKeywordsService,
   keywordService,
@@ -25,11 +24,6 @@ export const useArticleForm = ({
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
     !article?.keywords?.length ? [] : article?.keywords.split(',')
   )
-  useEffect(() => {
-    return () => {
-      dispatch(articleByIdService.actions.reset())
-    }
-  }, [dispatch])
 
   useEffect(() => {
     article?.app &&

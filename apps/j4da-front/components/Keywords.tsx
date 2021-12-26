@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { keywordService } from '../services'
 import { IKeywordsProps } from '../utils/types'
 
-const Keywords = (props: IKeywordsProps) => {
+const Keywords = ({ keywords }: IKeywordsProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const onAddKeyword = () => router.replace('/keywords/add')
@@ -29,7 +29,7 @@ const Keywords = (props: IKeywordsProps) => {
           </tr>
         </thead>
         <tbody>
-          {(props?.keywords ?? []).map((keyword) => (
+          {(keywords ?? []).map((keyword) => (
             <tr key={keyword._id}>
               <td>
                 <Link href="/keywords/[_id]" as={`/keywords/${keyword._id}`}>

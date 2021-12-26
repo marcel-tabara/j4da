@@ -6,10 +6,10 @@ import { keywordService } from '../services'
 import { IKeyword } from '../utils/types'
 
 interface IKeywordFormProps {
-  props: IKeyword
+  keywordById: IKeyword
 }
 
-const KeywordForm = ({ props }: IKeywordFormProps) => {
+const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const {
@@ -18,13 +18,14 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
     formState: { errors },
   } = useForm<IKeyword>()
   const onSubmit = handleSubmit((data) => {
-    if (props._id) {
-      dispatch(
-        keywordService.actions.updateKeyword({ ...data, _id: props._id })
-      )
-    } else {
-      dispatch(keywordService.actions.createKeyword(data))
-    }
+    keywordById._id
+      ? dispatch(
+          keywordService.actions.updateKeyword({
+            ...data,
+            _id: keywordById._id,
+          })
+        )
+      : dispatch(keywordService.actions.createKeyword(data))
 
     router.replace('/keywords')
   })
@@ -36,7 +37,7 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
           <label>Keyword Title</label>
           <input
             {...register('title')}
-            defaultValue={props.title}
+            defaultValue={keywordById?.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -44,7 +45,7 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
           <label>Keyword Description</label>
           <textarea
             {...register('description')}
-            defaultValue={props.description}
+            defaultValue={keywordById?.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
@@ -52,7 +53,7 @@ const KeywordForm = ({ props }: IKeywordFormProps) => {
           <label>Keyword Count</label>
           <input
             {...register('count')}
-            defaultValue={props.count}
+            defaultValue={keywordById?.count}
             className={`form-control ${errors.count ? 'is-invalid' : ''}`}
           />
         </div>

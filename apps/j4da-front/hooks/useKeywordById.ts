@@ -21,6 +21,11 @@ export const useKeywordById = (
       !keywordByIdFetching &&
       dispatch(keywordByIdService.actions.getKeywordById(_id))
   }, [_id, keywordByIdAvailable, dispatch, keywordByIdFetching])
+  useEffect(() => {
+    return () => {
+      dispatch(keywordByIdService.actions.reset())
+    }
+  }, [dispatch])
 
   return {
     keywordById,

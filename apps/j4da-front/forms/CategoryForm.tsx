@@ -27,16 +27,14 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
       ...data,
       subcategories: data.subcategories.filter((e) => e.title.length > 0),
     }
-    if (categoryById._id) {
-      dispatch(
-        categoryService.actions.updateCategory({
-          ...newData,
-          _id: categoryById._id,
-        })
-      )
-    } else {
-      dispatch(categoryService.actions.createCategory(newData))
-    }
+    categoryById._id
+      ? dispatch(
+          categoryService.actions.updateCategory({
+            ...newData,
+            _id: categoryById._id,
+          })
+        )
+      : dispatch(categoryService.actions.createCategory(newData))
 
     router.replace('/categories')
   })
