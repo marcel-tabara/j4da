@@ -5,7 +5,6 @@ export const ArticleSchema = new mongoose.Schema({
   url: String,
   title: String,
   images: [String],
-  section: String,
   keywords: String,
   dateCreated: String,
   datePublished: String,

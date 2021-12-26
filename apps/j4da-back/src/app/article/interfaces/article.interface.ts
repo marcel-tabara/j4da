@@ -6,7 +6,6 @@ export interface Article extends Document {
   readonly url: string
   readonly title: string
   readonly images: ReadonlyArray<string>
-  readonly section: string
   readonly keywords: string
   readonly dateCreated: string
   readonly datePublished: string

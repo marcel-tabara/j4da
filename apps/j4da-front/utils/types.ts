@@ -42,7 +42,6 @@ export interface IArticle {
   url?: string
   title: string
   images?: string | string[]
-  section?: string
   keywords?: string
   dateCreated?: string
   datePublished?: string

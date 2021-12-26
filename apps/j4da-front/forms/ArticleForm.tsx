@@ -56,9 +56,10 @@ const ArticleForm = ({
     setValue,
   })
 
-  const selectedArticlesKeywords = articlesKeywords.filter(
-    (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
-  )
+  const selectedArticlesKeywords = () =>
+    articlesKeywords.filter(
+      (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
+    )
 
   return (
     <div className="register-form">
@@ -172,14 +173,6 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <h6>section</h6>
-          <input
-            {...register('section')}
-            defaultValue={article?.section}
-            className={`form-control ${errors.section ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
           <h6>keywords</h6>
           <input
             {...register('keywords')}
@@ -211,11 +204,11 @@ const ArticleForm = ({
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Artcles Keywords: {selectedArticlesKeywords.length}
+                  Total Artcles Keywords: {selectedArticlesKeywords().length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
-                    {selectedArticlesKeywords.map((e, idx) => {
+                    {selectedArticlesKeywords().map((e, idx) => {
                       const key =
                         e.keyword.split(' ').join('_') +
                         '_' +
