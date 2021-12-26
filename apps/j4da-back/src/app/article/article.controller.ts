@@ -11,6 +11,7 @@ import {
   Query,
   Res,
 } from '@nestjs/common'
+import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { ArticleService } from './article.service'
 import { ArticleDTO } from './dto/article.dto'
@@ -26,7 +27,7 @@ export class ArticleController {
     const data = await this.articleService.find(paginationQuery)
     return res
       .status(HttpStatus.OK)
-      .json({ limit, skip, total: data.length, data })
+      .json({ limit, skip, total: data.length, data: data.sort(sortByTitle) })
   }
 
   @Get('/articleKeywords')

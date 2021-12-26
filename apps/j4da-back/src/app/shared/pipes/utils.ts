@@ -1,7 +1,9 @@
 export const sortByTitle = (a, b) => {
-  if (a.title > b.title) {
+  const aa = a.title.toLowerCase()
+  const bb = b.title.toLowerCase()
+  if (aa > bb) {
     return 1
-  } else if (a.title < b.title) {
+  } else if (aa < bb) {
     return -1
   } else {
     return 0

@@ -25,6 +25,7 @@ const ArticleForm = ({
   const {
     handleSubmit,
     register,
+    getValues,
     setValue,
     watch,
     control,

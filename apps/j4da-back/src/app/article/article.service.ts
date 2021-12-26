@@ -83,7 +83,7 @@ export class ArticleService {
 
 const generatFile = (article: ArticleDTO) => {
   const filePath = getFilePath(article)
-  fs.appendFileSync(filePath, article.body)
+  fs.appendFileSync(filePath, getBody(article) + article.body)
 }
 
 const removeFile = (article: ArticleDTO) => {
@@ -97,4 +97,17 @@ const getFilePath = (article: ArticleDTO) => {
   const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
   const filePath = dirPath + article.slug + '.md'
   return filePath
+}
+
+const getBody = (article: ArticleDTO) => {
+  return `
+---
+title: ${article.title}
+description:  ${article.description}
+date:  ${article.dateCreated}
+modified_date: ${article.dateModified}
+image:  ${article.images}
+---
+
+`
 }
