@@ -29,6 +29,7 @@ export class ArticleService {
             slug: article.slug,
             url: article.url,
             priority: article.priority,
+            _id: article._id,
           }
         })
       )

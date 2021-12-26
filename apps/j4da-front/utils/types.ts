@@ -8,6 +8,7 @@ export interface IArticlesKeyword {
   category: string
   subcategory: string
   priority: number
+  _id: string
 }
 
 export interface IApp {

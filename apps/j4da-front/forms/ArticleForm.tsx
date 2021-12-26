@@ -56,9 +56,9 @@ const ArticleForm = ({
     setValue,
   })
 
-  const selectedArticlesKeywords = () => {
-    return articlesKeywords.filter((e) => selectedKeywords.includes(e.keyword))
-  }
+  const selectedArticlesKeywords = articlesKeywords.filter(
+    (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
+  )
 
   return (
     <div className="register-form">
@@ -211,24 +211,20 @@ const ArticleForm = ({
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Artcles Keywords: {articlesKeywords.length}
+                  Total Artcles Keywords: {selectedArticlesKeywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
-                    {selectedArticlesKeywords().map((e, idx) => {
+                    {selectedArticlesKeywords.map((e, idx) => {
+                      const key =
+                        e.keyword.split(' ').join('_') +
+                        '_' +
+                        idx +
+                        '_selectedKeyword'
                       return (
-                        <li
-                          key={
-                            e.keyword.split(' ').join('_') +
-                            '_' +
-                            idx +
-                            '_selectedKeyword'
-                          }
-                          id={e.keyword}
-                          onClick={onAddKeyword}
-                          // className="accordion-list"
-                        >
-                          {e.keyword} - {e.url}
+                        <li key={key} id={key} onClick={onAddKeyword}>
+                          {e.priority}
+                          <b>{e.keyword}</b> - {e.url}
                         </li>
                       )
                     })}
@@ -337,7 +333,7 @@ const ArticleForm = ({
           <h6>datePublished</h6>
           <input
             {...register('datePublished')}
-            defaultValue={article?.datePublished}
+            defaultValue={new Date().toISOString()}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
             }`}

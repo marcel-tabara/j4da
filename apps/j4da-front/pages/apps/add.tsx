@@ -4,7 +4,7 @@ import { Main } from '../../templates/Main'
 import { IApp } from '../../utils/types'
 
 const App = () => {
-  const appById = {} as IApp
+  const appById = { dateCreated: new Date().toISOString() } as IApp
   return (
     <Main>
       <AppForm appById={appById} />
