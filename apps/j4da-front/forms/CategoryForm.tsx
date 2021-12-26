@@ -47,7 +47,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>Cat Title</label>
+          <h6>Cat Title</h6>
           <input
             {...register('title')}
             defaultValue={categoryById.title}
@@ -55,7 +55,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>Cat Description</label>
+          <h6>Cat Description</h6>
           <textarea
             {...register('description')}
             defaultValue={categoryById.description}
@@ -63,7 +63,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>app</label>
+          <h6>app</h6>
           <select
             {...register('app')}
             defaultValue={categoryById.app}
@@ -86,7 +86,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           <div key={`${subcategory.title}_${index}`}>
             <div>
               <div className="form-group">
-                <label>Subcat Title</label>
+                <h6>Subcat Title</h6>
                 <input
                   {...register(`subcategories.${index}.title` as const)}
                   key={subcategory.title}
@@ -95,7 +95,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
                 />
               </div>
               <div className="form-group">
-                <label>Subcat Description</label>
+                <h6>Subcat Description</h6>
                 <textarea
                   {...register(`subcategories.${index}.description` as const)}
                   key={`${subcategory.title}_descr`}

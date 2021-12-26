@@ -34,7 +34,7 @@ const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>Keyword Title</label>
+          <h6>Keyword Title</h6>
           <input
             {...register('title')}
             defaultValue={keywordById?.title}
@@ -42,7 +42,7 @@ const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>Keyword Description</label>
+          <h6>Keyword Description</h6>
           <textarea
             {...register('description')}
             defaultValue={keywordById?.description}
@@ -50,7 +50,7 @@ const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>Keyword Count</label>
+          <h6>Keyword Count</h6>
           <input
             {...register('count')}
             defaultValue={keywordById?.count}

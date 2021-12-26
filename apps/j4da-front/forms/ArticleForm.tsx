@@ -53,7 +53,7 @@ const ArticleForm = ({
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <h5>url</h5>
+          <h6>url</h6>
           <input
             {...register('url')}
             defaultValue={article?.url}
@@ -61,7 +61,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <h4>title</h4>
+          <h6>title</h6>
           <input
             {...register('title')}
             defaultValue={article?.title}
@@ -69,7 +69,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>slug</label>
+          <h6>slug</h6>
           <input
             {...register('slug')}
             defaultValue={article?.slug}
@@ -77,7 +77,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>app</label>
+          <h6>app</h6>
           <select
             {...register('app')}
             defaultValue={article?.app}
@@ -96,7 +96,7 @@ const ArticleForm = ({
           </select>
         </div>
         <div className="form-group">
-          <label>category</label>
+          <h6>category</h6>
           <Controller
             control={control}
             name="category"
@@ -126,7 +126,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>subcategory</label>
+          <h6>subcategory</h6>
           <Controller
             control={control}
             name="subcategory"
@@ -153,7 +153,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>images</label>
+          <h6>images</h6>
           <input
             {...register('images')}
             defaultValue={article?.images}
@@ -161,7 +161,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>section</label>
+          <h6>section</h6>
           <input
             {...register('section')}
             defaultValue={article?.section}
@@ -169,7 +169,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>keywords</label>
+          <h6>keywords</h6>
           <input
             {...register('keywords')}
             onBlur={onChangeKeywords}
@@ -178,7 +178,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>authorName</label>
+          <h6>authorName</h6>
           <input
             {...register('authorName')}
             defaultValue={article?.authorName}
@@ -186,7 +186,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>description</label>
+          <h6>description</h6>
           <textarea
             rows={10}
             {...register('description')}
@@ -196,7 +196,7 @@ const ArticleForm = ({
         </div>
         {bodyKeywords && (
           <div className="form-group">
-            <label>body keywords</label>
+            <h6>body keywords</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
@@ -221,7 +221,7 @@ const ArticleForm = ({
           </div>
         )}
         <div className="form-group">
-          <label>selected keywords</label>
+          <h6>selected keywords</h6>
           <Accordion>
             <Accordion.Item eventKey="0">
               <Accordion.Header>
@@ -247,7 +247,7 @@ const ArticleForm = ({
           </Accordion>
         </div>
         <div className="form-group">
-          <label>body mde</label>
+          <h6>body mde</h6>
           <Controller
             control={control}
             name="body"
@@ -262,7 +262,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>publisherName</label>
+          <h6>publisherName</h6>
           <input
             {...register('publisherName')}
             defaultValue={article?.publisherName}
@@ -272,7 +272,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>publisherLogo</label>
+          <h6>publisherLogo</h6>
           <input
             {...register('publisherLogo')}
             defaultValue={article?.publisherLogo}
@@ -282,7 +282,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>dateCreated</label>
+          <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
             defaultValue={article?.dateCreated}
@@ -290,7 +290,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>datePublished</label>
+          <h6>datePublished</h6>
           <input
             {...register('datePublished')}
             defaultValue={article?.datePublished}
@@ -300,7 +300,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>dateModified</label>
+          <h6>dateModified</h6>
           <input
             {...register('dateModified')}
             defaultValue={new Date().toISOString()}
@@ -310,7 +310,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>keyOverride</label>
+          <h6>keyOverride</h6>
           <input
             {...register('keyOverride')}
             defaultValue={article?.keyOverride}

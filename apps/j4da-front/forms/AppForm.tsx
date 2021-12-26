@@ -29,7 +29,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>url</label>
+          <h6>url</h6>
           <input
             {...register('url')}
             defaultValue={appById?.url}
@@ -37,7 +37,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>title</label>
+          <h6>title</h6>
           <input
             {...register('title')}
             defaultValue={appById?.title}
@@ -45,7 +45,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>images</label>
+          <h6>images</h6>
           <input
             {...register('images')}
             defaultValue={appById?.images}
@@ -53,7 +53,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>section</label>
+          <h6>section</h6>
           <input
             {...register('section')}
             defaultValue={appById?.section}
@@ -61,7 +61,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>keywords</label>
+          <h6>keywords</h6>
           <input
             {...register('keywords')}
             defaultValue={appById?.keywords}
@@ -69,7 +69,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>authorName</label>
+          <h6>authorName</h6>
           <input
             {...register('authorName')}
             defaultValue={appById?.authorName}
@@ -77,23 +77,25 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>description</label>
+          <h6>description</h6>
           <textarea
             {...register('description')}
+            rows={10}
             defaultValue={appById?.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
-          <label>body</label>
+          <h6>body</h6>
           <textarea
             {...register('body')}
+            rows={20}
             defaultValue={appById?.body}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
-          <label>publisherName</label>
+          <h6>publisherName</h6>
           <input
             {...register('publisherName')}
             defaultValue={appById?.publisherName}
@@ -103,7 +105,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>publisherLogo</label>
+          <h6>publisherLogo</h6>
           <input
             {...register('publisherLogo')}
             defaultValue={appById?.publisherLogo}
@@ -113,7 +115,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>dateCreated</label>
+          <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
             defaultValue={appById?.dateCreated}
@@ -121,7 +123,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>datePublished</label>
+          <h6>datePublished</h6>
           <input
             {...register('datePublished')}
             defaultValue={appById?.datePublished}
@@ -131,7 +133,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>dateModified</label>
+          <h6>dateModified</h6>
           <input
             {...register('dateModified')}
             defaultValue={new Date().toISOString()}
@@ -141,7 +143,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <label>keyOverride</label>
+          <h6>keyOverride</h6>
           <input
             {...register('keyOverride')}
             defaultValue={appById?.keyOverride}
