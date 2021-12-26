@@ -3,7 +3,13 @@ import Accordion from 'react-bootstrap/Accordion'
 import { Controller, useForm } from 'react-hook-form'
 import { MDEWrapper } from '../components/MDEWrapper'
 import { useArticleForm } from '../hooks/useArticleForm'
-import { IApp, IArticle, ICategory, ISubCategory } from '../utils/types'
+import {
+  IApp,
+  IArticle,
+  IArticlesKeyword,
+  ICategory,
+  ISubCategory,
+} from '../utils/types'
 
 interface IArticleFormProps {
   onChangeCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
@@ -12,6 +18,7 @@ interface IArticleFormProps {
   categories: ICategory[]
   article: IArticle
   allApps: IApp[]
+  articlesKeywords: IArticlesKeyword[]
 }
 
 const ArticleForm = ({
@@ -21,11 +28,11 @@ const ArticleForm = ({
   subcategories = [],
   article,
   allApps,
+  articlesKeywords,
 }: IArticleFormProps) => {
   const {
     handleSubmit,
     register,
-    getValues,
     setValue,
     watch,
     control,
@@ -48,6 +55,10 @@ const ArticleForm = ({
     handleSubmit,
     setValue,
   })
+
+  const selectedArticlesKeywords = () => {
+    return articlesKeywords.filter((e) => selectedKeywords.includes(e.keyword))
+  }
 
   return (
     <div className="register-form">
@@ -194,13 +205,46 @@ const ArticleForm = ({
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
+        {articlesKeywords && (
+          <div className="form-group">
+            <h6>articles keywords</h6>
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  Total Artcles Keywords: {articlesKeywords.length}
+                </Accordion.Header>
+                <Accordion.Body className="accordion-box">
+                  <div className="container">
+                    {selectedArticlesKeywords().map((e, idx) => {
+                      return (
+                        <li
+                          key={
+                            e.keyword.split(' ').join('_') +
+                            '_' +
+                            idx +
+                            '_selectedKeyword'
+                          }
+                          id={e.keyword}
+                          onClick={onAddKeyword}
+                          // className="accordion-list"
+                        >
+                          {e.keyword} - {e.url}
+                        </li>
+                      )
+                    })}
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+        )}
         {bodyKeywords && (
           <div className="form-group">
             <h6>body keywords</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Keywords: {bodyKeywords.length}
+                  Total Body Keywords: {bodyKeywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">

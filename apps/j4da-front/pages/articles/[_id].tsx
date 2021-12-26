@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
 import { useArticleById } from '../../hooks/useArticleById'
+import { useArticlesKeywords } from '../../hooks/useArticlesKeywords'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
@@ -20,8 +21,10 @@ const ArticleById = () => {
   useApps()
   useKeywords()
   useArticleById(_id as string)
+  useArticlesKeywords()
 
-  const { allApps, allCategories, articleById } = useSelectors()
+  const { articlesKeywords, allApps, allCategories, articleById } =
+    useSelectors()
 
   const getDefaultCats = () =>
     articleById?.app
@@ -69,12 +72,13 @@ const ArticleById = () => {
         <Spinner animation="grow" />
       ) : (
         <ArticleForm
-          subcategories={subcategories}
           onChangeCategory={onChangeCategory}
           onChangeApp={onChangeApp}
           categories={categories}
+          subcategories={subcategories}
           article={articleById}
           allApps={allApps}
+          articlesKeywords={articlesKeywords}
         />
       )}
     </Main>

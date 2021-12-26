@@ -1,7 +1,7 @@
 import { Action } from '@reduxjs/toolkit'
 import { ReactNode } from 'react'
 
-export interface IArticlesKeywords {
+export interface IArticlesKeyword {
   keyword: string
   url: string
   slug: string

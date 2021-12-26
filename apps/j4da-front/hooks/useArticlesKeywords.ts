@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { articlesKeywordsSelectors, articlesKeywordsService } from '../services'
-import { IArticlesKeywords } from '../utils/types'
+import { IArticlesKeyword } from '../utils/types'
 
-export const useArticlesKeywords = (
-  text: string
-): {
-  articlesKeywords: IArticlesKeywords
+export const useArticlesKeywords = (): {
+  articlesKeywords: IArticlesKeyword[]
   articlesKeywordsAvailable: boolean
   articlesKeywordsFetching: boolean
 } => {
@@ -18,11 +16,10 @@ export const useArticlesKeywords = (
   } = useSelector(articlesKeywordsSelectors.articleKeywordsSelector)
 
   useEffect(() => {
-    text &&
-      !articlesKeywordsAvailable &&
+    !articlesKeywordsAvailable &&
       !articlesKeywordsFetching &&
-      dispatch(articlesKeywordsService.actions.getArticlesKeywords(text))
-  }, [articlesKeywordsAvailable, dispatch, articlesKeywordsFetching, text])
+      dispatch(articlesKeywordsService.actions.getArticlesKeywords())
+  }, [articlesKeywordsAvailable, dispatch, articlesKeywordsFetching])
 
   return {
     articlesKeywords,

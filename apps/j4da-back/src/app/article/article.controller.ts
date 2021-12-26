@@ -30,9 +30,9 @@ export class ArticleController {
       .json({ limit, skip, total: data.length, data: data.sort(sortByTitle) })
   }
 
-  @Get('/articleKeywords')
+  @Get('/articlesKeywords')
   async articleKeywords(@Res() res) {
-    const data = await this.articleService.findArticleKeywords()
+    const data = await this.articleService.findArticlesKeywords()
     return res.status(HttpStatus.OK).json(data)
   }
 

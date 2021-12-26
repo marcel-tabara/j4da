@@ -17,7 +17,7 @@ export class ArticleService {
     private readonly keywordService: KeywordService
   ) {}
 
-  async findArticleKeywords(): Promise<ArticlesKeywords[]> {
+  async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
     const articles = await this.articleModel.find().exec()
     const articleKeywords = (articles || [])
       .map((article: Article) =>
@@ -27,7 +27,7 @@ export class ArticleService {
             category: article.category,
             subcategory: article.subcategory,
             slug: article.slug,
-            url: article._id,
+            url: article.url,
             priority: article.priority,
           }
         })
