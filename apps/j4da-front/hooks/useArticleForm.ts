@@ -15,6 +15,7 @@ export const useArticleForm = ({
   watch,
   handleSubmit,
   setValue,
+  articlesKeywords,
 }) => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -88,9 +89,9 @@ export const useArticleForm = ({
   })
   const onBodyChange = useCallback(
     async (e) => {
-      if (e.target?.value) {
-        setValue('body', e.target.value)
-        extractKeywords(e.target.value)
+      if (e) {
+        setValue('body', e)
+        extractKeywords(e)
       }
     },
     [extractKeywords, setValue]
@@ -126,6 +127,10 @@ export const useArticleForm = ({
   const onChangeKeywords = useCallback((e) => {
     setSelectedKeywords(e.target.value.split(','))
   }, [])
+  const selectedArticlesKeywords = () =>
+    articlesKeywords.filter(
+      (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
+    )
 
   return {
     bodyKeywords,
@@ -133,6 +138,7 @@ export const useArticleForm = ({
     defaultBodyKeywords,
     setDefaultBodyKeywords,
     selectedKeywords,
+    selectedArticlesKeywords,
     setSelectedKeywords,
     extractKeywords,
     onSubmit,

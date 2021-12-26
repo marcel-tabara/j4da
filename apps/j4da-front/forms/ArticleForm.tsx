@@ -47,6 +47,7 @@ const ArticleForm = ({
     onChangeKeywords,
     onAddKeyword,
     onRemoveKeyword,
+    selectedArticlesKeywords,
   } = useArticleForm({
     article,
     onChangeApp,
@@ -54,12 +55,8 @@ const ArticleForm = ({
     watch,
     handleSubmit,
     setValue,
+    articlesKeywords,
   })
-
-  const selectedArticlesKeywords = () =>
-    articlesKeywords.filter(
-      (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
-    )
 
   return (
     <div className="register-form">
