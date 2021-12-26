@@ -6,13 +6,16 @@ import { categoryService } from '../services'
 import { IApp, ICategory, ISubCategory } from '../utils/types'
 
 interface ICategoryFormProps {
-  props: ICategory & { apps: IApp[] }
+  categoryById: ICategory
+  apps: IApp[]
 }
 
-const CategoryForm = ({ props }: ICategoryFormProps) => {
+const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const [subcats, setSubcats] = useState<ISubCategory[]>(props.subcategories)
+  const [subcats, setSubcats] = useState<ISubCategory[]>(
+    categoryById.subcategories
+  )
   const {
     register,
     handleSubmit,
@@ -24,9 +27,12 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
       ...data,
       subcategories: data.subcategories.filter((e) => e.title.length > 0),
     }
-    if (props._id) {
+    if (categoryById._id) {
       dispatch(
-        categoryService.actions.updateCategory({ ...newData, _id: props._id })
+        categoryService.actions.updateCategory({
+          ...newData,
+          _id: categoryById._id,
+        })
       )
     } else {
       dispatch(categoryService.actions.createCategory(newData))
@@ -46,7 +52,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
           <label>Cat Title</label>
           <input
             {...register('title')}
-            defaultValue={props.title}
+            defaultValue={categoryById.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -54,7 +60,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
           <label>Cat Description</label>
           <textarea
             {...register('description')}
-            defaultValue={props.description}
+            defaultValue={categoryById.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
@@ -62,14 +68,14 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
           <label>app</label>
           <select
             {...register('app')}
-            defaultValue={props.app}
+            defaultValue={categoryById.app}
             name="app"
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >
             <option key="app.select" value="">
               Select App
             </option>
-            {props.apps.map((app: IApp) => (
+            {(apps || []).map((app: IApp) => (
               <option key={app._id} value={app._id}>
                 {app.title}
               </option>
@@ -78,7 +84,7 @@ const CategoryForm = ({ props }: ICategoryFormProps) => {
         </div>
         <h3>Subcategories</h3>
 
-        {subcats.map((subcategory: ISubCategory, index: number) => (
+        {(subcats || []).map((subcategory: ISubCategory, index: number) => (
           <div key={`${subcategory.title}_${index}`}>
             <div>
               <div className="form-group">

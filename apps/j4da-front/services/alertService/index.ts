@@ -10,7 +10,7 @@ const initialState = {
 }
 
 const alertService = createGenericSlice({
-  name: 'appById',
+  name: 'alerts',
   initialState,
   reducers: {
     getAlerts: (state, action: PayloadAction<string>) => {

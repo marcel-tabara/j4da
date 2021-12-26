@@ -5,21 +5,25 @@ import { ICategory } from '../utils/types'
 
 export const useCategories = (): {
   categories: ICategory[]
-  available: boolean
-  fetching: boolean
+  categoriesAvailable: boolean
+  categoriesFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    categorySelectors.categoriesSelector
-  )
+  const {
+    data: categories,
+    available: categoriesAvailable,
+    fetching: categoriesFetching,
+  } = useSelector(categorySelectors.categoriesSelector)
 
   useEffect(() => {
-    !available && !fetching && dispatch(categoryService.actions.getCategories())
-  }, [available, dispatch, fetching])
+    !categoriesAvailable &&
+      !categoriesFetching &&
+      dispatch(categoryService.actions.getCategories())
+  }, [categoriesAvailable, dispatch, categoriesFetching])
 
   return {
-    categories: data,
-    available,
-    fetching,
+    categories,
+    categoriesAvailable,
+    categoriesFetching,
   }
 }

@@ -7,21 +7,26 @@ export const useAppById = (
   _id: string
 ): {
   appById: IApp
-  available: boolean
-  fetching: boolean
+  appByIdAvailable: boolean
+  appByIdFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    appByIdSelectors.appByIdSelector
-  )
+  const {
+    data: appById,
+    available: appByIdAvailable,
+    fetching: appByIdFetching,
+  } = useSelector(appByIdSelectors.appByIdSelector)
 
   useEffect(() => {
-    !available && !fetching && dispatch(appByIdService.actions.getAppById(_id))
-  }, [_id, available, dispatch, fetching])
+    _id &&
+      !appByIdAvailable &&
+      !appByIdFetching &&
+      dispatch(appByIdService.actions.getAppById(_id))
+  }, [_id, appByIdAvailable, dispatch, appByIdFetching])
 
   return {
-    appById: data,
-    available,
-    fetching,
+    appById,
+    appByIdAvailable,
+    appByIdFetching,
   }
 }

@@ -7,23 +7,26 @@ export const useArticleById = (
   _id: string
 ): {
   articleById: IArticle
-  available: boolean
-  fetching: boolean
+  articleByIdAvailable: boolean
+  articleByIdFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    articleByIdSelectors.articleByIdSelector
-  )
+  const {
+    data: articleById,
+    available: articleByIdAvailable,
+    fetching: articleByIdFetching,
+  } = useSelector(articleByIdSelectors.articleByIdSelector)
 
   useEffect(() => {
-    !available &&
-      !fetching &&
+    _id &&
+      !articleByIdAvailable &&
+      !articleByIdFetching &&
       dispatch(articleByIdService.actions.getArticleById(_id))
-  }, [_id, available, dispatch, fetching])
+  }, [_id, articleByIdAvailable, dispatch, articleByIdFetching])
 
   return {
-    articleById: data,
-    available,
-    fetching,
+    articleById,
+    articleByIdAvailable,
+    articleByIdFetching,
   }
 }

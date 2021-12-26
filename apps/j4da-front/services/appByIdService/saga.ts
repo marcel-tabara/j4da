@@ -14,7 +14,7 @@ export function* watchGetAppById({ type, payload }: TaskAction<string>) {
 
 export function* watchCreateApp({ payload }: TaskAction<IApp>) {
   try {
-    yield http.post<IApp>(`/apps/add`)
+    yield http.post<IApp>(`/apps/add`, payload)
     yield put(appByIdService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -23,7 +23,7 @@ export function* watchCreateApp({ payload }: TaskAction<IApp>) {
 
 export function* watchUpdateApp({ payload }: TaskAction<IApp>) {
   try {
-    yield http.put<IApp>(`/apps/${payload._id}/update`)
+    yield http.put<IApp>(`/apps/${payload._id}/update`, payload)
     yield put(appByIdService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))

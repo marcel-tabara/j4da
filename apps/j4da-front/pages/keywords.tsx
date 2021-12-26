@@ -5,12 +5,12 @@ import { useKeywords } from '../hooks/useKeywords'
 import { Main } from '../templates/Main'
 
 const KeywordsList = () => {
-  const { keywords, available } = useKeywords()
+  const { keywords, keywordsAvailable } = useKeywords()
   const pagination = {}
 
   return (
     <Main>
-      {!available ? (
+      {!keywordsAvailable ? (
         <Spinner animation="grow" />
       ) : (
         <Keywords keywords={keywords} pagination={pagination} />

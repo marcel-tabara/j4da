@@ -53,7 +53,7 @@ const ArticleForm = ({
     <div className="register-form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label>url</label>
+          <h5>url</h5>
           <input
             {...register('url')}
             defaultValue={article?.url}
@@ -61,7 +61,7 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <label>title</label>
+          <h4>title</h4>
           <input
             {...register('title')}
             defaultValue={article?.title}

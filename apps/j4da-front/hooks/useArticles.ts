@@ -5,21 +5,25 @@ import { IArticles } from '../utils/types'
 
 export const useArticles = (): {
   articles: IArticles
-  available: boolean
-  fetching: boolean
+  articlesAvailable: boolean
+  articlesFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    articleSelectors.articlesSelector
-  )
+  const {
+    data: articles,
+    available: articlesAvailable,
+    fetching: articlesFetching,
+  } = useSelector(articleSelectors.articlesSelector)
 
   useEffect(() => {
-    !available && !fetching && dispatch(articleService.actions.getArticles())
-  }, [available, dispatch, fetching])
+    !articlesAvailable &&
+      !articlesFetching &&
+      dispatch(articleService.actions.getArticles())
+  }, [articlesAvailable, dispatch, articlesFetching])
 
   return {
-    articles: data,
-    available,
-    fetching,
+    articles,
+    articlesAvailable,
+    articlesFetching,
   }
 }

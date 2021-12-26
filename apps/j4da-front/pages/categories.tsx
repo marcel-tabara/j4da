@@ -5,12 +5,12 @@ import { useCategories } from '../hooks/useCategories'
 import { Main } from '../templates/Main'
 
 const CategoriesList = () => {
-  const { categories, available } = useCategories()
+  const { categories, categoriesAvailable } = useCategories()
   const pagination = {}
 
   return (
     <Main>
-      {!available ? (
+      {!categoriesAvailable ? (
         <Spinner animation="grow" />
       ) : (
         <Categories categories={categories} pagination={pagination} />

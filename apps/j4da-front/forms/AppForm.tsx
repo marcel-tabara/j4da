@@ -6,10 +6,10 @@ import { appService } from '../services'
 import { IApp } from '../utils/types'
 
 interface IAppFormProps {
-  props: IApp
+  appById: IApp
 }
 
-const AppForm = ({ props }: IAppFormProps) => {
+const AppForm = ({ appById }: IAppFormProps) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const {
@@ -18,8 +18,8 @@ const AppForm = ({ props }: IAppFormProps) => {
     formState: { errors },
   } = useForm<IApp>()
   const onSubmit = handleSubmit((data) => {
-    if (props._id) {
-      dispatch(appService.actions.updateApp({ ...data, _id: props._id }))
+    if (appById._id) {
+      dispatch(appService.actions.updateApp({ ...data, _id: appById._id }))
     } else {
       dispatch(appService.actions.createApp(data))
     }
@@ -34,7 +34,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>url</label>
           <input
             {...register('url')}
-            defaultValue={props.url}
+            defaultValue={appById?.url}
             className={`form-control ${errors.url ? 'is-invalid' : ''}`}
           />
         </div>
@@ -42,7 +42,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>title</label>
           <input
             {...register('title')}
-            defaultValue={props.title}
+            defaultValue={appById?.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -50,7 +50,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>images</label>
           <input
             {...register('images')}
-            defaultValue={props.images}
+            defaultValue={appById?.images}
             className={`form-control ${errors.images ? 'is-invalid' : ''}`}
           />
         </div>
@@ -58,7 +58,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>section</label>
           <input
             {...register('section')}
-            defaultValue={props.section}
+            defaultValue={appById?.section}
             className={`form-control ${errors.section ? 'is-invalid' : ''}`}
           />
         </div>
@@ -66,7 +66,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>keywords</label>
           <input
             {...register('keywords')}
-            defaultValue={props.keywords}
+            defaultValue={appById?.keywords}
             className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
           />
         </div>
@@ -74,7 +74,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>authorName</label>
           <input
             {...register('authorName')}
-            defaultValue={props.authorName}
+            defaultValue={appById?.authorName}
             className={`form-control ${errors.authorName ? 'is-invalid' : ''}`}
           />
         </div>
@@ -82,7 +82,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>description</label>
           <textarea
             {...register('description')}
-            defaultValue={props.description}
+            defaultValue={appById?.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
@@ -90,7 +90,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>body</label>
           <textarea
             {...register('body')}
-            defaultValue={props.body}
+            defaultValue={appById?.body}
             className={`form-control ${errors.body ? 'is-invalid' : ''}`}
           />
         </div>
@@ -98,7 +98,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>publisherName</label>
           <input
             {...register('publisherName')}
-            defaultValue={props.publisherName}
+            defaultValue={appById?.publisherName}
             className={`form-control ${
               errors.publisherName ? 'is-invalid' : ''
             }`}
@@ -108,7 +108,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>publisherLogo</label>
           <input
             {...register('publisherLogo')}
-            defaultValue={props.publisherLogo}
+            defaultValue={appById?.publisherLogo}
             className={`form-control ${
               errors.publisherLogo ? 'is-invalid' : ''
             }`}
@@ -118,7 +118,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>dateCreated</label>
           <input
             {...register('dateCreated')}
-            defaultValue={props.dateCreated}
+            defaultValue={appById?.dateCreated}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -126,7 +126,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>datePublished</label>
           <input
             {...register('datePublished')}
-            defaultValue={props.datePublished}
+            defaultValue={appById?.datePublished}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
             }`}
@@ -146,7 +146,7 @@ const AppForm = ({ props }: IAppFormProps) => {
           <label>keyOverride</label>
           <input
             {...register('keyOverride')}
-            defaultValue={props.keyOverride}
+            defaultValue={appById?.keyOverride}
             className={`form-control ${errors.keyOverride ? 'is-invalid' : ''}`}
           />
         </div>

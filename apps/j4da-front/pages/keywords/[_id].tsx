@@ -1,46 +1,25 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { KeywordForm } from '../../forms/KeywordForm'
+import { useKeywordById } from '../../hooks/useKeywordById'
 import { Main } from '../../templates/Main'
-import { BASE_URL } from '../../utils/constants'
-import { IKeyword, IUrl } from '../../utils/types'
 
-const Keyword = (props: IKeyword) => {
+const Keyword = () => {
+  const {
+    query: { _id },
+  } = useRouter()
+  const { keywordById, keywordByIdAvailable } = useKeywordById(_id as string)
+
   return (
     <Main>
-      <KeywordForm props={props} />
+      {!keywordByIdAvailable ? (
+        <Spinner animation="grow" />
+      ) : (
+        <KeywordForm props={keywordById} />
+      )}
     </Main>
   )
-}
-
-export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
-  const res = await fetch(`${BASE_URL}/keywords`)
-  const keywords: IKeyword[] = await res.json()
-
-  return {
-    paths: keywords.map((keyword) => ({
-      params: {
-        _id: keyword._id,
-      },
-    })),
-    fallback: false,
-  }
-}
-
-export const getStaticProps: GetStaticProps<IKeyword, IUrl> = async ({
-  params,
-}) => {
-  const res = await fetch(`${BASE_URL}/keywords/${params._id}`)
-  const keyword: IKeyword = await res.json()
-
-  return {
-    props: {
-      _id: keyword._id,
-      title: keyword.title,
-      description: keyword.description || '',
-      count: keyword.count || 0,
-    },
-  }
 }
 
 export default Keyword

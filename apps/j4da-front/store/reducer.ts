@@ -6,8 +6,10 @@ import {
   articleByIdService,
   articleService,
   articlesKeywordsService,
+  categoryByIdService,
   categoryService,
   extractedKeywordsService,
+  keywordByIdService,
   keywordService,
 } from '../services'
 
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   categoryService: categoryService.reducer,
   appService: appService.reducer,
   appByIdService: appByIdService.reducer,
+  categoryByIdService: categoryByIdService.reducer,
+  keywordByIdService: keywordByIdService.reducer,
 })
 
 export { rootReducer }

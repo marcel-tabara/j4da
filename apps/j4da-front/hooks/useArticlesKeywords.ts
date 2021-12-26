@@ -7,23 +7,26 @@ export const useArticlesKeywords = (
   text: string
 ): {
   articlesKeywords: IArticlesKeywords
-  available: boolean
-  fetching: boolean
+  articlesKeywordsAvailable: boolean
+  articlesKeywordsFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    articlesKeywordsSelectors.articleKeywordsSelector
-  )
+  const {
+    data: articlesKeywords,
+    available: articlesKeywordsAvailable,
+    fetching: articlesKeywordsFetching,
+  } = useSelector(articlesKeywordsSelectors.articleKeywordsSelector)
 
   useEffect(() => {
-    !available &&
-      !fetching &&
+    text &&
+      !articlesKeywordsAvailable &&
+      !articlesKeywordsFetching &&
       dispatch(articlesKeywordsService.actions.getArticlesKeywords(text))
-  }, [available, dispatch, fetching, text])
+  }, [articlesKeywordsAvailable, dispatch, articlesKeywordsFetching, text])
 
   return {
-    articlesKeywords: data,
-    available,
-    fetching,
+    articlesKeywords,
+    articlesKeywordsAvailable,
+    articlesKeywordsFetching,
   }
 }

@@ -1,52 +1,27 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { CategoryForm } from '../../forms/CategoryForm'
+import { useApps } from '../../hooks/useApps'
+import { useCategoryById } from '../../hooks/useCategoryById'
 import { Main } from '../../templates/Main'
-import { BASE_URL } from '../../utils/constants'
-import { IApp, ICategory, IUrl } from '../../utils/types'
 
-const Category = (props: ICategory & { apps: IApp[] }) => {
+const Category = () => {
+  const {
+    query: { _id },
+  } = useRouter()
+  const { categoryById, categoryByIdAvailable } = useCategoryById(_id as string)
+  const { appsAvailable, apps } = useApps()
+
   return (
     <Main>
-      <CategoryForm props={props} />
+      {!categoryByIdAvailable || !appsAvailable ? (
+        <Spinner animation="grow" />
+      ) : (
+        <CategoryForm apps={apps} categoryById={categoryById} />
+      )}
     </Main>
   )
-}
-
-export const getStaticPaths: GetStaticPaths<IUrl> = async () => {
-  const res = await fetch(`${BASE_URL}/categories`)
-  const categories: ICategory[] = await res.json()
-
-  return {
-    paths: categories.map((category) => ({
-      params: {
-        _id: category._id,
-      },
-    })),
-    fallback: false,
-  }
-}
-
-export const getStaticProps: GetStaticProps<
-  ICategory & { apps: IApp[] },
-  IUrl
-> = async ({ params }) => {
-  const resCat = await fetch(`${BASE_URL}/categories/${params._id}`)
-  const category: ICategory = await resCat.json()
-
-  const resApp = await fetch(`${BASE_URL}/apps`)
-  const apps: IApp[] = await resApp.json()
-
-  return {
-    props: {
-      _id: category._id || '',
-      title: category.title || '',
-      description: category.description || '',
-      subcategories: category.subcategories,
-      app: category.app || '',
-      apps,
-    },
-  }
 }
 
 export default Category

@@ -1,11 +1,24 @@
+import { useRouter } from 'next/router'
 import React from 'react'
+import { Spinner } from 'react-bootstrap'
 import { AppForm } from '../../forms/AppForm'
-import { useApps } from '../../hooks/useApps'
+import { useAppById } from '../../hooks/useAppById'
 import { Main } from '../../templates/Main'
 
 const App = () => {
-  const { apps, status } = useApps()
-  return <Main>{status === 'available' && <AppForm props={apps} />}</Main>
+  const {
+    query: { _id },
+  } = useRouter()
+  const { appById, appByIdAvailable } = useAppById(_id as string)
+  return (
+    <Main>
+      {!appByIdAvailable ? (
+        <Spinner animation="grow" />
+      ) : (
+        <AppForm appById={appById} />
+      )}
+    </Main>
+  )
 }
 
 export default App

@@ -5,21 +5,25 @@ import { IKeyword } from '../utils/types'
 
 export const useKeywords = (): {
   keywords: IKeyword[]
-  available: boolean
-  fetching: boolean
+  keywordsAvailable: boolean
+  keywordsFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { data, available, fetching } = useSelector(
-    keywordSelectors.keywordsSelector
-  )
+  const {
+    data: keywords,
+    available: keywordsAvailable,
+    fetching: keywordsFetching,
+  } = useSelector(keywordSelectors.keywordsSelector)
 
   useEffect(() => {
-    !available && !fetching && dispatch(keywordService.actions.getKeywords())
-  }, [available, dispatch, fetching])
+    !keywordsAvailable &&
+      !keywordsFetching &&
+      dispatch(keywordService.actions.getKeywords())
+  }, [keywordsAvailable, dispatch, keywordsFetching])
 
   return {
-    keywords: data,
-    available,
-    fetching,
+    keywords,
+    keywordsAvailable,
+    keywordsFetching,
   }
 }

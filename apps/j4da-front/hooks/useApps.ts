@@ -5,19 +5,23 @@ import { IApp } from '../utils/types'
 
 export const useApps = (): {
   apps: IApp[]
-  available: boolean
-  fetching: boolean
+  appsAvailable: boolean
+  appsFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const { available, fetching, data } = useSelector(appSelectors.appsSelector)
+  const {
+    available: appsAvailable,
+    fetching: appsFetching,
+    data: apps,
+  } = useSelector(appSelectors.appsSelector)
 
   useEffect(() => {
-    !available && !fetching && dispatch(appService.actions.getApps())
-  }, [available, dispatch, fetching])
+    !appsAvailable && !appsFetching && dispatch(appService.actions.getApps())
+  }, [appsAvailable, dispatch, appsFetching])
 
   return {
-    apps: data,
-    available,
-    fetching,
+    apps,
+    appsAvailable,
+    appsFetching,
   }
 }
