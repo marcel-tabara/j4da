@@ -28,7 +28,7 @@ export class App {
   @Prop()
   dateModified: string
   @Prop()
-  authorName: [string]
+  authorName: string
   @Prop()
   description: string
   @Prop()
