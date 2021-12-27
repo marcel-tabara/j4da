@@ -22,7 +22,7 @@ export interface IApp {
   dateCreated?: string
   datePublished?: string
   dateModified?: string
-  authorName?: string | string[]
+  authorName?: string
   description?: string
   body?: string
   publisherName?: string
@@ -46,7 +46,7 @@ export interface IArticle {
   dateCreated?: string
   datePublished?: string
   dateModified?: string
-  authorName?: string | string[]
+  authorName?: string
   description?: string
   body?: string
   publisherName?: string

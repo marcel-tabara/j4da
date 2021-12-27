@@ -103,11 +103,11 @@ const getFilePath = (article: ArticleDTO) => {
 const getBody = (article: ArticleDTO) => {
   return `
 ---
-title: ${article.title}
-description:  ${article.description}
-date:  ${article.dateCreated}
-modified_date: ${article.dateModified}
-image:  ${article.images}
+title: ${article?.title}
+description:  ${article?.description}
+date:  ${article?.dateCreated}
+modified_date: ${article?.dateModified}
+image:  ${article?.images}
 ---
 
 `
