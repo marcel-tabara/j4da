@@ -89,7 +89,7 @@ const ArticleForm = ({
           <h6>app</h6>
           <select
             {...register('app')}
-            defaultValue={article?.app}
+            defaultValue={article?.app._id}
             name="app"
             onChange={onChangeApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}

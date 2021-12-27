@@ -1,7 +1,19 @@
-import * as mongoose from 'mongoose'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Transform } from 'class-transformer'
+import { Document, ObjectId } from 'mongoose'
 
-export const KeywordSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  count: Number,
-})
+export type KeywordDocument = Keyword & Document
+
+@Schema()
+export class Keyword {
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId
+
+  @Prop()
+  title: string
+  @Prop()
+  description: string
+  @Prop()
+  count: number
+}
+export const KeywordSchema = SchemaFactory.createForClass(Keyword)

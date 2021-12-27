@@ -46,6 +46,16 @@ export class ArticleService {
     const { limit, skip, sort } = paginationQuery
     return await this.articleModel
       .find()
+      .populate({
+        path: 'app',
+        select: '_id, title',
+        strictPopulate: false,
+      })
+      .populate({
+        path: 'category',
+        select: '_id, title',
+        strictPopulate: false,
+      })
       .sort(sort)
       .skip(skip)
       .limit(limit)

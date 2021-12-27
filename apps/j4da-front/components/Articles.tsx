@@ -27,6 +27,8 @@ const Articles = (props: IArticlesProps) => {
           <tr>
             <th>Articles</th>
             <th>App</th>
+            <th>Cat</th>
+            <th>Subcat</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -38,7 +40,9 @@ const Articles = (props: IArticlesProps) => {
                   {article.title || 'No title'}
                 </Link>
               </td>
-              <td>{article.app}</td>
+              <td>{article.app.title}</td>
+              <td>{article.category.title}</td>
+              <td>{article.subcategory}</td>
               <td align="right">
                 <Icon.Trash
                   onClick={onDelete}

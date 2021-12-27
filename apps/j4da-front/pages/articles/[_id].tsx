@@ -39,7 +39,7 @@ const ArticleById = () => {
   }
 
   const [subcategories, setSubcategories] = useState<ISubCategory[]>(
-    getSubCat(articleById?.category)
+    getSubCat(articleById?.category._id)
   )
 
   const onChangeCategory = useCallback(
@@ -55,7 +55,7 @@ const ArticleById = () => {
   const onChangeApp = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const cats = allCategories.filter(
-        (category: ICategory) => category.app === event.target.value
+        (category: ICategory) => category.app._id === event.target.value
       )
 
       setCategories(cats || [])

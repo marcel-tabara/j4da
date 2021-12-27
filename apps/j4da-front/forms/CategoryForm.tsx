@@ -66,7 +66,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           <h6>app</h6>
           <select
             {...register('app')}
-            defaultValue={categoryById.app}
+            defaultValue={categoryById.app._id}
             name="app"
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
           >

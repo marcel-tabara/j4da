@@ -52,9 +52,9 @@ export interface IArticle {
   publisherName?: string
   publisherLogo?: string
   slug?: string
-  category?: string
+  category?: { _id: string; title: string }
   subcategory?: string
-  app: string
+  app: { _id: string; title: string }
   priority: number
 }
 
@@ -74,7 +74,7 @@ export interface ICategory {
   _id: string
   title: string
   description?: string
-  app: string
+  app: { _id: string; title: string }
   subcategories?: ISubCategory[]
 }
 

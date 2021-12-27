@@ -15,7 +15,14 @@ export class CategoryService {
   }
 
   async findById(_id): Promise<Category> {
-    return await this.categoryModel.findById(_id).exec()
+    return await this.categoryModel
+      .findOne({ _id })
+      .populate({
+        path: 'app',
+        select: '_id, title',
+        strictPopulate: false,
+      })
+      .exec()
   }
 
   async add(categoryDTO: CategoryDTO): Promise<Category> {
