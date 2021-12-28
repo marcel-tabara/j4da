@@ -11,3 +11,12 @@
   cursor: pointer;
   padding: 10;
 }
+
+.row {
+  display: flex;
+}
+
+.column {
+  padding: 5px;
+  align-items: flex-end;
+}

@@ -14,7 +14,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const [subcats, setSubcats] = useState<ISubCategory[]>(
-    categoryById.subcategories
+    categoryById.subcategories || []
   )
   const {
     register,
@@ -109,18 +109,21 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           </div>
         ))}
 
-        <div className="btn-group btn-block">
-          <button type="submit" className="btn btn-primary">
-            Save
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onAddSubcat}
-          >
-            Add Subcategory
-          </button>
+        <div className="row">
+          <div className="column">
+            <button
+              type="button"
+              className="btn btn-primary column"
+              onClick={onAddSubcat}
+            >
+              Add Subcategory
+            </button>
+          </div>
+          <div className="column">
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
+          </div>
         </div>
       </form>
     </div>

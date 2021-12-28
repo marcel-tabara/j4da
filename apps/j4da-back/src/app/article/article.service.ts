@@ -127,15 +127,29 @@ export class ArticleService {
 
   getBody = async (article: ArticleDTO) => {
     const cat = await this.categoryService.findById(article.category)
+    const getValue = (value: string | string[]) => {
+      if (Array.isArray(value)) {
+        return value.map((e) => `  - ${e}`).join('\n')
+      } else {
+        return value
+      }
+    }
+    const get = (type: string, value: string | string[]) => {
+      const isArray = (value: string | string[]) =>
+        Array.isArray(value) ? `\n` : ' '
+      return value && `${type}:${isArray(value)}${getValue(value)}\n`
+    }
     return `---
-title: ${article?.title}
-category: ${cat.title}
-subcategory: ${article.subcategory}
-description:  ${article?.description}
-date:  ${article?.dateCreated}
-modified_date: ${article?.dateModified}
-image:  ${article?.images}
-tags: ${article?.keywords}
+${get('title', article?.title)}${get('category', cat.title)}${get(
+      'subcategory',
+      article?.subcategory
+    )}${get('description', article?.description)}${get(
+      'date',
+      article?.dateCreated
+    )}${get('image', article?.images as string[])}${get(
+      'tags',
+      article?.keywords.split(',')
+    )}${get('slug', article?.slug)}${get('author', article?.authorName)}
 ---
 
 `
