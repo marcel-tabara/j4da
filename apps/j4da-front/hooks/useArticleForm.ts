@@ -36,15 +36,15 @@ export const useArticleForm = ({
   )
 
   useEffect(() => {
-    Boolean(article?.app._id) &&
+    Boolean(article?.app?._id) &&
       onChangeApp({
-        target: { value: article?.app._id },
+        target: { value: article?.app?._id },
       } as React.ChangeEvent<HTMLSelectElement>)
-    Boolean(article?.category._id) &&
+    Boolean(article?.category?._id) &&
       onChangeCategory({
-        target: { value: article?.category._id },
+        target: { value: article?.category?._id },
       } as React.ChangeEvent<HTMLSelectElement>)
-  }, [article?.app._id, article?.category._id, onChangeApp, onChangeCategory])
+  }, [article?.app?._id, article?.category?._id, onChangeApp, onChangeCategory])
 
   const extractKeywords = useCallback(
     (text: string) => {

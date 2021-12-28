@@ -87,7 +87,7 @@ const ArticleForm = ({
           <h6>app</h6>
           <select
             {...register('app')}
-            defaultValue={article?.app._id}
+            defaultValue={article?.app?._id}
             name="app"
             onChange={onChangeApp}
             className={`form-control ${errors.app ? 'is-invalid' : ''}`}
@@ -107,7 +107,7 @@ const ArticleForm = ({
           <Controller
             control={control}
             name="category"
-            defaultValue={article?.category._id}
+            defaultValue={article?.category?._id}
             render={({ field: { value, onChange } }) => (
               <select
                 {...register('category')}
