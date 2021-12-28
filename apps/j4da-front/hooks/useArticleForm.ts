@@ -1,22 +1,31 @@
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { FormEventHandler, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   articleService,
   extractedKeywordsService,
   keywordService,
 } from '../services'
+import { IArticle, IArticlesKeyword } from '../utils/types'
 import { useSelectors } from './useSelectors'
+
+interface Props {
+  article: IArticle
+  onChangeApp: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleSubmit: (data) => FormEventHandler<HTMLFormElement>
+  setValue: (field: string, value: string) => void
+  articlesKeywords: IArticlesKeyword[]
+}
 
 export const useArticleForm = ({
   article,
   onChangeApp,
   onChangeCategory,
-  watch,
   handleSubmit,
   setValue,
   articlesKeywords,
-}) => {
+}: Props) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { extractedKeywords } = useSelectors()
@@ -27,22 +36,15 @@ export const useArticleForm = ({
   )
 
   useEffect(() => {
-    Boolean(article?.app) &&
+    Boolean(article?.app._id) &&
       onChangeApp({
-        target: { value: article?.app },
+        target: { value: article?.app._id },
       } as React.ChangeEvent<HTMLSelectElement>)
-    Boolean(article?.category) &&
+    Boolean(article?.category._id) &&
       onChangeCategory({
-        target: { value: article?.category },
+        target: { value: article?.category._id },
       } as React.ChangeEvent<HTMLSelectElement>)
-  }, [article?.app, article?.category, onChangeApp, onChangeCategory])
-
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    )
-    return () => subscription.unsubscribe()
-  }, [watch])
+  }, [article?.app._id, article?.category._id, onChangeApp, onChangeCategory])
 
   const extractKeywords = useCallback(
     (text: string) => {
@@ -64,7 +66,7 @@ export const useArticleForm = ({
       setDefaultBodyKeywords(extractedKeywords)
   }, [extractedKeywords, defaultBodyKeywords, setDefaultBodyKeywords])
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit((data: IArticle) => {
     if (article?._id) {
       dispatch(
         articleService.actions.updateArticle({ ...data, _id: article?._id })

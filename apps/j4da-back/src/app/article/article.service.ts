@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import * as fs from 'fs'
 import { Model } from 'mongoose'
 import rake from 'rake-js'
+import { CategoryService } from '../category/category.service'
 import { KeywordService } from '../keyword/keyword.service'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
@@ -14,7 +15,8 @@ import path = require('path')
 export class ArticleService {
   constructor(
     @InjectModel('Article') private readonly articleModel: Model<Article>,
-    private readonly keywordService: KeywordService
+    private readonly keywordService: KeywordService,
+    private readonly categoryService: CategoryService
   ) {}
 
   async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
@@ -63,12 +65,24 @@ export class ArticleService {
   }
 
   async findById(_id): Promise<Article> {
-    return await this.articleModel.findById(_id).exec()
+    return await this.articleModel
+      .findById(_id)
+      .populate({
+        path: 'app',
+        select: '_id, title',
+        strictPopulate: false,
+      })
+      .populate({
+        path: 'category',
+        select: '_id, title',
+        strictPopulate: false,
+      })
+      .exec()
   }
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
     const newArticle = await new this.articleModel(articleDTO)
-    generatFile(articleDTO)
+    this.generatFile(articleDTO)
     return newArticle.save()
   }
 
@@ -77,8 +91,8 @@ export class ArticleService {
     articleDTO: ArticleDTO
   ): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    removeFile(article)
-    generatFile(articleDTO)
+    this.removeFile(article)
+    this.generatFile(articleDTO)
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
     })
@@ -86,39 +100,44 @@ export class ArticleService {
 
   async findByIdAndRemove(_id): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    removeFile(article)
+    this.removeFile(article)
     await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
-}
 
-const generatFile = (article: ArticleDTO) => {
-  const filePath = getFilePath(article)
-  fs.appendFileSync(filePath, getBody(article) + article.body)
-}
-
-const removeFile = (article: ArticleDTO) => {
-  const filePath = getFilePath(article)
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath)
+  generatFile = (article: ArticleDTO) => {
+    const filePath = this.getFilePath(article)
+    this.getBody(article).then((e) =>
+      fs.appendFileSync(filePath, e + article.body)
+    )
   }
-}
 
-const getFilePath = (article: ArticleDTO) => {
-  const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
-  const filePath = dirPath + article.slug + '.md'
-  return filePath
-}
+  removeFile = (article: ArticleDTO) => {
+    const filePath = this.getFilePath(article)
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath)
+    }
+  }
 
-const getBody = (article: ArticleDTO) => {
-  return `
----
+  getFilePath = (article: ArticleDTO) => {
+    const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
+    const filePath = dirPath + article.slug + '.md'
+    return filePath
+  }
+
+  getBody = async (article: ArticleDTO) => {
+    const cat = await this.categoryService.findById(article.category)
+    return `---
 title: ${article?.title}
+category: ${cat.title}
+subcategory: ${article.subcategory}
 description:  ${article?.description}
 date:  ${article?.dateCreated}
 modified_date: ${article?.dateModified}
 image:  ${article?.images}
+tags: ${article?.keywords}
 ---
 
 `
+  }
 }

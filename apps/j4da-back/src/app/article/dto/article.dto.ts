@@ -1,3 +1,6 @@
+import { App } from '../../app/interfaces/app.interface'
+import { Category } from '../../category/interfaces/category.interface'
+
 export class ArticleDTO {
   readonly keyOverride?: string
   readonly url: string
@@ -13,7 +16,7 @@ export class ArticleDTO {
   readonly publisherName: string
   readonly publisherLogo: string
   readonly slug: string
-  readonly category: string
+  readonly category: Category
   readonly subcategory: string
-  readonly app: string
+  readonly app: App
 }

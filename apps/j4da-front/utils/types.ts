@@ -52,9 +52,31 @@ export interface IArticle {
   publisherName?: string
   publisherLogo?: string
   slug?: string
-  category?: { _id: string; title: string }
+  category?: ICategory
   subcategory?: string
-  app: { _id: string; title: string }
+  app: IApp
+  priority: number
+}
+
+export interface IArticleSave {
+  _id: string
+  keyOverride?: string
+  url?: string
+  title: string
+  images?: string | string[]
+  keywords?: string
+  dateCreated?: string
+  datePublished?: string
+  dateModified?: string
+  authorName?: string
+  description?: string
+  body?: string
+  publisherName?: string
+  publisherLogo?: string
+  slug?: string
+  category?: string
+  subcategory?: string
+  app: string
   priority: number
 }
 
@@ -74,7 +96,7 @@ export interface ICategory {
   _id: string
   title: string
   description?: string
-  app: { _id: string; title: string }
+  app: IApp
   subcategories?: ISubCategory[]
 }
 

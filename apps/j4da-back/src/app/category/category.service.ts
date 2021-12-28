@@ -11,7 +11,11 @@ export class CategoryService {
   ) {}
 
   async find(): Promise<Category[]> {
-    return await this.categoryModel.find().exec()
+    return await this.categoryModel.find().populate({
+      path: 'app',
+      select: '_id, title',
+      strictPopulate: false,
+    })
   }
 
   async findById(_id): Promise<Category> {

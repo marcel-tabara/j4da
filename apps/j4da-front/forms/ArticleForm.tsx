@@ -6,6 +6,7 @@ import { useArticleForm } from '../hooks/useArticleForm'
 import {
   IApp,
   IArticle,
+  IArticleSave,
   IArticlesKeyword,
   ICategory,
   ISubCategory,
@@ -34,10 +35,9 @@ const ArticleForm = ({
     handleSubmit,
     register,
     setValue,
-    watch,
     control,
     formState: { errors },
-  } = useForm<IArticle>()
+  } = useForm<IArticleSave>()
 
   const {
     bodyKeywords,
@@ -52,12 +52,10 @@ const ArticleForm = ({
     article,
     onChangeApp,
     onChangeCategory,
-    watch,
     handleSubmit,
     setValue,
     articlesKeywords,
   })
-
   return (
     <div className="register-form">
       <form onSubmit={onSubmit}>
@@ -109,7 +107,7 @@ const ArticleForm = ({
           <Controller
             control={control}
             name="category"
-            defaultValue={article?.category}
+            defaultValue={article?.category._id}
             render={({ field: { value, onChange } }) => (
               <select
                 {...register('category')}

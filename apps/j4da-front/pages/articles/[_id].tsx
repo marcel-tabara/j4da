@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
 import { useArticleById } from '../../hooks/useArticleById'
@@ -13,7 +12,6 @@ import { Main } from '../../templates/Main'
 import { ICategory, ISubCategory } from '../../utils/types'
 
 const ArticleById = () => {
-  const dispatch = useDispatch()
   const {
     query: { _id },
   } = useRouter()
@@ -28,8 +26,9 @@ const ArticleById = () => {
 
   const getDefaultCats = () =>
     articleById?.app
-      ? allCategories.filter((cat) => cat.app === articleById.app)
+      ? allCategories.filter((cat) => cat.app._id === articleById.app._id)
       : []
+
   const [categories, setCategories] = useState<ICategory[]>(getDefaultCats())
   const getSubCat = (cat: string) => {
     const category = categories.find(

@@ -1,4 +1,6 @@
 import { Document } from 'mongoose'
+import { App } from '../../app/interfaces/app.interface'
+import { Category } from '../../category/interfaces/category.interface'
 
 export interface Article extends Document {
   readonly _id?: string
@@ -16,8 +18,8 @@ export interface Article extends Document {
   readonly publisherName: string
   readonly publisherLogo: string
   readonly slug: string
-  readonly category: string
+  readonly category: Category
   readonly subcategory: string
-  readonly app: string
+  readonly app: App
   readonly priority: number
 }

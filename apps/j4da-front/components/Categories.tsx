@@ -25,8 +25,9 @@ const Categories = ({ categories }: ICategoriesProps) => {
       <Table responsive="sm">
         <thead>
           <tr>
-            <th>Categories</th>
-            <th>Actions</th>
+            <th>Category</th>
+            <th>App</th>
+            <th align="right">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -44,6 +45,7 @@ const Categories = ({ categories }: ICategoriesProps) => {
                   (subcat) => subcat.title + ' | '
                 )}
               </td>
+              <td>{category.app.title}</td>
               <td align="right">
                 <Icon.Trash
                   onClick={onDelete}
