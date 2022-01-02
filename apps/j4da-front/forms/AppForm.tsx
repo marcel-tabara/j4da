@@ -45,6 +45,14 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
+          <h6>slug</h6>
+          <input
+            {...register('slug')}
+            defaultValue={appById?.slug}
+            className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
           <h6>images</h6>
           <input
             {...register('images')}

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import * as fs from 'fs'
+import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
 import rake from 'rake-js'
+import { AppService } from '../app/app.service'
 import { CategoryService } from '../category/category.service'
 import { KeywordService } from '../keyword/keyword.service'
 import { ArticleDTO } from './dto/article.dto'
@@ -16,7 +18,8 @@ export class ArticleService {
   constructor(
     @InjectModel('Article') private readonly articleModel: Model<Article>,
     private readonly keywordService: KeywordService,
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+    private readonly appService: AppService
   ) {}
 
   async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
@@ -44,10 +47,10 @@ export class ArticleService {
     return rake(article, { language: 'english' })
   }
 
-  async find(paginationQuery: PaginationDto): Promise<Article[]> {
+  async find(paginationQuery: PaginationDto, query): Promise<Article[]> {
     const { limit, skip, sort } = paginationQuery
     return await this.articleModel
-      .find()
+      .find(query)
       .populate({
         path: 'app',
         select: '_id, title',
@@ -82,8 +85,18 @@ export class ArticleService {
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
     const newArticle = await new this.articleModel(articleDTO)
-    const { cat, subcat } = await this.getCatSubcatSlug({ article: articleDTO })
-    this.generatFile({ article: articleDTO, cat, subcat })
+    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+      article: articleDTO,
+    })
+    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+
+    this.generatCatSubcatFile({
+      app: articleDTO.app,
+      catSlug,
+      catId,
+      subcatSlug,
+    })
+
     return newArticle.save()
   }
 
@@ -92,9 +105,29 @@ export class ArticleService {
     articleDTO: ArticleDTO
   ): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    const { cat, subcat } = await this.getCatSubcatSlug({ article: articleDTO })
-    this.removeFile({ article, cat, subcat })
-    this.generatFile({ article: articleDTO, cat, subcat })
+    const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
+      await this.getCatSubcatSlug({
+        article,
+      })
+    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+      article: articleDTO,
+    })
+
+    this.removeArticleFile({ article, catSlug, subcatSlug })
+    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+
+    this.removeCatSubcatFile({
+      app: article.app.toString(),
+      catSlug: oldCatSlug,
+      subcatSlug: oldSubcatSlug,
+    })
+    this.generatCatSubcatFile({
+      app: articleDTO.app,
+      catSlug,
+      catId,
+      subcatSlug,
+    })
+
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
     })
@@ -102,25 +135,79 @@ export class ArticleService {
 
   async findByIdAndRemove(_id): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    const { cat, subcat } = await this.getCatSubcatSlug({ article })
-    this.removeFile({ article, cat, subcat })
+    const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
+    this.removeArticleFile({ article, catSlug, subcatSlug })
+    this.removeCatSubcatFile({
+      app: article.app,
+      catSlug,
+      subcatSlug,
+    })
     await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
 
-  generatFile = ({ article, cat, subcat }) => {
-    const filePath = this.getFilePath(article.slug, cat, subcat)
-    this.getBody(article).then((e) => {
+  async getCatSubCatPath({ app, catSlug, subcatSlug }) {
+    const appData = await this.appService.findById(app)
+    const dirPath = path.join(
+      process.cwd(),
+      '/apps/j4da-front/public/contents',
+      appData.slug
+    )
+
+    const catPath = path.join(dirPath, catSlug, 'byCat.json')
+    const subCatPath = path.join(dirPath, catSlug, subcatSlug, 'bySubCat.json')
+    return {
+      dirPath,
+      catPath,
+      subCatPath,
+    }
+  }
+  generatCatSubcatFile = async ({ app, catId, catSlug, subcatSlug }) => {
+    const { catPath, subCatPath } = await this.getCatSubCatPath({
+      app,
+      catSlug,
+      subcatSlug,
+    })
+
+    const articlesByCat = await this.find({} as PaginationDto, {
+      app: new mongoose.Types.ObjectId(app),
+      catId,
+    })
+    fs.writeFileSync(catPath, JSON.stringify(articlesByCat, null, 2))
+    const articlesBySubCat = articlesByCat.filter(
+      (a) => a.subcategory === subcatSlug
+    )
+    fs.writeFileSync(subCatPath, JSON.stringify(articlesBySubCat, null, 2))
+  }
+
+  removeCatSubcatFile = async ({ app, catSlug, subcatSlug }) => {
+    const { catPath, subCatPath } = await this.getCatSubCatPath({
+      app,
+      catSlug,
+      subcatSlug,
+    })
+
+    if (fs.existsSync(catPath)) {
+      fs.unlinkSync(catPath)
+    }
+    if (fs.existsSync(subCatPath)) {
+      fs.unlinkSync(subCatPath)
+    }
+  }
+
+  generateArticleFile = async ({ article, catSlug, subcatSlug }) => {
+    const filePath = await this.getFilePath(article, catSlug, subcatSlug)
+    this.getBody({ article, catSlug, subcatSlug }).then((e) => {
       const dirname = path.dirname(filePath)
       if (!fs.existsSync(dirname)) {
         fs.mkdirSync(dirname, { recursive: true })
       }
-      fs.appendFileSync(filePath, e + article.body)
+      fs.writeFileSync(filePath, e + article.body)
     })
   }
 
-  removeFile = ({ article, cat, subcat }) => {
-    const filePath = this.getFilePath(article.slug, cat, subcat)
+  removeArticleFile = async ({ article, catSlug, subcatSlug }) => {
+    const filePath = await this.getFilePath(article, catSlug, subcatSlug)
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath)
     }
@@ -129,18 +216,27 @@ export class ArticleService {
   async getCatSubcatSlug({ article }) {
     const cat = await this.categoryService.findById(article.category)
     const subcat = cat.subcategories.find(
-      (subcat) => subcat.title === article.subcategory
+      (subcat) => subcat.slug === article.subcategory
     )
-    return { cat: cat.slug, subcat: subcat.slug }
+    return {
+      catSlug: cat.slug,
+      subcatSlug: subcat?.slug,
+      catId: cat._id,
+    }
   }
 
-  getFilePath = (articleSlug: string, cat: string, subcat: string) => {
-    const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
-    const filePath = path.join(dirPath, cat, subcat, `${articleSlug}.md`)
+  async getFilePath(article, cat: string, subcat: string) {
+    const app = await this.appService.findById(article.app)
+    const dirPath = path.join(
+      process.cwd(),
+      '/apps/j4da-front/public/contents',
+      app.slug
+    )
+    const filePath = path.join(dirPath, cat, subcat, `${article.slug}.md`)
     return filePath
   }
 
-  getBody = async ({ article, cat, subcat }) => {
+  getBody = async ({ article, catSlug, subcatSlug }) => {
     const getValue = (value: string | string[]) => {
       if (Array.isArray(value)) {
         return value.map((e) => `  - ${e}`).join('\n')
@@ -154,9 +250,9 @@ export class ArticleService {
       return value && `${type}:${isArray(value)}${getValue(value)}\n`
     }
     return `---
-${get('title', article?.title)}${get('category', cat)}${get(
+${get('title', article?.title)}${get('category', catSlug)}${get(
       'subcategory',
-      subcat
+      subcatSlug
     )}${get('description', article?.description)}${get(
       'date',
       article?.dateCreated

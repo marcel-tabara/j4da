@@ -151,7 +151,7 @@ const ArticleForm = ({
                   Select SubCategory
                 </option>
                 {(subcategories || []).map((subcategory) => (
-                  <option key={subcategory.title} value={subcategory.title}>
+                  <option key={subcategory.slug} value={subcategory.slug}>
                     {subcategory.title}
                   </option>
                 ))}

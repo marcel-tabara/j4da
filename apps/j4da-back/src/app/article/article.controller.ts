@@ -24,7 +24,7 @@ export class ArticleController {
   @Get()
   async findPaginated(@Res() res, @Query() paginationQuery: PaginationDto) {
     const { limit, skip } = paginationQuery
-    const data = await this.articleService.find(paginationQuery)
+    const data = await this.articleService.find(paginationQuery, {})
     return res
       .status(HttpStatus.OK)
       .json({ limit, skip, total: data.length, data: data.sort(sortByTitle) })

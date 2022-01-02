@@ -27,6 +27,7 @@ export interface IApp {
   body?: string
   publisherName?: string
   publisherLogo?: string
+  slug?: string
 }
 
 export interface IKeyword {

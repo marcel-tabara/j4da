@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
+import { AppsModule } from '../app/app.module'
 import { CategoryModule } from '../category/category.module'
 import { KeywordModule } from '../keyword/keyword.module'
 import { ArticleController } from './article.controller'
@@ -8,6 +9,7 @@ import { ArticleSchema } from './schemas/article.schema'
 
 @Module({
   imports: [
+    AppsModule,
     CategoryModule,
     KeywordModule,
     MongooseModule.forFeature([{ name: 'Article', schema: ArticleSchema }]),

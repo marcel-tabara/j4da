@@ -21,7 +21,7 @@ export class CategoryController {
 
   @Get()
   async find(@Res() res) {
-    const categories = await this.categoryService.find()
+    const categories = await this.categoryService.find({})
     return res.status(HttpStatus.OK).json(categories.sort(sortByTitle))
   }
 

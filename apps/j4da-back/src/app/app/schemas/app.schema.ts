@@ -37,6 +37,8 @@ export class App {
   publisherName: string
   @Prop()
   publisherLogo: string
+  @Prop()
+  slug: string
 }
 
 export const AppSchema = SchemaFactory.createForClass(App)

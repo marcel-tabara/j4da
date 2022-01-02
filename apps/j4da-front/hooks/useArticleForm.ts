@@ -75,7 +75,7 @@ export const useArticleForm = ({
       dispatch(articleService.actions.createArticle(data))
     }
 
-    const oldKeywords = article?.keywords.split(',') || []
+    const oldKeywords = (article?.keywords ?? '').split(',') || []
     const newKeywords = data.keywords.split(',') || []
     const a = oldKeywords.filter((e: string) => !newKeywords.includes(e))
     const b = newKeywords.filter((e: string) => !oldKeywords.includes(e))

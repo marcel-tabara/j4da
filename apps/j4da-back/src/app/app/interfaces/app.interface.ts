@@ -15,4 +15,5 @@ export interface App extends Document {
   readonly body: string
   readonly publisherName: string
   readonly publisherLogo: string
+  readonly slug: string
 }

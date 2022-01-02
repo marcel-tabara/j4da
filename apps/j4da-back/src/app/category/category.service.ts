@@ -10,8 +10,8 @@ export class CategoryService {
     @InjectModel('Category') private readonly categoryModel: Model<Category>
   ) {}
 
-  async find(): Promise<Category[]> {
-    return await this.categoryModel.find().populate({
+  async find(query): Promise<Category[]> {
+    return await this.categoryModel.find(query).populate({
       path: 'app',
       select: '_id, title',
       strictPopulate: false,
