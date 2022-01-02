@@ -82,7 +82,8 @@ export class ArticleService {
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
     const newArticle = await new this.articleModel(articleDTO)
-    this.generatFile(articleDTO)
+    const { cat, subcat } = await this.getCatSubcatSlug({ article: articleDTO })
+    this.generatFile({ article: articleDTO, cat, subcat })
     return newArticle.save()
   }
 
@@ -91,8 +92,9 @@ export class ArticleService {
     articleDTO: ArticleDTO
   ): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    this.removeFile(article)
-    this.generatFile(articleDTO)
+    const { cat, subcat } = await this.getCatSubcatSlug({ article: articleDTO })
+    this.removeFile({ article, cat, subcat })
+    this.generatFile({ article: articleDTO, cat, subcat })
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
     })
@@ -100,33 +102,45 @@ export class ArticleService {
 
   async findByIdAndRemove(_id): Promise<Article> {
     const article = await this.articleModel.findById(_id)
-    this.removeFile(article)
+    const { cat, subcat } = await this.getCatSubcatSlug({ article })
+    this.removeFile({ article, cat, subcat })
     await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
 
-  generatFile = (article: ArticleDTO) => {
-    const filePath = this.getFilePath(article)
-    this.getBody(article).then((e) =>
+  generatFile = ({ article, cat, subcat }) => {
+    const filePath = this.getFilePath(article.slug, cat, subcat)
+    this.getBody(article).then((e) => {
+      const dirname = path.dirname(filePath)
+      if (!fs.existsSync(dirname)) {
+        fs.mkdirSync(dirname, { recursive: true })
+      }
       fs.appendFileSync(filePath, e + article.body)
-    )
+    })
   }
 
-  removeFile = (article: ArticleDTO) => {
-    const filePath = this.getFilePath(article)
+  removeFile = ({ article, cat, subcat }) => {
+    const filePath = this.getFilePath(article.slug, cat, subcat)
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath)
     }
   }
 
-  getFilePath = (article: ArticleDTO) => {
+  async getCatSubcatSlug({ article }) {
+    const cat = await this.categoryService.findById(article.category)
+    const subcat = cat.subcategories.find(
+      (subcat) => subcat.title === article.subcategory
+    )
+    return { cat: cat.slug, subcat: subcat.slug }
+  }
+
+  getFilePath = (articleSlug: string, cat: string, subcat: string) => {
     const dirPath = path.join(process.cwd(), '/apps/j4da-front/public/')
-    const filePath = dirPath + article.slug + '.md'
+    const filePath = path.join(dirPath, cat, subcat, `${articleSlug}.md`)
     return filePath
   }
 
-  getBody = async (article: ArticleDTO) => {
-    const cat = await this.categoryService.findById(article.category)
+  getBody = async ({ article, cat, subcat }) => {
     const getValue = (value: string | string[]) => {
       if (Array.isArray(value)) {
         return value.map((e) => `  - ${e}`).join('\n')
@@ -140,9 +154,9 @@ export class ArticleService {
       return value && `${type}:${isArray(value)}${getValue(value)}\n`
     }
     return `---
-${get('title', article?.title)}${get('category', cat.title)}${get(
+${get('title', article?.title)}${get('category', cat)}${get(
       'subcategory',
-      article?.subcategory
+      subcat
     )}${get('description', article?.description)}${get(
       'date',
       article?.dateCreated

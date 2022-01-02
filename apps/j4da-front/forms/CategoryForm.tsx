@@ -40,7 +40,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
   })
   const onAddSubcat = () => {
     const newCat: ISubCategory[] = [...subcats]
-    newCat.push({ title: '', description: '' })
+    newCat.push({} as ISubCategory)
     setSubcats(newCat)
   }
   return (
@@ -52,6 +52,14 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
             {...register('title')}
             defaultValue={categoryById.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+          />
+        </div>
+        <div className="form-group">
+          <h6>Cat Slug</h6>
+          <input
+            {...register('slug')}
+            defaultValue={categoryById.slug}
+            className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
@@ -92,6 +100,15 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
                   key={subcategory.title}
                   defaultValue={subcategory.title}
                   className={`form-control ${errors.title ? 'is-invalid' : ''}`}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Subcat Slug</h6>
+                <input
+                  {...register(`subcategories.${index}.slug` as const)}
+                  key={subcategory.slug}
+                  defaultValue={subcategory.slug}
+                  className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
                 />
               </div>
               <div className="form-group">

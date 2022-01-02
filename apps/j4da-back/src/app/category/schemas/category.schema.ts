@@ -3,20 +3,9 @@ import { Transform, Type } from 'class-transformer'
 import * as mongoose from 'mongoose'
 import { Document, ObjectId } from 'mongoose'
 import { App } from '../../app/schemas/app.schema'
+import { Subcategory } from './subcategory.schema'
 
 export type CategoryDocument = Category & Document
-
-@Schema()
-class Subcategory {
-  @Transform(({ value }) => value.toString())
-  _id: ObjectId
-
-  @Prop()
-  title: string
-
-  @Prop()
-  description: string
-}
 
 @Schema()
 export class Category {
@@ -25,6 +14,9 @@ export class Category {
 
   @Prop()
   title: string
+
+  @Prop()
+  slug: string
 
   @Prop()
   description: string

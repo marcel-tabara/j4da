@@ -88,13 +88,16 @@ export interface IArticles {
 }
 
 export interface ISubCategory {
+  _id: string
   title: string
+  slug: string
   description: string
 }
 
 export interface ICategory {
   _id: string
   title: string
+  slug: string
   description?: string
   app: IApp
   subcategories?: ISubCategory[]
