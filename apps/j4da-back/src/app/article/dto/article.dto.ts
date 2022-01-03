@@ -19,4 +19,5 @@ export class ArticleDTO {
   readonly category: Category
   readonly subcategory: string
   readonly app: App
+  readonly _id: string
 }

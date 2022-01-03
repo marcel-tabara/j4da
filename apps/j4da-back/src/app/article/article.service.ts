@@ -113,20 +113,32 @@ export class ArticleService {
       article: articleDTO,
     })
 
-    this.removeArticleFile({ article, catSlug, subcatSlug })
-    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
-
     this.removeCatSubcatFile({
       app: article.app.toString(),
       catSlug: oldCatSlug,
       subcatSlug: oldSubcatSlug,
     })
+    this.removeArticleFile({
+      article,
+      catSlug: oldCatSlug,
+      subcatSlug: oldSubcatSlug,
+    })
+    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+
     this.generatCatSubcatFile({
       app: articleDTO.app,
       catSlug,
       catId,
       subcatSlug,
     })
+    if (articleDTO._id !== article._id) {
+      this.generatCatSubcatFile({
+        app: article.app,
+        catSlug: oldCatSlug,
+        catId,
+        subcatSlug: oldSubcatSlug,
+      })
+    }
 
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
@@ -154,8 +166,8 @@ export class ArticleService {
       appData.slug
     )
 
-    const catPath = path.join(dirPath, catSlug, 'byCat.json')
-    const subCatPath = path.join(dirPath, catSlug, subcatSlug, 'bySubCat.json')
+    const catPath = path.join(dirPath, catSlug)
+    const subCatPath = path.join(dirPath, catSlug, subcatSlug)
     return {
       dirPath,
       catPath,
@@ -173,11 +185,13 @@ export class ArticleService {
       app: new mongoose.Types.ObjectId(app),
       catId,
     })
-    fs.writeFileSync(catPath, JSON.stringify(articlesByCat, null, 2))
+    const cat = path.join(catPath, 'byCat.json')
+    const subcat = path.join(subCatPath, 'bySubCat.json')
+    fs.writeFileSync(cat, JSON.stringify(articlesByCat, null, 2))
     const articlesBySubCat = articlesByCat.filter(
       (a) => a.subcategory === subcatSlug
     )
-    fs.writeFileSync(subCatPath, JSON.stringify(articlesBySubCat, null, 2))
+    fs.writeFileSync(subcat, JSON.stringify(articlesBySubCat, null, 2))
   }
 
   removeCatSubcatFile = async ({ app, catSlug, subcatSlug }) => {
@@ -187,11 +201,19 @@ export class ArticleService {
       subcatSlug,
     })
 
-    if (fs.existsSync(catPath)) {
-      fs.unlinkSync(catPath)
+    const cat = path.join(catPath, 'byCat.json')
+    const subcat = path.join(subCatPath, 'bySubCat.json')
+    if (fs.existsSync(cat)) {
+      fs.unlinkSync(cat)
     }
-    if (fs.existsSync(subCatPath)) {
-      fs.unlinkSync(subCatPath)
+    if (fs.existsSync(subcat)) {
+      fs.unlinkSync(subcat)
+    }
+    if (fs.existsSync(subCatPath) && !fs.readdirSync(subCatPath).length) {
+      fs.rmSync(subCatPath, { recursive: true })
+    }
+    if (fs.existsSync(catPath) && !fs.readdirSync(catPath).length) {
+      fs.rmSync(catPath, { recursive: true })
     }
   }
 
@@ -208,6 +230,7 @@ export class ArticleService {
 
   removeArticleFile = async ({ article, catSlug, subcatSlug }) => {
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
+
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath)
     }
