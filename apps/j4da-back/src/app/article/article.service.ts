@@ -148,12 +148,12 @@ export class ArticleService {
   async findByIdAndRemove(_id): Promise<Article> {
     const article = await this.articleModel.findById(_id)
     const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
-    this.removeArticleFile({ article, catSlug, subcatSlug })
     this.removeCatSubcatFile({
       app: article.app,
       catSlug,
       subcatSlug,
     })
+    this.removeArticleFile({ article, catSlug, subcatSlug })
     await this.keywordService.findManyAndRemove(article.keywords.split(','))
     return await this.articleModel.findByIdAndRemove(_id)
   }
@@ -209,11 +209,13 @@ export class ArticleService {
     if (fs.existsSync(subcat)) {
       fs.unlinkSync(subcat)
     }
-    if (fs.existsSync(subCatPath) && !fs.readdirSync(subCatPath).length) {
-      fs.rmSync(subCatPath, { recursive: true })
-    }
-    if (fs.existsSync(catPath) && !fs.readdirSync(catPath).length) {
-      fs.rmSync(catPath, { recursive: true })
+    this.cleanDir(subCatPath)
+    this.cleanDir(catPath)
+  }
+
+  cleanDir(path) {
+    if (fs.existsSync(path) && fs.readdirSync(path).length <= 1) {
+      fs.rmSync(path, { recursive: true })
     }
   }
 
