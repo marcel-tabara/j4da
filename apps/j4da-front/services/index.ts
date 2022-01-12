@@ -18,3 +18,8 @@ export {
 } from './extractedKeywordsService'
 export { keywordByIdSelectors, keywordByIdService } from './keywordByIdService'
 export { keywordSelectors, keywordService } from './keywordService'
+export {
+  subcategoryByIdSelectors,
+  subcategoryByIdService,
+} from './subcategoryByIdService'
+export { subcategorySelectors, subcategoryService } from './subcategoryService'

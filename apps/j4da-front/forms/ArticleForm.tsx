@@ -137,7 +137,7 @@ const ArticleForm = ({
           <Controller
             control={control}
             name="subcategory"
-            defaultValue={article?.subcategory}
+            defaultValue={article?.subcategory?._id}
             render={({ field: { value, onChange } }) => (
               <select
                 {...register('subcategory')}
@@ -151,7 +151,7 @@ const ArticleForm = ({
                   Select SubCategory
                 </option>
                 {(subcategories || []).map((subcategory) => (
-                  <option key={subcategory.slug} value={subcategory.slug}>
+                  <option key={subcategory._id} value={subcategory._id}>
                     {subcategory.title}
                   </option>
                 ))}

@@ -25,6 +25,10 @@ const NavBar = () => {
         <Link href="/categories" as="/categories" passHref>
           <Nav.Link>Categories</Nav.Link>
         </Link>
+
+        <Link href="/subcategories" as="/subcategories" passHref>
+          <Nav.Link>Subcategories</Nav.Link>
+        </Link>
       </Nav>
     </Navbar>
   )

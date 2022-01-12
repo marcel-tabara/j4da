@@ -7,6 +7,7 @@ import rake from 'rake-js'
 import { AppService } from '../app/app.service'
 import { CategoryService } from '../category/category.service'
 import { KeywordService } from '../keyword/keyword.service'
+import { SubcategoryService } from '../subcategory/subcategory.service'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { ArticlesKeywords } from './interfaces/article-keywords.interface'
@@ -19,6 +20,7 @@ export class ArticleService {
     @InjectModel('Article') private readonly articleModel: Model<Article>,
     private readonly keywordService: KeywordService,
     private readonly categoryService: CategoryService,
+    private readonly subcategoryService: SubcategoryService,
     private readonly appService: AppService
   ) {}
 
@@ -38,7 +40,7 @@ export class ArticleService {
           }
         })
       )
-      .reduce((a, b) => a.concat(b))
+      .reduce((a, b) => a.concat(b), [])
 
     return articleKeywords as ArticlesKeywords[]
   }
@@ -58,7 +60,12 @@ export class ArticleService {
       })
       .populate({
         path: 'category',
-        select: '_id, title',
+        select: '_id, title, slug',
+        strictPopulate: false,
+      })
+      .populate({
+        path: 'subcategory',
+        select: '_id, title, slug',
         strictPopulate: false,
       })
       .sort(sort)
@@ -77,7 +84,12 @@ export class ArticleService {
       })
       .populate({
         path: 'category',
-        select: '_id, title',
+        select: '_id, slug',
+        strictPopulate: false,
+      })
+      .populate({
+        path: 'subcategory',
+        select: '_id, slug',
         strictPopulate: false,
       })
       .exec()
@@ -240,9 +252,8 @@ export class ArticleService {
 
   async getCatSubcatSlug({ article }) {
     const cat = await this.categoryService.findById(article.category)
-    const subcat = cat.subcategories.find(
-      (subcat) => subcat.slug === article.subcategory
-    )
+    const subcat = await this.subcategoryService.findById(article.subcategory)
+
     return {
       catSlug: cat.slug,
       subcatSlug: subcat?.slug,

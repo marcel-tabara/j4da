@@ -6,6 +6,7 @@ import { AppsModule } from './app/app.module'
 import { ArticleModule } from './article/article.module'
 import { CategoryModule } from './category/category.module'
 import { KeywordModule } from './keyword/keyword.module'
+import { SubcategoryModule } from './subcategory/subcategory.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { KeywordModule } from './keyword/keyword.module'
     ArticleModule,
     CategoryModule,
     KeywordModule,
+    SubcategoryModule,
     AppsModule,
   ],
   controllers: [AppController],

@@ -5,16 +5,19 @@ import { useArticlesKeywords } from '../../hooks/useArticlesKeywords'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
+import { useSubcategories } from '../../hooks/useSubcategories'
 import { Main } from '../../templates/Main'
 import { IArticle, ICategory, ISubCategory } from '../../utils/types'
 
 const ArticleAdd = () => {
   useCategories()
+  useSubcategories()
   useApps()
   useKeywords()
   useArticlesKeywords()
 
-  const { articlesKeywords, allApps, allCategories } = useSelectors()
+  const { articlesKeywords, allApps, allCategories, allSubcategories } =
+    useSelectors()
 
   const getDefaultCats = () => []
 
@@ -23,12 +26,13 @@ const ArticleAdd = () => {
 
   const onChangeCategory = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const cats = allCategories.find(
-        (category: ICategory) => category._id === event.target.value
+      const subcats = allSubcategories.filter(
+        (subcategory: ISubCategory) =>
+          subcategory.category._id === event.target.value
       )
-      setSubcategories(cats?.subcategories ?? [])
+      setSubcategories(subcats ?? [])
     },
-    [allCategories]
+    [allSubcategories]
   )
 
   const onChangeApp = useCallback(

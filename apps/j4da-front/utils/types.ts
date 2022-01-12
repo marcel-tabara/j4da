@@ -54,7 +54,7 @@ export interface IArticle {
   publisherLogo?: string
   slug?: string
   category?: ICategory
-  subcategory?: string
+  subcategory?: ISubCategory
   app: IApp
   priority: number
 }
@@ -93,6 +93,7 @@ export interface ISubCategory {
   title: string
   slug: string
   description: string
+  category: ICategory
 }
 
 export interface ICategory {
@@ -101,7 +102,6 @@ export interface ICategory {
   slug: string
   description?: string
   app: IApp
-  subcategories?: ISubCategory[]
 }
 
 export interface IArticlesProps {
@@ -111,6 +111,11 @@ export interface IArticlesProps {
 
 export interface ICategoriesProps {
   categories: ICategory[]
+  pagination: Record<string, unknown>
+}
+
+export interface ISubcategoriesProps {
+  subcategories: ISubCategory[]
   pagination: Record<string, unknown>
 }
 

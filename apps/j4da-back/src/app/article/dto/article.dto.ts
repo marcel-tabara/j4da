@@ -1,5 +1,6 @@
 import { App } from '../../app/interfaces/app.interface'
 import { Category } from '../../category/interfaces/category.interface'
+import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
 
 export class ArticleDTO {
   readonly keyOverride?: string
@@ -17,7 +18,7 @@ export class ArticleDTO {
   readonly publisherLogo: string
   readonly slug: string
   readonly category: Category
-  readonly subcategory: string
+  readonly subcategory: Subcategory
   readonly app: App
   readonly _id: string
 }

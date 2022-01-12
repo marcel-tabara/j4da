@@ -4,49 +4,49 @@ import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
 import { useDispatch } from 'react-redux'
-import { categoryService } from '../services'
-import { ICategoriesProps } from '../utils/types'
+import { subcategoryService } from '../services'
+import { ISubcategoriesProps } from '../utils/types'
 
-const Categories = ({ categories }: ICategoriesProps) => {
+const Subcategories = ({ subcategories }: ISubcategoriesProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const onAddCategory = () => router.replace('/categories/add')
+  const onAddCategory = () => router.replace('/subcategories/add')
   const onDelete = async (e) => {
     if (e.target.id) {
-      dispatch(categoryService.actions.deleteCategory(e.target.id))
-      router.replace('/categories')
+      dispatch(subcategoryService.actions.deleteSubcategory(e.target.id))
+      router.replace('/subcategories')
     }
   }
   return (
     <>
       <button type="button" className="btn btn-primary" onClick={onAddCategory}>
-        Add Category
+        Add Subcategory
       </button>
       <Table responsive="sm">
         <thead>
           <tr>
+            <th>Subcategory</th>
             <th>Category</th>
-            <th>App</th>
             <th align="right">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {(categories ?? []).map((category) => (
-            <tr key={category._id}>
+          {(subcategories ?? []).map((subcategory) => (
+            <tr key={subcategory._id}>
               <td>
                 <Link
-                  href="/categories/[_id]"
-                  as={`/categories/${category._id}`}
+                  href="/subcategories/[_id]"
+                  as={`/subcategories/${subcategory._id}`}
                 >
-                  {category.title}
+                  {subcategory.title}
                 </Link>
                 <br />
               </td>
-              <td>{category.app.title}</td>
+              <td>{subcategory.category.slug}</td>
               <td align="right">
                 <Icon.Trash
                   onClick={onDelete}
-                  id={category._id}
+                  id={subcategory._id}
                   className="pointer"
                 />
               </td>
@@ -58,4 +58,4 @@ const Categories = ({ categories }: ICategoriesProps) => {
   )
 }
 
-export { Categories }
+export { Subcategories }

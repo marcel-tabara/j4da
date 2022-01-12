@@ -38,9 +38,14 @@ export class CategoryService {
     _id: string,
     categoryDTO: CategoryDTO & { _id: string }
   ): Promise<Category> {
-    return await this.categoryModel.findByIdAndUpdate(_id, categoryDTO, {
-      new: true,
-    })
+    const newCat = await this.categoryModel.findByIdAndUpdate(
+      _id,
+      categoryDTO,
+      {
+        new: true,
+      }
+    )
+    return newCat
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {

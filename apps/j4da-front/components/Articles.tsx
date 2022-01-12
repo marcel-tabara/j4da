@@ -41,8 +41,8 @@ const Articles = (props: IArticlesProps) => {
                 </Link>
               </td>
               <td>{article.app.title}</td>
-              <td>{article.category.title}</td>
-              <td>{article.subcategory}</td>
+              <td>{article.category.slug}</td>
+              <td>{article.subcategory.slug}</td>
               <td align="right">
                 <Icon.Trash
                   onClick={onDelete}

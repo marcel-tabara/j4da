@@ -9,6 +9,8 @@ import categorySaga from '../services/categoryService/saga'
 import extractedKeywordsSaga from '../services/extractedKeywordsService/saga'
 import keywordByIdSaga from '../services/keywordByIdService/saga'
 import keywordSaga from '../services/keywordService/saga'
+import subcategoryByIdSaga from '../services/subcategoryByIdService/saga'
+import subcategorySaga from '../services/subcategoryService/saga'
 
 export default function* sagas() {
   yield all(
@@ -23,6 +25,8 @@ export default function* sagas() {
       keywordByIdSaga,
       categorySaga,
       categoryByIdSaga,
+      subcategorySaga,
+      subcategoryByIdSaga,
     ].map((saga) => fork(saga))
   )
 }

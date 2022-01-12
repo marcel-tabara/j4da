@@ -2,15 +2,18 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { categoryService } from '../services'
-import { IApp, ICategory } from '../utils/types'
+import { subcategoryService } from '../services'
+import { ICategory, ISubCategory } from '../utils/types'
 
-interface ICategoryFormProps {
-  categoryById: ICategory
-  apps: IApp[]
+interface ISubcategoryFormProps {
+  subcategoryById: ISubCategory
+  categories: ICategory[]
 }
 
-const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
+const SubcategoryForm = ({
+  subcategoryById,
+  categories,
+}: ISubcategoryFormProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -18,30 +21,30 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ICategory>()
+  } = useForm<ISubCategory>()
 
   const onSubmit = handleSubmit((data) => {
-    categoryById._id
+    subcategoryById._id
       ? dispatch(
-          categoryService.actions.updateCategory({
+          subcategoryService.actions.updateSubcategory({
             ...data,
-            _id: categoryById._id,
+            _id: subcategoryById._id,
           })
         )
-      : dispatch(categoryService.actions.createCategory(data))
+      : dispatch(subcategoryService.actions.createSubcategory(data))
 
-    router.replace('/categories')
+    router.replace('/subcategories')
   })
 
   return (
     <div className="register-form">
       <form onSubmit={onSubmit}>
-        <h3>Category</h3>
+        <h3>Subcategory</h3>
         <div className="form-group">
           <h6>Title</h6>
           <input
             {...register('title')}
-            defaultValue={categoryById.title}
+            defaultValue={subcategoryById.title}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>
@@ -49,7 +52,7 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           <h6>Slug</h6>
           <input
             {...register('slug')}
-            defaultValue={categoryById.slug}
+            defaultValue={subcategoryById.slug}
             className={`form-control ${errors.slug ? 'is-invalid' : ''}`}
           />
         </div>
@@ -57,24 +60,24 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
           <h6>Description</h6>
           <textarea
             {...register('description')}
-            defaultValue={categoryById.description}
+            defaultValue={subcategoryById.description}
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
-          <h6>App</h6>
+          <h6>Category</h6>
           <select
-            {...register('app')}
-            defaultValue={categoryById?.app?._id}
-            name="app"
-            className={`form-control ${errors.app ? 'is-invalid' : ''}`}
+            {...register('category')}
+            defaultValue={subcategoryById?.category?._id}
+            name="category"
+            className={`form-control ${errors.category ? 'is-invalid' : ''}`}
           >
-            <option key="app.select" value="">
-              Select App
+            <option key="category.select" value="">
+              Select Category
             </option>
-            {(apps || []).map((app: IApp) => (
-              <option key={app._id} value={app._id}>
-                {app.title}
+            {(categories || []).map((category: ICategory) => (
+              <option key={category._id} value={category._id}>
+                {category.title}
               </option>
             ))}
           </select>
@@ -91,4 +94,4 @@ const CategoryForm = ({ categoryById, apps }: ICategoryFormProps) => {
   )
 }
 
-export { CategoryForm }
+export { SubcategoryForm }

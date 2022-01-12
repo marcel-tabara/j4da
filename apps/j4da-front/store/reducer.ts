@@ -11,6 +11,8 @@ import {
   extractedKeywordsService,
   keywordByIdService,
   keywordService,
+  subcategoryByIdService,
+  subcategoryService,
 } from '../services'
 
 const rootReducer = combineReducers({
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
   appByIdService: appByIdService.reducer,
   categoryByIdService: categoryByIdService.reducer,
   keywordByIdService: keywordByIdService.reducer,
+  subcategoryByIdService: subcategoryByIdService.reducer,
+  subcategoryService: subcategoryService.reducer,
 })
 
 export { rootReducer }

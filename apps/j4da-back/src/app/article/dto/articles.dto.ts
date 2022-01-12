@@ -1,3 +1,7 @@
+import { App } from '../../app/interfaces/app.interface'
+import { Category } from '../../category/interfaces/category.interface'
+import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
+
 export class ArticleDTO {
   readonly total: number
   readonly skip: number
@@ -18,9 +22,9 @@ export class ArticleDTO {
       readonly publisherName: string
       readonly publisherLogo: string
       readonly slug: string
-      readonly category: string
-      readonly subcategory: string
-      readonly app: string
+      readonly category: Category
+      readonly subcategory: Subcategory
+      readonly app: App
     }
   ]
 }

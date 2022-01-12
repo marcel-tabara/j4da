@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose'
 import { Document, ObjectId } from 'mongoose'
 import { App } from '../../app/schemas/app.schema'
 import { Category } from '../../category/schemas/category.schema'
+import { Subcategory } from '../../subcategory/schemas/subcategory.schema'
 
 export type ArticleDocument = Article & Document
 
@@ -40,8 +41,10 @@ export class Article {
   publisherLogo: string
   @Prop()
   slug: string
-  @Prop()
-  subcategory: string
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Subcategory.name })
+  @Type(() => Subcategory)
+  subcategory: Subcategory
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })
   @Type(() => Category)

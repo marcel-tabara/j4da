@@ -11,6 +11,8 @@ import {
   extractedKeywordsSelectors,
   keywordByIdSelectors,
   keywordSelectors,
+  subcategoryByIdSelectors,
+  subcategorySelectors,
 } from '../services'
 
 export const useSelectors = () => {
@@ -67,6 +69,18 @@ export const useSelectors = () => {
   } = useSelector(categorySelectors.categoriesSelector)
 
   const {
+    data: subcategoryById,
+    available: subcategoryByIdAvailable,
+    fetching: subcategoryByIdFetching,
+  } = useSelector(subcategoryByIdSelectors.subcategoryByIdSelector)
+
+  const {
+    data: allSubcategories,
+    available: allSubcategoriesAvailable,
+    fetching: allSubcategoriesFetching,
+  } = useSelector(subcategorySelectors.subcategoriesSelector)
+
+  const {
     data: allAlerts,
     available: allAlertsAvailable,
     fetching: allAlertsFetching,
@@ -109,6 +123,13 @@ export const useSelectors = () => {
     categoryById,
     categoryByIdAvailable,
     categoryByIdFetching,
+    //
+    allSubcategories,
+    allSubcategoriesAvailable,
+    allSubcategoriesFetching,
+    subcategoryById,
+    subcategoryByIdAvailable,
+    subcategoryByIdFetching,
     //
     extractedKeywords,
     extractedKeywordsAvailable,
