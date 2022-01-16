@@ -44,6 +44,7 @@ export interface IArticle {
   title: string
   images?: string | string[]
   keywords?: string
+  links?: IArticlesKeyword[]
   dateCreated?: string
   datePublished?: string
   dateModified?: string
@@ -66,6 +67,7 @@ export interface IArticleSave {
   title: string
   images?: string | string[]
   keywords?: string
+  links?: IArticlesKeyword[]
   dateCreated?: string
   datePublished?: string
   dateModified?: string
@@ -79,6 +81,11 @@ export interface IArticleSave {
   subcategory?: string
   app: string
   priority: number
+}
+
+export interface GetArticlesKeywordsPayload {
+  keywords: string[]
+  _id: string
 }
 
 export interface IArticles {

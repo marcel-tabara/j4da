@@ -2,6 +2,7 @@ import { Document } from 'mongoose'
 import { App } from '../../app/interfaces/app.interface'
 import { Category } from '../../category/interfaces/category.interface'
 import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
+import { ArticlesKeywords } from './article-keywords.interface'
 
 export interface Article extends Document {
   readonly _id?: string
@@ -23,4 +24,5 @@ export interface Article extends Document {
   readonly subcategory: Subcategory
   readonly app: App
   readonly priority: number
+  readonly links: ArticlesKeywords
 }

@@ -24,6 +24,8 @@ export class Article {
   @Prop()
   keywords: string
   @Prop()
+  links: string
+  @Prop()
   dateCreated: string
   @Prop()
   datePublished: string

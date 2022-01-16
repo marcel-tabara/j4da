@@ -3,10 +3,12 @@ import { FormEventHandler, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   articleService,
+  articlesKeywordsService,
   extractedKeywordsService,
   keywordService,
 } from '../services'
 import { IArticle, IArticlesKeyword } from '../utils/types'
+import { useArticlesKeywords } from './useArticlesKeywords'
 import { useSelectors } from './useSelectors'
 
 interface Props {
@@ -15,7 +17,6 @@ interface Props {
   onChangeCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void
   handleSubmit: (data) => FormEventHandler<HTMLFormElement>
   setValue: (field: string, value: string) => void
-  articlesKeywords: IArticlesKeyword[]
 }
 
 export const useArticleForm = ({
@@ -24,16 +25,24 @@ export const useArticleForm = ({
   onChangeCategory,
   handleSubmit,
   setValue,
-  articlesKeywords,
 }: Props) => {
   const dispatch = useDispatch()
   const router = useRouter()
+
+  const { articlesKeywords } = useSelectors()
   const { extractedKeywords } = useSelectors()
   const [bodyKeywords, setBodyKeywords] = useState<string[]>([])
   const [defaultBodyKeywords, setDefaultBodyKeywords] = useState<string[]>([])
   const [selectedKeywords, setSelectedKeywords] = useState<string[]>(
     !article?.keywords?.length ? [] : article?.keywords.split(',')
   )
+
+  const [articleLinks, setArticleLinks] = useState<IArticlesKeyword[]>([])
+  const [selectedLinks, setSelectedLinks] = useState<IArticlesKeyword[]>(
+    !article?.links?.length ? [] : article?.links
+  )
+
+  useArticlesKeywords({ keywords: bodyKeywords, _id: article._id })
 
   useEffect(() => {
     Boolean(article?.app?._id) &&
@@ -94,9 +103,10 @@ export const useArticleForm = ({
       if (e) {
         setValue('body', e)
         extractKeywords(e)
+        dispatch(articlesKeywordsService.actions.reset())
       }
     },
-    [extractKeywords, setValue]
+    [dispatch, extractKeywords, setValue]
   )
   const onAddKeyword = useCallback(
     (event) => {
@@ -110,6 +120,23 @@ export const useArticleForm = ({
       setBodyKeywords(newBodyKeywords)
     },
     [bodyKeywords, selectedKeywords, setValue]
+  )
+  const onAddLink = useCallback(
+    (event) => {
+      const id = event.target.id.split('_')
+      const link = articlesKeywords.find(
+        (e) => e.keyword === id[0] && e._id === id[1]
+      )
+      const newSelectedLinks = link && [...selectedLinks].concat(link)
+      setSelectedLinks(newSelectedLinks)
+      setValue('links', newSelectedLinks.toString())
+
+      const newArticlesLinks = articleLinks.filter(
+        (link) => link !== event.target.id
+      )
+      setArticleLinks(newArticlesLinks)
+    },
+    [articleLinks, articlesKeywords, selectedLinks, setValue]
   )
   const onRemoveKeyword = useCallback(
     (event) => {
@@ -126,13 +153,15 @@ export const useArticleForm = ({
     },
     [defaultBodyKeywords, selectedKeywords, setValue]
   )
-  const onChangeKeywords = useCallback((e) => {
-    setSelectedKeywords(e.target.value.split(','))
-  }, [])
+  const onChangeKeywords = useCallback(
+    (e) => {
+      setSelectedKeywords(e.target.value.split(','))
+      dispatch(articlesKeywordsService.actions.reset())
+    },
+    [dispatch]
+  )
   const selectedArticlesKeywords = () =>
-    articlesKeywords.filter(
-      (e) => selectedKeywords.includes(e.keyword) && e._id !== article._id
-    )
+    (articlesKeywords || []).filter((e) => selectedKeywords.includes(e.keyword))
 
   return {
     bodyKeywords,
@@ -147,6 +176,9 @@ export const useArticleForm = ({
     onBodyChange,
     onChangeKeywords,
     onAddKeyword,
+    onAddLink,
     onRemoveKeyword,
+    articleLinks,
+    selectedLinks,
   }
 }

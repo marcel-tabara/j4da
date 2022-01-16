@@ -46,7 +46,7 @@ export class SubcategoryService {
         new: true,
       }
     )
-    console.log('########## newCat', newCat)
+
     return newCat
   }
 

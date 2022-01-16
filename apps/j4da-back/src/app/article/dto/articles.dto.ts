@@ -25,6 +25,7 @@ export class ArticleDTO {
       readonly category: Category
       readonly subcategory: Subcategory
       readonly app: App
+      readonly links: string
     }
   ]
 }

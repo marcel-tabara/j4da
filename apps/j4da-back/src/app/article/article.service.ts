@@ -9,6 +9,7 @@ import { CategoryService } from '../category/category.service'
 import { KeywordService } from '../keyword/keyword.service'
 import { SubcategoryService } from '../subcategory/subcategory.service'
 import { ArticleDTO } from './dto/article.dto'
+import { GetArticlesKeywordsDTO } from './dto/get-article-keywords.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { ArticlesKeywords } from './interfaces/article-keywords.interface'
 import { Article } from './interfaces/article.interface'
@@ -24,8 +25,16 @@ export class ArticleService {
     private readonly appService: AppService
   ) {}
 
-  async findArticlesKeywords(): Promise<ArticlesKeywords[]> {
-    const articles = await this.articleModel.find().exec()
+  async findArticlesKeywords(
+    payload: GetArticlesKeywordsDTO
+  ): Promise<ArticlesKeywords[]> {
+    const keys = payload.keywords.map(
+      (key) => new RegExp('\\b' + key + '\\b', 'i')
+    )
+    const articles = await this.articleModel
+      .find({ keywords: { $in: keys } })
+      .exec()
+
     const articleKeywords = (articles || [])
       .map((article: Article) =>
         (article.keywords || '').split(',').map((keyword) => {
@@ -36,11 +45,14 @@ export class ArticleService {
             slug: article.slug,
             url: article.url,
             priority: article.priority,
-            _id: article._id,
+            _id: article._id.toString(),
           }
         })
       )
       .reduce((a, b) => a.concat(b), [])
+      .filter(
+        (e) => payload.keywords.includes(e.keyword) && e._id !== payload._id
+      )
 
     return articleKeywords as ArticlesKeywords[]
   }

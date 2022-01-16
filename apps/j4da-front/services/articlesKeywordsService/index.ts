@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit'
-import { IArticlesKeyword } from '../../utils/types'
+import { GetArticlesKeywordsPayload, IArticlesKeyword } from '../../utils/types'
 import { createGenericSlice } from '../utils/genericSlice'
 import * as articlesKeywordsSelectors from './selectors'
 
@@ -13,7 +13,10 @@ const articlesKeywordsService = createGenericSlice({
   name: 'articlesKeywords',
   initialState,
   reducers: {
-    getArticlesKeywords: (state, action: PayloadAction<string>) => {
+    getArticlesKeywords: (
+      state,
+      action: PayloadAction<GetArticlesKeywordsPayload>
+    ) => {
       state.fetching = true
     },
   },

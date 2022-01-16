@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { articlesKeywordsSelectors, articlesKeywordsService } from '../services'
 import { IArticlesKeyword } from '../utils/types'
 
-export const useArticlesKeywords = (): {
+interface Props {
+  keywords?: string[]
+  _id: string
+}
+export const useArticlesKeywords = ({
+  keywords,
+  _id,
+}: Props): {
   articlesKeywords: IArticlesKeyword[]
   articlesKeywordsAvailable: boolean
   articlesKeywordsFetching: boolean
@@ -16,10 +23,19 @@ export const useArticlesKeywords = (): {
   } = useSelector(articlesKeywordsSelectors.articleKeywordsSelector)
 
   useEffect(() => {
-    !articlesKeywordsAvailable &&
+    keywords?.length > 0 &&
+      !articlesKeywordsAvailable &&
       !articlesKeywordsFetching &&
-      dispatch(articlesKeywordsService.actions.getArticlesKeywords())
-  }, [articlesKeywordsAvailable, dispatch, articlesKeywordsFetching])
+      dispatch(
+        articlesKeywordsService.actions.getArticlesKeywords({ keywords, _id })
+      )
+  }, [
+    articlesKeywordsAvailable,
+    dispatch,
+    articlesKeywordsFetching,
+    keywords,
+    _id,
+  ])
 
   return {
     articlesKeywords,

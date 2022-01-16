@@ -3,11 +3,11 @@ import Accordion from 'react-bootstrap/Accordion'
 import { Controller, useForm } from 'react-hook-form'
 import { MDEWrapper } from '../components/MDEWrapper'
 import { useArticleForm } from '../hooks/useArticleForm'
+import { useSelectors } from '../hooks/useSelectors'
 import {
   IApp,
   IArticle,
   IArticleSave,
-  IArticlesKeyword,
   ICategory,
   ISubCategory,
 } from '../utils/types'
@@ -19,7 +19,6 @@ interface IArticleFormProps {
   categories: ICategory[]
   article: IArticle
   allApps: IApp[]
-  articlesKeywords: IArticlesKeyword[]
 }
 
 const ArticleForm = ({
@@ -29,7 +28,6 @@ const ArticleForm = ({
   subcategories = [],
   article,
   allApps,
-  articlesKeywords,
 }: IArticleFormProps) => {
   const {
     handleSubmit,
@@ -38,6 +36,8 @@ const ArticleForm = ({
     control,
     formState: { errors },
   } = useForm<IArticleSave>()
+  const { articlesKeywords = [] } = useSelectors()
+  console.log('########## articlesKeywords', articlesKeywords)
 
   const {
     bodyKeywords,
@@ -46,15 +46,16 @@ const ArticleForm = ({
     onBodyChange,
     onChangeKeywords,
     onAddKeyword,
+    onAddLink,
     onRemoveKeyword,
     selectedArticlesKeywords,
+    articleLinks,
   } = useArticleForm({
     article,
     onChangeApp,
     onChangeCategory,
     handleSubmit,
     setValue,
-    articlesKeywords,
   })
   return (
     <div className="register-form">
@@ -195,7 +196,32 @@ const ArticleForm = ({
         </div>
         {articlesKeywords && (
           <div className="form-group">
-            <h6>articles keywords</h6>
+            <h6>available keyword links</h6>
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>
+                  Total Artcles Keywords: {articlesKeywords.length}
+                </Accordion.Header>
+                <Accordion.Body className="accordion-box">
+                  <div className="container">
+                    {articlesKeywords.map((e, idx) => {
+                      const key = e.keyword + '_' + e._id
+                      return (
+                        <li key={key} id={key} onClick={onAddLink}>
+                          {e.priority}
+                          <b>{e.keyword}</b> - {e.url}
+                        </li>
+                      )
+                    })}
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+        )}
+        {articleLinks && (
+          <div className="form-group">
+            <h6>available keyword links</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
@@ -210,7 +236,7 @@ const ArticleForm = ({
                         idx +
                         '_selectedKeyword'
                       return (
-                        <li key={key} id={key} onClick={onAddKeyword}>
+                        <li key={key} id={key} onClick={onAddLink}>
                           {e.priority}
                           <b>{e.keyword}</b> - {e.url}
                         </li>

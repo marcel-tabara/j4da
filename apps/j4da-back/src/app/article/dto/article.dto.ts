@@ -1,6 +1,7 @@
 import { App } from '../../app/interfaces/app.interface'
 import { Category } from '../../category/interfaces/category.interface'
 import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
+import { ArticlesKeywordsDTO } from './article-keywords.dto'
 
 export class ArticleDTO {
   readonly keyOverride?: string
@@ -21,4 +22,5 @@ export class ArticleDTO {
   readonly subcategory: Subcategory
   readonly app: App
   readonly _id: string
+  readonly links: ArticlesKeywordsDTO
 }

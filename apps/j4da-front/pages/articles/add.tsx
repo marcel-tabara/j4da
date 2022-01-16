@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
-import { useArticlesKeywords } from '../../hooks/useArticlesKeywords'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
@@ -14,10 +13,8 @@ const ArticleAdd = () => {
   useSubcategories()
   useApps()
   useKeywords()
-  useArticlesKeywords()
 
-  const { articlesKeywords, allApps, allCategories, allSubcategories } =
-    useSelectors()
+  const { allApps, allCategories, allSubcategories } = useSelectors()
 
   const getDefaultCats = () => []
 
@@ -58,7 +55,6 @@ const ArticleAdd = () => {
         subcategories={subcategories}
         article={article}
         allApps={allApps}
-        articlesKeywords={articlesKeywords}
       />
     </Main>
   )
