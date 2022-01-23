@@ -6,7 +6,6 @@ import articleSaga from '../services/articleService/saga'
 import articlesKeywordsSaga from '../services/articlesKeywordsService/saga'
 import categoryByIdSaga from '../services/categoryByIdService/saga'
 import categorySaga from '../services/categoryService/saga'
-import extractedKeywordsSaga from '../services/extractedKeywordsService/saga'
 import keywordByIdSaga from '../services/keywordByIdService/saga'
 import keywordSaga from '../services/keywordService/saga'
 import subcategoryByIdSaga from '../services/subcategoryByIdService/saga'
@@ -18,7 +17,7 @@ export default function* sagas() {
       articleSaga,
       articleByIdSaga,
       articlesKeywordsSaga,
-      extractedKeywordsSaga,
+      //extractedKeywordsSaga,
       appSaga,
       appByIdSaga,
       keywordSaga,

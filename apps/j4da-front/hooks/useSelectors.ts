@@ -8,7 +8,6 @@ import {
   articlesKeywordsSelectors,
   categoryByIdSelectors,
   categorySelectors,
-  extractedKeywordsSelectors,
   keywordByIdSelectors,
   keywordSelectors,
   subcategoryByIdSelectors,
@@ -45,9 +44,9 @@ export const useSelectors = () => {
   } = useSelector(appByIdSelectors.appByIdSelector)
 
   const {
-    data: allKeywords,
-    available: allKeywordsAvailable,
-    fetching: allKeywordsFetching,
+    data: keywords,
+    available: keywordsAvailable,
+    fetching: keywordsFetching,
   } = useSelector(keywordSelectors.keywordsSelector)
 
   const {
@@ -55,6 +54,12 @@ export const useSelectors = () => {
     available: keywordByIdAvailable,
     fetching: keywordByIdFetching,
   } = useSelector(keywordByIdSelectors.keywordByIdSelector)
+
+  const {
+    data: keywordsByArticleId,
+    available: keywordsByArticleIdAvailable,
+    fetching: keywordsByArticleIdFetching,
+  } = useSelector(keywordSelectors.keywordsSelector)
 
   const {
     data: categoryById,
@@ -86,12 +91,6 @@ export const useSelectors = () => {
     fetching: allAlertsFetching,
   } = useSelector(alertSelectors.alertsSelector)
 
-  const {
-    data: extractedKeywords,
-    available: extractedKeywordsAvailable,
-    fetching: extractedKeywordsFetching,
-  } = useSelector(extractedKeywordsSelectors.extractedKeywordsSelector)
-
   return {
     allArticles,
     allArticlesAvailable,
@@ -110,12 +109,15 @@ export const useSelectors = () => {
     appsByIdAvailable,
     appsByIdFetching,
     //
-    allKeywords,
-    allKeywordsAvailable,
-    allKeywordsFetching,
+    keywords,
+    keywordsAvailable,
+    keywordsFetching,
     keywordById,
     keywordByIdAvailable,
     keywordByIdFetching,
+    keywordsByArticleId,
+    keywordsByArticleIdAvailable,
+    keywordsByArticleIdFetching,
     //
     allCategories,
     allCategoriesAvailable,
@@ -130,10 +132,6 @@ export const useSelectors = () => {
     subcategoryById,
     subcategoryByIdAvailable,
     subcategoryByIdFetching,
-    //
-    extractedKeywords,
-    extractedKeywordsAvailable,
-    extractedKeywordsFetching,
     //
     allAlerts,
     allAlertsAvailable,

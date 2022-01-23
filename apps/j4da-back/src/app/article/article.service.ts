@@ -1,17 +1,13 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import * as fs from 'fs'
 import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
-import rake from 'rake-js'
 import { AppService } from '../app/app.service'
 import { CategoryService } from '../category/category.service'
-import { KeywordService } from '../keyword/keyword.service'
 import { SubcategoryService } from '../subcategory/subcategory.service'
 import { ArticleDTO } from './dto/article.dto'
-import { GetArticlesKeywordsDTO } from './dto/get-article-keywords.dto'
 import { PaginationDto } from './dto/pagination.dto'
-import { ArticlesKeywords } from './interfaces/article-keywords.interface'
 import { Article } from './interfaces/article.interface'
 import path = require('path')
 
@@ -19,49 +15,13 @@ import path = require('path')
 export class ArticleService {
   constructor(
     @InjectModel('Article') private readonly articleModel: Model<Article>,
-    private readonly keywordService: KeywordService,
     private readonly categoryService: CategoryService,
     private readonly subcategoryService: SubcategoryService,
     private readonly appService: AppService
   ) {}
 
-  async findArticlesKeywords(
-    payload: GetArticlesKeywordsDTO
-  ): Promise<ArticlesKeywords[]> {
-    const keys = payload.keywords.map(
-      (key) => new RegExp('\\b' + key + '\\b', 'i')
-    )
-    const articles = await this.articleModel
-      .find({ keywords: { $in: keys } })
-      .exec()
-
-    const articleKeywords = (articles || [])
-      .map((article: Article) =>
-        (article.keywords || '').split(',').map((keyword) => {
-          return {
-            keyword,
-            category: article.category,
-            subcategory: article.subcategory,
-            slug: article.slug,
-            url: article.url,
-            priority: article.priority,
-            _id: article._id.toString(),
-          }
-        })
-      )
-      .reduce((a, b) => a.concat(b), [])
-      .filter(
-        (e) => payload.keywords.includes(e.keyword) && e._id !== payload._id
-      )
-
-    return articleKeywords as ArticlesKeywords[]
-  }
-
-  async extractKeywords(article: string): Promise<string[]> {
-    return rake(article, { language: 'english' })
-  }
-
   async find(paginationQuery: PaginationDto, query): Promise<Article[]> {
+    Logger.log(`ArticleService: Find articles ${JSON.stringify(query)}`)
     const { limit, skip, sort } = paginationQuery
     return await this.articleModel
       .find(query)
@@ -87,6 +47,7 @@ export class ArticleService {
   }
 
   async findById(_id): Promise<Article> {
+    Logger.log(`ArticleService: findById ${_id}`)
     return await this.articleModel
       .findById(_id)
       .populate({
@@ -108,18 +69,19 @@ export class ArticleService {
   }
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
+    Logger.log(`ArticleService: Create article.`)
     const newArticle = await new this.articleModel(articleDTO)
-    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
-      article: articleDTO,
-    })
-    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    // const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+    //   article: articleDTO,
+    // })
+    // this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
 
-    this.generatCatSubcatFile({
-      app: articleDTO.app,
-      catSlug,
-      catId,
-      subcatSlug,
-    })
+    // this.generatCatSubcatFile({
+    //   app: articleDTO.app,
+    //   catSlug,
+    //   catId,
+    //   subcatSlug,
+    // })
 
     return newArticle.save()
   }
@@ -128,6 +90,7 @@ export class ArticleService {
     _id: string,
     articleDTO: ArticleDTO
   ): Promise<Article> {
+    Logger.log(`ArticleService: findByIdAndUpdate ${_id}`)
     const article = await this.articleModel.findById(_id)
     const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
       await this.getCatSubcatSlug({
@@ -170,6 +133,7 @@ export class ArticleService {
   }
 
   async findByIdAndRemove(_id): Promise<Article> {
+    Logger.log(`ArticleService: findByIdAndRemove ${_id}`)
     const article = await this.articleModel.findById(_id)
     const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
     this.removeCatSubcatFile({
@@ -178,11 +142,12 @@ export class ArticleService {
       subcatSlug,
     })
     this.removeArticleFile({ article, catSlug, subcatSlug })
-    await this.keywordService.findManyAndRemove(article.keywords.split(','))
+
     return await this.articleModel.findByIdAndRemove(_id)
   }
 
   async getCatSubCatPath({ app, catSlug, subcatSlug }) {
+    Logger.log(`ArticleService: GetCatSubCatPath.`)
     const appData = await this.appService.findById(app)
     const dirPath = path.join(
       process.cwd(),
@@ -199,6 +164,7 @@ export class ArticleService {
     }
   }
   generatCatSubcatFile = async ({ app, catId, catSlug, subcatSlug }) => {
+    Logger.log(`ArticleService: GeneratCatSubcatFile.`)
     const { catPath, subCatPath } = await this.getCatSubCatPath({
       app,
       catSlug,
@@ -219,6 +185,7 @@ export class ArticleService {
   }
 
   removeCatSubcatFile = async ({ app, catSlug, subcatSlug }) => {
+    Logger.log(`ArticleService: RemoveCatSubcatFile.`)
     const { catPath, subCatPath } = await this.getCatSubCatPath({
       app,
       catSlug,
@@ -238,12 +205,14 @@ export class ArticleService {
   }
 
   cleanDir(path) {
+    Logger.log(`ArticleService: Clean directory.`)
     if (fs.existsSync(path) && fs.readdirSync(path).length <= 1) {
       fs.rmSync(path, { recursive: true })
     }
   }
 
   generateArticleFile = async ({ article, catSlug, subcatSlug }) => {
+    Logger.log(`ArticleService: GenerateArticleFile.`)
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
     this.getBody({ article, catSlug, subcatSlug }).then((e) => {
       const dirname = path.dirname(filePath)
@@ -255,6 +224,7 @@ export class ArticleService {
   }
 
   removeArticleFile = async ({ article, catSlug, subcatSlug }) => {
+    Logger.log(`ArticleService: RemoveArticleFile.`)
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
 
     if (fs.existsSync(filePath)) {
@@ -263,6 +233,7 @@ export class ArticleService {
   }
 
   async getCatSubcatSlug({ article }) {
+    Logger.log(`ArticleService: GetCatSubcatSlug.`)
     const cat = await this.categoryService.findById(article.category)
     const subcat = await this.subcategoryService.findById(article.subcategory)
 
@@ -274,6 +245,7 @@ export class ArticleService {
   }
 
   async getFilePath(article, cat: string, subcat: string) {
+    Logger.log(`ArticleService: GetFilePath.`)
     const app = await this.appService.findById(article.app)
     const dirPath = path.join(
       process.cwd(),
@@ -285,6 +257,7 @@ export class ArticleService {
   }
 
   getBody = async ({ article, catSlug, subcatSlug }) => {
+    Logger.log(`ArticleService: GetBody.`)
     const getValue = (value: string | string[]) => {
       if (Array.isArray(value)) {
         return value.map((e) => `  - ${e}`).join('\n')

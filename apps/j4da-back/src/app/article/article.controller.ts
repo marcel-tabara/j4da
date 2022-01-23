@@ -15,7 +15,6 @@ import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { ArticleService } from './article.service'
 import { ArticleDTO } from './dto/article.dto'
-import { GetArticlesKeywordsDTO } from './dto/get-article-keywords.dto'
 import { PaginationDto } from './dto/pagination.dto'
 
 @Controller('articles')
@@ -29,20 +28,6 @@ export class ArticleController {
     return res
       .status(HttpStatus.OK)
       .json({ limit, skip, total: data.length, data: data.sort(sortByTitle) })
-  }
-
-  @Post('/articlesKeywords')
-  async articleKeywords(@Res() res, @Body() payload: GetArticlesKeywordsDTO) {
-    const data = await this.articleService.findArticlesKeywords(payload)
-    return res.status(HttpStatus.OK).json(data)
-  }
-
-  @Post('/extractKeywords')
-  async extractKeywords(@Res() res, @Body() article: { article: string }) {
-    const extractedKeywords = await this.articleService.extractKeywords(
-      article.article
-    )
-    return res.status(HttpStatus.OK).json(extractedKeywords)
   }
 
   @Get('/:_id')

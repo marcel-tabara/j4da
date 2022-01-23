@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { SubcategoryDTO } from './dto/subcategory.dto'
@@ -12,6 +12,7 @@ export class SubcategoryService {
   ) {}
 
   async find(query): Promise<Subcategory[]> {
+    Logger.log(`SubcategoryService: find ${JSON.stringify(query)}`)
     return await this.subcategoryModel.find(query).populate({
       path: 'category',
       select: '_id, slug',
@@ -20,6 +21,7 @@ export class SubcategoryService {
   }
 
   async findById(_id): Promise<Subcategory> {
+    Logger.log(`SubcategoryService: findById ${_id}`)
     return await this.subcategoryModel
       .findOne({ _id })
       .populate({
@@ -39,6 +41,7 @@ export class SubcategoryService {
     _id: string,
     subcategoryDTO: SubcategoryDTO & { _id: string }
   ): Promise<Subcategory> {
+    Logger.log(`SubcategoryService: findByIdAndUpdate ${_id}`)
     const newCat = await this.subcategoryModel.findByIdAndUpdate(
       _id,
       subcategoryDTO,
@@ -51,6 +54,7 @@ export class SubcategoryService {
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
+    Logger.log(`SubcategoryService: findByIdAndRemove ${_id}`)
     return await this.subcategoryModel.findByIdAndRemove(_id)
   }
 }

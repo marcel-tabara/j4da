@@ -22,15 +22,11 @@ export class Article {
   @Prop()
   images: [string]
   @Prop()
-  keywords: string
+  dateCreated: Date
   @Prop()
-  links: string
+  datePublished: Date
   @Prop()
-  dateCreated: string
-  @Prop()
-  datePublished: string
-  @Prop()
-  dateModified: string
+  dateModified: Date
   @Prop()
   authorName: string
   @Prop()

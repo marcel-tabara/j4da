@@ -21,7 +21,7 @@ export class AppController {
 
   @Get()
   async find(@Res() res) {
-    const apps = await this.appService.find()
+    const apps = await this.appService.find({})
     return res.status(HttpStatus.OK).json(apps.sort(sortByTitle))
   }
 

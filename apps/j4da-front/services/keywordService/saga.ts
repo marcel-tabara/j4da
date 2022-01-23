@@ -39,18 +39,45 @@ export function* watchDeleteKeyword({ payload }: TaskAction<string>) {
   }
 }
 
-export function* watchBulkRemove({ payload }: TaskAction<string[]>) {
+export function* watchKeywordsByArticleId({ payload }: TaskAction<string>) {
   try {
-    yield http.post<string[]>(`/keywords/bulkremove`, payload)
+    yield http.get<string>(`/keywords/${payload}/byArticle`)
     yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
   }
 }
 
-export function* watchBulkUpsert({ payload }: TaskAction<string[]>) {
+export function* watchExtractKeywords({
+  type,
+  payload,
+}: TaskAction<{ _id: string; text: string }>) {
   try {
-    yield http.post<string[]>(`/keywords/bulkupsert`, payload)
+    const extractedKeywords = yield http.post<{ _id: string; text: string }>(
+      '/keywords/extractKeywords',
+      { _id: payload._id, text: payload.text }
+    )
+    yield put(keywordService.actions.success(extractedKeywords.data))
+  } catch (error) {
+    yield put(alertService.actions.success(error.message))
+  }
+}
+
+export function* watchDeleteKeywordByArticleId({
+  payload,
+}: TaskAction<string>) {
+  try {
+    yield http.delete<string>(`/keywords/${payload}/deleteByArticleId`)
+    yield put(keywordService.actions.reset())
+  } catch (error) {
+    yield put(alertService.actions.success(error.message))
+  }
+}
+
+export function* watchInsertManyKeywords({ payload }: TaskAction<IKeyword[]>) {
+  console.log('########## payload', payload)
+  try {
+    yield http.post<IKeyword[]>(`/keywords/insertMany`, payload)
     yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
@@ -58,10 +85,15 @@ export function* watchBulkUpsert({ payload }: TaskAction<string[]>) {
 }
 
 export default function* rootSaga() {
+  yield takeLatest('keywords/keywordsByArticleId', watchKeywordsByArticleId)
   yield takeLatest('keywords/getKeywords', watchGetKeywords)
   yield takeLatest('keywords/createKeyword', watchCreateKeyword)
   yield takeLatest('keywords/updateKeyword', watchUpdateKeyword)
   yield takeLatest('keywords/deleteKeyword', watchDeleteKeyword)
-  yield takeLatest('keywords/bulkremove', watchBulkRemove)
-  yield takeLatest('keywords/bulkupsert', watchBulkUpsert)
+  yield takeLatest('keywords/extractKeywords', watchExtractKeywords)
+  yield takeLatest('keywords/insertMany', watchInsertManyKeywords)
+  yield takeLatest(
+    'keywords/deleteKeywordByArticleId',
+    watchDeleteKeywordByArticleId
+  )
 }

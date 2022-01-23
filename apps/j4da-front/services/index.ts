@@ -12,10 +12,6 @@ export {
   categoryByIdService,
 } from './categoryByIdService'
 export { categorySelectors, categoryService } from './categoryService'
-export {
-  extractedKeywordsSelectors,
-  extractedKeywordsService,
-} from './extractedKeywordsService'
 export { keywordByIdSelectors, keywordByIdService } from './keywordByIdService'
 export { keywordSelectors, keywordService } from './keywordService'
 export {

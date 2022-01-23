@@ -3,7 +3,6 @@ import Accordion from 'react-bootstrap/Accordion'
 import { Controller, useForm } from 'react-hook-form'
 import { MDEWrapper } from '../components/MDEWrapper'
 import { useArticleForm } from '../hooks/useArticleForm'
-import { useSelectors } from '../hooks/useSelectors'
 import {
   IApp,
   IArticle,
@@ -36,20 +35,14 @@ const ArticleForm = ({
     control,
     formState: { errors },
   } = useForm<IArticleSave>()
-  const { articlesKeywords = [] } = useSelectors()
-  console.log('########## articlesKeywords', articlesKeywords)
 
   const {
-    bodyKeywords,
-    selectedKeywords,
     onSubmit,
     onBodyChange,
-    onChangeKeywords,
     onAddKeyword,
-    onAddLink,
     onRemoveKeyword,
-    selectedArticlesKeywords,
-    articleLinks,
+    selectedKeywords,
+    keywords,
   } = useArticleForm({
     article,
     onChangeApp,
@@ -169,15 +162,6 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <h6>keywords</h6>
-          <input
-            {...register('keywords')}
-            onBlur={onChangeKeywords}
-            defaultValue={selectedKeywords.toString()}
-            className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
-          />
-        </div>
-        <div className="form-group">
           <h6>authorName</h6>
           <input
             {...register('authorName')}
@@ -194,22 +178,24 @@ const ArticleForm = ({
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
-        {articlesKeywords && (
+        {keywords && (
           <div className="form-group">
-            <h6>available keyword links</h6>
+            <h6>extracted keywords</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Artcles Keywords: {articlesKeywords.length}
+                  Total Keywords: {keywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
-                    {articlesKeywords.map((e, idx) => {
-                      const key = e.keyword + '_' + e._id
+                    {keywords.map((e, idx) => {
                       return (
-                        <li key={key} id={key} onClick={onAddLink}>
-                          {e.priority}
-                          <b>{e.keyword}</b> - {e.url}
+                        <li
+                          key={e.title + '_' + idx}
+                          id={e.title}
+                          onClick={onAddKeyword}
+                        >
+                          {e.title} <b>{e.articleLink}</b>
                         </li>
                       )
                     })}
@@ -219,87 +205,32 @@ const ArticleForm = ({
             </Accordion>
           </div>
         )}
-        {articleLinks && (
+        {selectedKeywords && (
           <div className="form-group">
-            <h6>available keyword links</h6>
+            <h6>selected keywords</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Artcles Keywords: {selectedArticlesKeywords().length}
+                  Total Selected Keywords: {selectedKeywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
-                    {selectedArticlesKeywords().map((e, idx) => {
-                      const key =
-                        e.keyword.split(' ').join('_') +
-                        '_' +
-                        idx +
-                        '_selectedKeyword'
-                      return (
-                        <li key={key} id={key} onClick={onAddLink}>
-                          {e.priority}
-                          <b>{e.keyword}</b> - {e.url}
-                        </li>
-                      )
-                    })}
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-        )}
-        {bodyKeywords && (
-          <div className="form-group">
-            <h6>body keywords</h6>
-            <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>
-                  Total Body Keywords: {bodyKeywords.length}
-                </Accordion.Header>
-                <Accordion.Body className="accordion-box">
-                  <div className="container">
-                    {bodyKeywords.map((e) => (
+                    {selectedKeywords.map((e) => (
                       <li
-                        key={e.split(' ').join('_')}
-                        id={e}
-                        onClick={onAddKeyword}
-                        className="accordion-list"
-                      >
-                        {e}
-                      </li>
-                    ))}
-                  </div>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-        )}
-        <div className="form-group">
-          <h6>selected keywords</h6>
-          <Accordion>
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>
-                Total Selected Keywords: {selectedKeywords.length}
-              </Accordion.Header>
-              <Accordion.Body className="accordion-box">
-                <div className="container">
-                  <ul className="list-unstyled card-columns">
-                    {(selectedKeywords || []).map((e) => (
-                      <li
-                        key={e.split(' ').join('_').concat('_selected')}
-                        className="accordion-list"
-                        id={e}
+                        key={e.title + '_selectd'}
+                        id={e.title}
                         onClick={onRemoveKeyword}
+                        className="accordion-list"
                       >
-                        {e}
+                        {e.title}
                       </li>
                     ))}
-                  </ul>
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-        </div>
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+        )}
         <div className="form-group">
           <h6>body mde</h6>
           <Controller
@@ -339,7 +270,7 @@ const ArticleForm = ({
           <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
-            defaultValue={article?.dateCreated}
+            defaultValue={article?.dateCreated.toString()}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>

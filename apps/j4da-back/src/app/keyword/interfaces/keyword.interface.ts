@@ -1,7 +1,8 @@
 import { Document } from 'mongoose'
+import { Article } from '../../article/interfaces/article.interface'
 
 export interface Keyword extends Document {
   readonly title: string
-  readonly description: string
-  readonly count: number
+  readonly article: Article
+  readonly articleLink: Article
 }

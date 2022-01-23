@@ -13,6 +13,7 @@ import {
 import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { KeywordDTO } from './dto/keyword.dto'
+import { Keyword } from './interfaces/keyword.interface'
 import { KeywordService } from './keyword.service'
 
 @Controller('keywords')
@@ -21,9 +22,19 @@ export class KeywordController {
 
   @Get()
   async find(@Res() res) {
-    const keywords = await this.keywordService.find()
+    const keywords = await this.keywordService.find({})
 
     return res.status(HttpStatus.OK).json(keywords.sort(sortByTitle))
+  }
+
+  @Get('/:_id/byArticleLink')
+  async findByArticleLink(
+    @Res() res,
+    @Param('_id', new ValidateObjectId()) _id
+  ) {
+    const keywords = await this.keywordService.find({ articleLink: _id })
+
+    return res.status(HttpStatus.OK).json(keywords)
   }
 
   @Get('/:_id')
@@ -31,6 +42,15 @@ export class KeywordController {
     const keyword = await this.keywordService.findById(_id)
     if (!keyword) throw new NotFoundException('Keyword does not exist!')
     return res.status(HttpStatus.OK).json(keyword)
+  }
+
+  @Post('/insertMany')
+  async insertMany(@Res() res, @Body() keywords: Keyword[]) {
+    const keyword = await this.keywordService.insertMany(keywords)
+    return res.status(HttpStatus.OK).json({
+      message: 'success',
+      keyword,
+    })
   }
 
   @Post('/add')
@@ -56,26 +76,6 @@ export class KeywordController {
     })
   }
 
-  @Post('/bulkupsert')
-  async findManyAndUpdate(@Res() res, @Body() keywords: string[]) {
-    const upsertmany = await this.keywordService.findManyAndUpdate(keywords)
-
-    return res.status(HttpStatus.OK).json({
-      message: 'success',
-      upsertmany,
-    })
-  }
-
-  @Post('/bulkremove')
-  async findManyAndRemove(@Res() res, @Body() keywords: string[]) {
-    const upsertmany = await this.keywordService.findManyAndRemove(keywords)
-
-    return res.status(HttpStatus.OK).json({
-      message: 'success',
-      upsertmany,
-    })
-  }
-
   @Delete(':_id/delete')
   async findByIdAndRemove(
     @Res() res,
@@ -87,5 +87,30 @@ export class KeywordController {
       message: 'success',
       keyword,
     })
+  }
+
+  @Delete(':_id/deleteByArticleId')
+  async findByArticleIdAndRemove(
+    @Res() res,
+    @Param('_id', new ValidateObjectId()) _id
+  ) {
+    const keyword = await this.keywordService.remove({ article: _id })
+    if (!keyword) throw new NotFoundException('Keyword does not exist!')
+    return res.status(HttpStatus.OK).json({
+      message: 'success',
+      keyword,
+    })
+  }
+
+  @Post('/extractKeywords')
+  async extractKeywords(
+    @Res() res,
+    @Body() article: { _id: string; text: string }
+  ) {
+    const extractedKeywords = await this.keywordService.extractKeywords({
+      _id: article._id,
+      text: article.text,
+    })
+    return res.status(HttpStatus.OK).json(extractedKeywords)
   }
 }

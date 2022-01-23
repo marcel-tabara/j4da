@@ -18,10 +18,10 @@ export interface IApp {
   title?: string
   images?: string | string[]
   section?: string
-  keywords?: string
-  dateCreated?: string
-  datePublished?: string
-  dateModified?: string
+  keywords?: IKeyword[]
+  dateCreated?: Date
+  datePublished?: Date
+  dateModified?: Date
   authorName?: string
   description?: string
   body?: string
@@ -33,8 +33,8 @@ export interface IApp {
 export interface IKeyword {
   _id: string
   title?: string
-  description?: string
-  count?: number
+  article: string
+  articleLink: string
 }
 
 export interface IArticle {
@@ -43,11 +43,10 @@ export interface IArticle {
   url?: string
   title: string
   images?: string | string[]
-  keywords?: string
-  links?: IArticlesKeyword[]
-  dateCreated?: string
-  datePublished?: string
-  dateModified?: string
+  keywords?: IKeyword[]
+  dateCreated?: Date
+  datePublished?: Date
+  dateModified?: Date
   authorName?: string
   description?: string
   body?: string
@@ -66,11 +65,10 @@ export interface IArticleSave {
   url?: string
   title: string
   images?: string | string[]
-  keywords?: string
-  links?: IArticlesKeyword[]
-  dateCreated?: string
-  datePublished?: string
-  dateModified?: string
+  keywords?: IKeyword[]
+  dateCreated?: Date
+  datePublished?: Date
+  dateModified?: Date
   authorName?: string
   description?: string
   body?: string

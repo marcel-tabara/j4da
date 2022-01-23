@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
 import { CategoryDTO } from './dto/category.dto'
@@ -11,6 +11,7 @@ export class CategoryService {
   ) {}
 
   async find(query): Promise<Category[]> {
+    Logger.log(`CategoryService: Find categories ${JSON.stringify(query)}.`)
     return await this.categoryModel.find(query).populate({
       path: 'app',
       select: '_id, title',
@@ -19,6 +20,7 @@ export class CategoryService {
   }
 
   async findById(_id): Promise<Category> {
+    Logger.log(`CategoryService: Find category by id ${_id}.`)
     return await this.categoryModel
       .findOne({ _id })
       .populate({
@@ -30,6 +32,7 @@ export class CategoryService {
   }
 
   async add(categoryDTO: CategoryDTO): Promise<Category> {
+    Logger.log(`CategoryService: Add category.`)
     const category = await new this.categoryModel(categoryDTO)
     return category.save()
   }
@@ -38,6 +41,7 @@ export class CategoryService {
     _id: string,
     categoryDTO: CategoryDTO & { _id: string }
   ): Promise<Category> {
+    Logger.log(`CategoryService: FindByIdAndUpdate ${_id}.`)
     const newCat = await this.categoryModel.findByIdAndUpdate(
       _id,
       categoryDTO,
@@ -49,6 +53,7 @@ export class CategoryService {
   }
 
   async findByIdAndRemove(_id): Promise<unknown> {
+    Logger.log(`CategoryService: FindByIdAndRemove ${_id}.`)
     return await this.categoryModel.findByIdAndRemove(_id)
   }
 }

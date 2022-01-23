@@ -11,9 +11,15 @@ export class Keyword {
 
   @Prop()
   title: string
-  @Prop()
-  description: string
-  @Prop()
-  count: number
+  article: string
+  articleLink: string
+
+  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Article.name })
+  // @Type(() => Article)
+  // article: Article
+
+  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Article.name })
+  // @Type(() => Article)
+  // articleLink: Article
 }
 export const KeywordSchema = SchemaFactory.createForClass(Keyword)

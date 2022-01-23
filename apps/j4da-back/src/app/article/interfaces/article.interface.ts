@@ -2,7 +2,6 @@ import { Document } from 'mongoose'
 import { App } from '../../app/interfaces/app.interface'
 import { Category } from '../../category/interfaces/category.interface'
 import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
-import { ArticlesKeywords } from './article-keywords.interface'
 
 export interface Article extends Document {
   readonly _id?: string
@@ -10,10 +9,9 @@ export interface Article extends Document {
   readonly url: string
   readonly title: string
   readonly images: ReadonlyArray<string>
-  readonly keywords: string
-  readonly dateCreated: string
-  readonly datePublished: string
-  readonly dateModified?: string
+  readonly dateCreated: Date
+  readonly datePublished: Date
+  readonly dateModified?: Date
   readonly authorName: string
   readonly description: string
   readonly body: string
@@ -24,5 +22,4 @@ export interface Article extends Document {
   readonly subcategory: Subcategory
   readonly app: App
   readonly priority: number
-  readonly links: ArticlesKeywords
 }

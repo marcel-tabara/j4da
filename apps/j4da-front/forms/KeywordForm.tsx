@@ -44,17 +44,17 @@ const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
         <div className="form-group">
           <h6>Keyword Description</h6>
           <textarea
-            {...register('description')}
-            defaultValue={keywordById?.description}
-            className={`form-control ${errors.description ? 'is-invalid' : ''}`}
+            {...register('article')}
+            defaultValue={keywordById?.article}
+            className={`form-control ${errors.article ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
           <h6>Keyword Count</h6>
           <input
-            {...register('count')}
-            defaultValue={keywordById?.count}
-            className={`form-control ${errors.count ? 'is-invalid' : ''}`}
+            {...register('articleLink')}
+            defaultValue={keywordById?.articleLink}
+            className={`form-control ${errors.articleLink ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
