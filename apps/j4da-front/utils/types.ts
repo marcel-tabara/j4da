@@ -77,11 +77,6 @@ export interface IArticleSave {
   priority: number
 }
 
-export interface GetArticlesKeywordsPayload {
-  keywords: string[]
-  _id: string
-}
-
 export interface IArticles {
   total: number
   skip: number

@@ -5,7 +5,6 @@ import {
   appSelectors,
   articleByIdSelectors,
   articleSelectors,
-  articlesKeywordsSelectors,
   categoryByIdSelectors,
   categorySelectors,
   keywordByIdSelectors,
@@ -26,11 +25,6 @@ export const useSelectors = () => {
     available: allArticlesAvailable,
     fetching: allArticlesFetching,
   } = useSelector(articleSelectors.articlesSelector)
-  const {
-    data: articlesKeywords,
-    available: articlesKeywordsAvailable,
-    fetching: articlesKeywordsFetching,
-  } = useSelector(articlesKeywordsSelectors.articleKeywordsSelector)
 
   const {
     data: allApps,
@@ -98,9 +92,6 @@ export const useSelectors = () => {
     articleById,
     articleByIdAvailable,
     articleByIdFetching,
-    articlesKeywords,
-    articlesKeywordsAvailable,
-    articlesKeywordsFetching,
     //
     allApps,
     allAppsAvailable,
