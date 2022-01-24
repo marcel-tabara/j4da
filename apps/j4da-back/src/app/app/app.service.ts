@@ -9,7 +9,7 @@ export class AppService {
   constructor(@InjectModel('App') private readonly appModel: Model<App>) {}
 
   async find(query): Promise<App[]> {
-    Logger.log(`AppService: Find apps ${JSON.stringify(query)}.`)
+    Logger.log(`AppService: Find apps ${JSON.stringify(query, null, 2)}.`)
     return await this.appModel.find().exec()
   }
 

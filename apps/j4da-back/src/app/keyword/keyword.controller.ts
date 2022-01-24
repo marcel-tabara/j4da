@@ -13,7 +13,6 @@ import {
 import { sortByTitle } from '../shared/pipes/utils'
 import { ValidateObjectId } from '../shared/pipes/validate-object-id.pipes'
 import { KeywordDTO } from './dto/keyword.dto'
-import { Keyword } from './interfaces/keyword.interface'
 import { KeywordService } from './keyword.service'
 
 @Controller('keywords')
@@ -42,15 +41,6 @@ export class KeywordController {
     const keyword = await this.keywordService.findById(_id)
     if (!keyword) throw new NotFoundException('Keyword does not exist!')
     return res.status(HttpStatus.OK).json(keyword)
-  }
-
-  @Post('/insertMany')
-  async insertMany(@Res() res, @Body() keywords: Keyword[]) {
-    const keyword = await this.keywordService.insertMany(keywords)
-    return res.status(HttpStatus.OK).json({
-      message: 'success',
-      keyword,
-    })
   }
 
   @Post('/add')

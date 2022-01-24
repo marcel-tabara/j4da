@@ -12,7 +12,7 @@ export class SubcategoryService {
   ) {}
 
   async find(query): Promise<Subcategory[]> {
-    Logger.log(`SubcategoryService: find ${JSON.stringify(query)}`)
+    Logger.log(`SubcategoryService: find ${JSON.stringify(query, null, 2)}`)
     return await this.subcategoryModel.find(query).populate({
       path: 'category',
       select: '_id, slug',

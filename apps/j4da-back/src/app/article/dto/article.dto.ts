@@ -1,5 +1,6 @@
 import { App } from '../../app/interfaces/app.interface'
 import { Category } from '../../category/interfaces/category.interface'
+import { Keyword } from '../../keyword/interfaces/keyword.interface'
 import { Subcategory } from '../../subcategory/interfaces/subcategory.interface'
 
 export class ArticleDTO {
@@ -20,4 +21,5 @@ export class ArticleDTO {
   readonly subcategory: Subcategory
   readonly app: App
   readonly _id: string
+  readonly keywords: Keyword[]
 }

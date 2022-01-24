@@ -11,7 +11,9 @@ export class CategoryService {
   ) {}
 
   async find(query): Promise<Category[]> {
-    Logger.log(`CategoryService: Find categories ${JSON.stringify(query)}.`)
+    Logger.log(
+      `CategoryService: Find categories ${JSON.stringify(query, null, 2)}.`
+    )
     return await this.categoryModel.find(query).populate({
       path: 'app',
       select: '_id, title',

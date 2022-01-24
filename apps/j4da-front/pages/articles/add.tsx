@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
 import { useCategories } from '../../hooks/useCategories'
-import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
 import { useSubcategories } from '../../hooks/useSubcategories'
 import { Main } from '../../templates/Main'
@@ -12,7 +11,6 @@ const ArticleAdd = () => {
   useCategories()
   useSubcategories()
   useApps()
-  useKeywords()
 
   const { allApps, allCategories, allSubcategories } = useSelectors()
 
@@ -45,7 +43,7 @@ const ArticleAdd = () => {
     },
     [allCategories, onChangeCategory]
   )
-  const article = { dateCreated: new Date().toISOString() } as IArticle
+  const article = { dateCreated: new Date() } as IArticle
   return (
     <Main>
       <ArticleForm

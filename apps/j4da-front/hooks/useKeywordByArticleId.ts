@@ -5,7 +5,7 @@ import { IKeyword } from '../utils/types'
 import { useSelectors } from './useSelectors'
 
 export const useKeywordByArticleId = (
-  _id: string
+  _id?: string
 ): {
   keywordsByArticleId: IKeyword[]
   keywordsByArticleIdAvailable: boolean

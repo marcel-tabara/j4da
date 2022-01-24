@@ -195,7 +195,7 @@ const ArticleForm = ({
                           id={e.title}
                           onClick={onAddKeyword}
                         >
-                          {e.title} <b>{e.articleLink}</b>
+                          {e.title} <b>{e.article?.url}</b>
                         </li>
                       )
                     })}
@@ -220,9 +220,8 @@ const ArticleForm = ({
                         key={e.title + '_selectd'}
                         id={e.title}
                         onClick={onRemoveKeyword}
-                        className="accordion-list"
                       >
-                        {e.title}
+                        {e.title} {e.article?.url}
                       </li>
                     ))}
                   </div>

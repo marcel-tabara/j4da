@@ -75,7 +75,6 @@ export function* watchDeleteKeywordByArticleId({
 }
 
 export function* watchInsertManyKeywords({ payload }: TaskAction<IKeyword[]>) {
-  console.log('########## payload', payload)
   try {
     yield http.post<IKeyword[]>(`/keywords/insertMany`, payload)
     yield put(keywordService.actions.reset())

@@ -5,6 +5,7 @@ import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
 import { AppService } from '../app/app.service'
 import { CategoryService } from '../category/category.service'
+import { KeywordService } from '../keyword/keyword.service'
 import { SubcategoryService } from '../subcategory/subcategory.service'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
@@ -16,12 +17,15 @@ export class ArticleService {
   constructor(
     @InjectModel('Article') private readonly articleModel: Model<Article>,
     private readonly categoryService: CategoryService,
+    private readonly keywordService: KeywordService,
     private readonly subcategoryService: SubcategoryService,
     private readonly appService: AppService
   ) {}
 
   async find(paginationQuery: PaginationDto, query): Promise<Article[]> {
-    Logger.log(`ArticleService: Find articles ${JSON.stringify(query)}`)
+    Logger.log(
+      `ArticleService: Find articles ${JSON.stringify(query, null, 2)}`
+    )
     const { limit, skip, sort } = paginationQuery
     return await this.articleModel
       .find(query)
@@ -69,8 +73,15 @@ export class ArticleService {
   }
 
   async create(articleDTO: ArticleDTO): Promise<Article> {
-    Logger.log(`ArticleService: Create article.`)
-    const newArticle = await new this.articleModel(articleDTO)
+    Logger.log(
+      `ArticleService: Create article. ${JSON.stringify(articleDTO, null, 2)}`
+    )
+    const newArticle = await new this.articleModel(articleDTO).save()
+
+    this.keywordService.insertMany({
+      _id: newArticle._id,
+      keywords: articleDTO.keywords,
+    })
     // const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
     //   article: articleDTO,
     // })
@@ -83,7 +94,7 @@ export class ArticleService {
     //   subcatSlug,
     // })
 
-    return newArticle.save()
+    return newArticle
   }
 
   async findByIdAndUpdate(
@@ -141,6 +152,7 @@ export class ArticleService {
       catSlug,
       subcatSlug,
     })
+    this.keywordService.remove({ article: _id })
     this.removeArticleFile({ article, catSlug, subcatSlug })
 
     return await this.articleModel.findByIdAndRemove(_id)

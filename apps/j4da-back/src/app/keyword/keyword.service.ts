@@ -15,15 +15,18 @@ export class KeywordService {
     Logger.log('ArticleService: Extrating keywords.')
     const extractedKeywords = rake(text, { language: 'english' })
 
-    const keywords = await this.find({ keyword: { $in: extractedKeywords } })
+    const keywords = await this.find({
+      keyword: { $in: extractedKeywords },
+    })
+
     const keys = keywords.map((e) => e.title)
 
     const transformedExtractedKeywords = extractedKeywords
       .map((e) => {
         return {
           title: e,
-          article: _id || '',
-          articleLink: '',
+          article: _id || undefined,
+          articleLink: undefined,
         }
       })
       .filter((e) => !keys.includes(e.title))
@@ -31,8 +34,22 @@ export class KeywordService {
   }
 
   async find(query): Promise<Keyword[]> {
-    Logger.log(`KeywordService: Find keywords ${JSON.stringify(query)}.`)
-    return await this.keywordModel.find(query).exec()
+    Logger.log(
+      `KeywordService: Find keywords ${JSON.stringify(query, null, 2)}.`
+    )
+    return await this.keywordModel
+      .find(query)
+      .populate({
+        path: 'article',
+        select: '_id, url',
+        strictPopulate: false,
+      })
+      .populate({
+        path: 'articleLink',
+        select: '_id, url',
+        strictPopulate: false,
+      })
+      .exec()
   }
 
   async findById(_id): Promise<Keyword> {
@@ -62,14 +79,31 @@ export class KeywordService {
   }
 
   async remove(query): Promise<Keyword[]> {
-    Logger.log(`KeywordService: Remove keywords ${JSON.stringify(query)}.`)
+    Logger.log(
+      `KeywordService: Remove keywords ${JSON.stringify(query, null, 2)}.`
+    )
     return await this.keywordModel.remove(query).exec()
   }
 
-  async insertMany(keywords: Keyword[]): Promise<Keyword[]> {
+  async insertMany({ _id, keywords }): Promise<Keyword[]> {
     Logger.log(
-      `KeywordService: insertMany keywords ${JSON.stringify(keywords)}.`
+      `KeywordService: insertMany keywords ${JSON.stringify(
+        keywords,
+        null,
+        2
+      )}.`
     )
-    return await this.keywordModel.insertMany(keywords)
+    const updatedKeywords = keywords.map((e) => {
+      return {
+        ...e,
+        article: _id,
+        articleLink: undefined,
+        _id: undefined,
+      }
+    })
+
+    return await this.keywordModel.insertMany(updatedKeywords, {
+      ordered: false,
+    })
   }
 }

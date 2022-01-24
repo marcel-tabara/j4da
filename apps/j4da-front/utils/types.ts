@@ -1,16 +1,6 @@
 import { Action } from '@reduxjs/toolkit'
 import { ReactNode } from 'react'
 
-export interface IArticlesKeyword {
-  keyword: string
-  url: string
-  slug: string
-  category: string
-  subcategory: string
-  priority: number
-  _id: string
-}
-
 export interface IApp {
   _id: string
   keyOverride?: string
@@ -33,8 +23,14 @@ export interface IApp {
 export interface IKeyword {
   _id: string
   title?: string
-  article: string
-  articleLink: string
+  article: {
+    _id: string
+    url: string
+  }
+  articleLink: {
+    _id: string
+    url: string
+  }
 }
 
 export interface IArticle {

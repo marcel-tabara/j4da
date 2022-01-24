@@ -22,12 +22,12 @@ export const useArticleForm = ({
 }: Props) => {
   const dispatch = useDispatch()
   const router = useRouter()
+
   const { keywords, keywordsByArticleId } = useSelectors()
   const [selectedKeywords, setSelectedKeywords] = useState<IKeyword[]>(
     keywordsByArticleId || []
   )
 
-  console.log('########## selectedKeywords', selectedKeywords)
   useEffect(() => {
     Boolean(article?.app?._id) &&
       onChangeApp({
@@ -59,14 +59,20 @@ export const useArticleForm = ({
   const onSubmit = handleSubmit((data: IArticle) => {
     if (article?._id) {
       dispatch(
-        articleService.actions.updateArticle({ ...data, _id: article?._id })
+        articleService.actions.updateArticle({
+          ...data,
+          _id: article?._id,
+          keywords: selectedKeywords,
+        })
       )
-      dispatch(keywordService.actions.deleteKeywordByArticleId(article._id))
     } else {
-      dispatch(articleService.actions.createArticle(data))
+      dispatch(
+        articleService.actions.createArticle({
+          ...data,
+          keywords: selectedKeywords,
+        })
+      )
     }
-    dispatch(keywordService.actions.insertMany(selectedKeywords))
-
     router.replace('/articles')
   })
   const onBodyChange = useCallback(
@@ -83,9 +89,8 @@ export const useArticleForm = ({
       const find = keywords.find((e) => e.title === event.target.id)
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
-      setValue('keywords', newSelectedKeywords.map((e) => e.title).join(','))
     },
-    [keywords, selectedKeywords, setValue]
+    [keywords, selectedKeywords]
   )
   const onRemoveKeyword = useCallback(
     (event) => {
@@ -93,9 +98,8 @@ export const useArticleForm = ({
         (e) => e.title !== event.target.id
       )
       setSelectedKeywords(newSelectedKeywords)
-      setValue('keywords', newSelectedKeywords.toString())
     },
-    [selectedKeywords, setValue]
+    [selectedKeywords]
   )
 
   return {
