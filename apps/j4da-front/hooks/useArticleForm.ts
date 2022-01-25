@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { FormEventHandler, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { articleService, keywordService } from '../services'
+import { articleService, keywordExtractionService } from '../services'
 import { IArticle, IKeyword } from '../utils/types'
 import { useSelectors } from './useSelectors'
 
@@ -23,7 +23,7 @@ export const useArticleForm = ({
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const { keywords, keywordsByArticleId } = useSelectors()
+  const { extractedKeywords, keywordsByArticleId } = useSelectors()
   const [selectedKeywords, setSelectedKeywords] = useState<IKeyword[]>(
     keywordsByArticleId || []
   )
@@ -42,7 +42,7 @@ export const useArticleForm = ({
   const extractKeywords = useCallback(
     (text: string) => {
       dispatch(
-        keywordService.actions.extractKeywords({
+        keywordExtractionService.actions.extractKeywords({
           _id: article._id,
           text,
         })
@@ -86,11 +86,11 @@ export const useArticleForm = ({
   )
   const onAddKeyword = useCallback(
     (event) => {
-      const find = keywords.find((e) => e.title === event.target.id)
+      const find = extractedKeywords.find((e) => e.title === event.target.id)
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
     },
-    [keywords, selectedKeywords]
+    [extractedKeywords, selectedKeywords]
   )
   const onRemoveKeyword = useCallback(
     (event) => {
@@ -110,6 +110,6 @@ export const useArticleForm = ({
     onBodyChange,
     onAddKeyword,
     onRemoveKeyword,
-    keywords,
+    extractedKeywords,
   }
 }

@@ -9,6 +9,10 @@ export {
 } from './categoryByIdService'
 export { categorySelectors, categoryService } from './categoryService'
 export { keywordByIdSelectors, keywordByIdService } from './keywordByIdService'
+export {
+  keywordExtractionSelectors,
+  keywordExtractionService,
+} from './keywordExtractionService'
 export { keywordSelectors, keywordService } from './keywordService'
 export {
   subcategoryByIdSelectors,

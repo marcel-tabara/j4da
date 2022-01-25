@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+// import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
 import rake from 'rake-js'
 import { KeywordDTO } from './dto/keyword.dto'
@@ -12,11 +13,12 @@ export class KeywordService {
   ) {}
 
   async extractKeywords({ _id, text }): Promise<Keyword[]> {
-    Logger.log('ArticleService: Extrating keywords.')
+    Logger.log(`ArticleService: Extrating keywords. _id: ${_id}`)
     const extractedKeywords = rake(text, { language: 'english' })
 
     const keywords = await this.find({
       keyword: { $in: extractedKeywords },
+      article: { $ne: _id },
     })
 
     const keys = keywords.map((e) => e.title)
@@ -97,7 +99,7 @@ export class KeywordService {
       return {
         ...e,
         article: _id,
-        articleLink: undefined,
+        articleLink: e.article,
         _id: undefined,
       }
     })

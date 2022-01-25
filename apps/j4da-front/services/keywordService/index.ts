@@ -28,12 +28,6 @@ const keywordService = createGenericSlice({
     getKeywordsByArticleId: (state, action: PayloadAction<string>) => {
       state.fetching = true
     },
-    extractKeywords: (
-      state,
-      action: PayloadAction<{ _id: string; text: string }>
-    ) => {
-      state.fetching = true
-    },
     deleteKeywordByArticleId: (state, action: PayloadAction<string>) => {
       state.fetching = true
     },

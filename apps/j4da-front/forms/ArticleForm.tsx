@@ -42,7 +42,7 @@ const ArticleForm = ({
     onAddKeyword,
     onRemoveKeyword,
     selectedKeywords,
-    keywords,
+    extractedKeywords,
   } = useArticleForm({
     article,
     onChangeApp,
@@ -178,17 +178,17 @@ const ArticleForm = ({
             className={`form-control ${errors.description ? 'is-invalid' : ''}`}
           />
         </div>
-        {keywords && (
+        {extractedKeywords && (
           <div className="form-group">
             <h6>extracted keywords</h6>
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Keywords: {keywords.length}
+                  Total Keywords: {extractedKeywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
-                    {keywords.map((e, idx) => {
+                    {extractedKeywords.map((e, idx) => {
                       return (
                         <li
                           key={e.title + '_' + idx}
@@ -217,7 +217,7 @@ const ArticleForm = ({
                   <div className="container">
                     {selectedKeywords.map((e) => (
                       <li
-                        key={e.title + '_selectd'}
+                        key={e.title + e.article._id}
                         id={e.title}
                         onClick={onRemoveKeyword}
                       >

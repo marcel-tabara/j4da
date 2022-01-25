@@ -22,18 +22,16 @@ export class KeywordController {
   @Get()
   async find(@Res() res) {
     const keywords = await this.keywordService.find({})
-
     return res.status(HttpStatus.OK).json(keywords.sort(sortByTitle))
   }
 
-  @Get('/:_id/byArticleLink')
+  @Get('/:_id/byArticle')
   async findByArticleLink(
     @Res() res,
     @Param('_id', new ValidateObjectId()) _id
   ) {
-    const keywords = await this.keywordService.find({ articleLink: _id })
-
-    return res.status(HttpStatus.OK).json(keywords)
+    const keywords = await this.keywordService.find({ article: _id })
+    return res.status(HttpStatus.OK).json(keywords.sort(sortByTitle))
   }
 
   @Get('/:_id')

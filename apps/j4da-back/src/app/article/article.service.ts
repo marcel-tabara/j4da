@@ -82,17 +82,17 @@ export class ArticleService {
       _id: newArticle._id,
       keywords: articleDTO.keywords,
     })
-    // const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
-    //   article: articleDTO,
-    // })
-    // this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+      article: articleDTO,
+    })
+    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
 
-    // this.generatCatSubcatFile({
-    //   app: articleDTO.app,
-    //   catSlug,
-    //   catId,
-    //   subcatSlug,
-    // })
+    this.generatCatSubcatFile({
+      app: articleDTO.app,
+      catSlug,
+      catId,
+      subcatSlug,
+    })
 
     return newArticle
   }
@@ -111,6 +111,14 @@ export class ArticleService {
       article: articleDTO,
     })
 
+    // update keywords
+    this.keywordService.remove({ article: _id })
+    this.keywordService.insertMany({
+      _id: _id,
+      keywords: articleDTO.keywords,
+    })
+
+    // update files
     this.removeCatSubcatFile({
       app: article.app.toString(),
       catSlug: oldCatSlug,
@@ -282,19 +290,20 @@ export class ArticleService {
         Array.isArray(value) ? `\n` : ' '
       return value && `${type}:${isArray(value)}${getValue(value)}\n`
     }
-    return `---
-${get('title', article?.title)}${get('category', catSlug)}${get(
-      'subcategory',
-      subcatSlug
-    )}${get('description', article?.description)}${get(
-      'date',
-      article?.dateCreated
-    )}${get('image', article?.images as string[])}${get(
-      'tags',
-      article?.keywords.split(',')
-    )}${get('slug', article?.slug)}${get('author', article?.authorName)}
----
+    //     return `---
+    // ${get('title', article?.title)}${get('category', catSlug)}${get(
+    //       'subcategory',
+    //       subcatSlug
+    //     )}${get('description', article?.description)}${get(
+    //       'date',
+    //       article?.dateCreated
+    //     )}${get('image', article?.images as string[])}${get(
+    //       'tags',
+    //       article?.keywords.map((e) => e.title)
+    //     )}${get('slug', article?.slug)}${get('author', article?.authorName)}
+    // ---
 
-`
+    // `
+    return ''
   }
 }

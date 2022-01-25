@@ -41,23 +41,8 @@ export function* watchDeleteKeyword({ payload }: TaskAction<string>) {
 
 export function* watchKeywordsByArticleId({ payload }: TaskAction<string>) {
   try {
-    yield http.get<string>(`/keywords/${payload}/byArticle`)
-    yield put(keywordService.actions.reset())
-  } catch (error) {
-    yield put(alertService.actions.success(error.message))
-  }
-}
-
-export function* watchExtractKeywords({
-  type,
-  payload,
-}: TaskAction<{ _id: string; text: string }>) {
-  try {
-    const extractedKeywords = yield http.post<{ _id: string; text: string }>(
-      '/keywords/extractKeywords',
-      { _id: payload._id, text: payload.text }
-    )
-    yield put(keywordService.actions.success(extractedKeywords.data))
+    const keywords = yield http.get<string>(`/keywords/${payload}/byArticle`)
+    yield put(keywordService.actions.success(keywords.data))
   } catch (error) {
     yield put(alertService.actions.success(error.message))
   }
@@ -84,12 +69,11 @@ export function* watchInsertManyKeywords({ payload }: TaskAction<IKeyword[]>) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest('keywords/keywordsByArticleId', watchKeywordsByArticleId)
+  yield takeLatest('keywords/getKeywordsByArticleId', watchKeywordsByArticleId)
   yield takeLatest('keywords/getKeywords', watchGetKeywords)
   yield takeLatest('keywords/createKeyword', watchCreateKeyword)
   yield takeLatest('keywords/updateKeyword', watchUpdateKeyword)
   yield takeLatest('keywords/deleteKeyword', watchDeleteKeyword)
-  yield takeLatest('keywords/extractKeywords', watchExtractKeywords)
   yield takeLatest('keywords/insertMany', watchInsertManyKeywords)
   yield takeLatest(
     'keywords/deleteKeywordByArticleId',

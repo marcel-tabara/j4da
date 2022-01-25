@@ -6,7 +6,6 @@ import { useApps } from '../../hooks/useApps'
 import { useArticleById } from '../../hooks/useArticleById'
 import { useCategories } from '../../hooks/useCategories'
 import { useKeywordByArticleId } from '../../hooks/useKeywordByArticleId'
-import { useKeywords } from '../../hooks/useKeywords'
 import { useSelectors } from '../../hooks/useSelectors'
 import { useSubcategories } from '../../hooks/useSubcategories'
 import { Main } from '../../templates/Main'
@@ -19,7 +18,6 @@ const ArticleById = () => {
   useCategories()
   useSubcategories()
   useApps()
-  useKeywords()
   useArticleById(_id as string)
   useKeywordByArticleId(_id as string)
 
