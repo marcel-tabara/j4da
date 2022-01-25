@@ -195,7 +195,7 @@ const ArticleForm = ({
                           id={e.title}
                           onClick={onAddKeyword}
                         >
-                          {e.title} <b>{e.article?.url}</b>
+                          {e.title} <b>{e?.article?.url}</b>
                         </li>
                       )
                     })}
@@ -217,11 +217,17 @@ const ArticleForm = ({
                   <div className="container">
                     {selectedKeywords.map((e) => (
                       <li
-                        key={e.title + e.article._id}
+                        key={e.title + e?.article?._id}
                         id={e.title}
                         onClick={onRemoveKeyword}
                       >
-                        {e.title} {e.article?.url}
+                        {e.title}{' '}
+                        <b>
+                          {article._id !== e?.articleLink?._id &&
+                            e?.articleLink?.url}
+                        </b>{' '}
+                        {article._id !== e?.articleLink?._id &&
+                          e?.articleLink?._id}
                       </li>
                     ))}
                   </div>

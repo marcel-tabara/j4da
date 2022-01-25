@@ -25,8 +25,12 @@ export const useArticleForm = ({
 
   const { extractedKeywords, keywordsByArticleId } = useSelectors()
   const [selectedKeywords, setSelectedKeywords] = useState<IKeyword[]>(
-    keywordsByArticleId || []
+    keywordsByArticleId ? keywordsByArticleId : []
   )
+
+  useEffect(() => {
+    setSelectedKeywords(keywordsByArticleId)
+  }, [keywordsByArticleId])
 
   useEffect(() => {
     Boolean(article?.app?._id) &&
@@ -56,23 +60,28 @@ export const useArticleForm = ({
     [article?.body, extractKeywords]
   )
 
-  const onSubmit = handleSubmit((data: IArticle) => {
-    if (article?._id) {
-      dispatch(
-        articleService.actions.updateArticle({
-          ...data,
-          _id: article?._id,
-          keywords: selectedKeywords,
-        })
-      )
-    } else {
-      dispatch(
-        articleService.actions.createArticle({
-          ...data,
-          keywords: selectedKeywords,
-        })
-      )
+  useEffect(() => {
+    return () => {
+      dispatch(keywordExtractionService.actions.reset())
     }
+  }, [dispatch])
+
+  const onSubmit = handleSubmit((data: IArticle) => {
+    article?._id
+      ? dispatch(
+          articleService.actions.updateArticle({
+            ...data,
+            _id: article?._id,
+            keywords: selectedKeywords,
+          })
+        )
+      : dispatch(
+          articleService.actions.createArticle({
+            ...data,
+            keywords: selectedKeywords,
+          })
+        )
+
     router.replace('/articles')
   })
   const onBodyChange = useCallback(

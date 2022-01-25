@@ -80,11 +80,11 @@ export class KeywordService {
     return await this.keywordModel.findByIdAndRemove(_id)
   }
 
-  async remove(query): Promise<Keyword[]> {
+  async remove(query): Promise<unknown> {
     Logger.log(
       `KeywordService: Remove keywords ${JSON.stringify(query, null, 2)}.`
     )
-    return await this.keywordModel.remove(query).exec()
+    return await this.keywordModel.deleteMany(query).exec()
   }
 
   async insertMany({ _id, keywords }): Promise<Keyword[]> {
