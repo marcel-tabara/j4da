@@ -17,7 +17,7 @@ export class KeywordService {
     const extractedKeywords = rake(text, { language: 'english' })
 
     const keywords = await this.find({
-      keyword: { $in: extractedKeywords },
+      title: { $in: extractedKeywords },
       article: { $ne: _id },
     })
 

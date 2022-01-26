@@ -24,12 +24,11 @@ export const useArticleForm = ({
   const router = useRouter()
 
   const { extractedKeywords, keywordsByArticleId } = useSelectors()
-  const [selectedKeywords, setSelectedKeywords] = useState<IKeyword[]>(
-    keywordsByArticleId ? keywordsByArticleId : []
-  )
+  const [selectedKeywords, setSelectedKeywords] =
+    useState<IKeyword[]>(keywordsByArticleId)
 
   useEffect(() => {
-    setSelectedKeywords(keywordsByArticleId)
+    setSelectedKeywords(keywordsByArticleId || [])
   }, [keywordsByArticleId])
 
   useEffect(() => {

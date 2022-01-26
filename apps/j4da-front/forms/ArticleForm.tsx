@@ -195,7 +195,10 @@ const ArticleForm = ({
                           id={e.title}
                           onClick={onAddKeyword}
                         >
-                          {e.title} <b>{e?.article?.url}</b>
+                          {e.title} <b>{e?.article?.url}</b> {e?.article?._id}
+                          {selectedKeywords
+                            .map((e) => e.title)
+                            .includes(e.title) && <b> existing</b>}
                         </li>
                       )
                     })}
@@ -228,6 +231,9 @@ const ArticleForm = ({
                         </b>{' '}
                         {article._id !== e?.articleLink?._id &&
                           e?.articleLink?._id}
+                        {!(extractedKeywords || [])
+                          .map((e) => e.title)
+                          .includes(e.title) && <b> non existing</b>}
                       </li>
                     ))}
                   </div>

@@ -199,7 +199,7 @@ export class ArticleService {
     const subcat = path.join(subCatPath, 'bySubCat.json')
     fs.writeFileSync(cat, JSON.stringify(articlesByCat, null, 2))
     const articlesBySubCat = articlesByCat.filter(
-      (a) => a.subcategory === subcatSlug
+      (a) => a.subcategory.slug === subcatSlug
     )
     fs.writeFileSync(subcat, JSON.stringify(articlesBySubCat, null, 2))
   }
@@ -239,7 +239,7 @@ export class ArticleService {
       if (!fs.existsSync(dirname)) {
         fs.mkdirSync(dirname, { recursive: true })
       }
-      fs.writeFileSync(filePath, e + article.body)
+      fs.writeFileSync(filePath, e)
     })
   }
 
@@ -290,20 +290,20 @@ export class ArticleService {
         Array.isArray(value) ? `\n` : ' '
       return value && `${type}:${isArray(value)}${getValue(value)}\n`
     }
-    //     return `---
-    // ${get('title', article?.title)}${get('category', catSlug)}${get(
-    //       'subcategory',
-    //       subcatSlug
-    //     )}${get('description', article?.description)}${get(
-    //       'date',
-    //       article?.dateCreated
-    //     )}${get('image', article?.images as string[])}${get(
-    //       'tags',
-    //       article?.keywords.map((e) => e.title)
-    //     )}${get('slug', article?.slug)}${get('author', article?.authorName)}
-    // ---
+    return `---
+${get('title', article?.title)}${get('category', catSlug)}${get(
+      'subcategory',
+      subcatSlug
+    )}${get('description', article?.description)}${get(
+      'date',
+      article?.dateCreated
+    )}${get('image', article?.images as string[])}${get(
+      'tags',
+      article?.keywords.map((e) => e.title)
+    )}${get('slug', article?.slug)}${get('author', article?.authorName)}---
 
-    // `
+${article.body}
+`
     return ''
   }
 }

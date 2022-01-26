@@ -24,6 +24,7 @@ export const useKeywordByArticleId = (
       !keywordsByArticleIdFetching &&
       dispatch(keywordService.actions.getKeywordsByArticleId(_id))
   }, [_id, keywordsByArticleIdAvailable, dispatch, keywordsByArticleIdFetching])
+
   useEffect(() => {
     return () => {
       dispatch(keywordService.actions.reset())
