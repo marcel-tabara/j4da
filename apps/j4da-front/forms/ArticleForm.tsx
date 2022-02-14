@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import { Controller, useForm } from 'react-hook-form'
 import { MDEWrapper } from '../components/MDEWrapper'
@@ -12,8 +12,8 @@ import {
 } from '../utils/types'
 
 interface IArticleFormProps {
-  onChangeCategory: (event: React.ChangeEvent<HTMLSelectElement>) => void
-  onChangeApp: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeCategory: (event: ChangeEvent<HTMLSelectElement>) => void
+  onChangeApp: (event: ChangeEvent<HTMLSelectElement>) => void
   subcategories: ISubCategory[]
   categories: ICategory[]
   article: IArticle
@@ -39,6 +39,7 @@ const ArticleForm = ({
   const {
     onSubmit,
     onBodyChange,
+    onChangeTitle,
     onAddKeyword,
     onRemoveKeyword,
     selectedKeywords,
@@ -50,6 +51,7 @@ const ArticleForm = ({
     handleSubmit,
     setValue,
   })
+
   return (
     <div className="register-form">
       <form onSubmit={onSubmit}>
@@ -66,6 +68,7 @@ const ArticleForm = ({
           <input
             {...register('title')}
             defaultValue={article?.title}
+            onChange={onChangeTitle}
             className={`form-control ${errors.title ? 'is-invalid' : ''}`}
           />
         </div>

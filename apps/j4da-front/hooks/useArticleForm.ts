@@ -1,8 +1,15 @@
 import { useRouter } from 'next/router'
-import { FormEventHandler, useCallback, useEffect, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
 import { useDispatch } from 'react-redux'
 import { articleService, keywordExtractionService } from '../services'
 import { IArticle, IKeyword } from '../utils/types'
+import { slugify } from '../utils/utils'
 import { useSelectors } from './useSelectors'
 
 interface Props {
@@ -65,6 +72,10 @@ export const useArticleForm = ({
     }
   }, [dispatch])
 
+  const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue('slug', slugify(event.target.value))
+  }
+
   const onSubmit = handleSubmit((data: IArticle) => {
     article?._id
       ? dispatch(
@@ -116,6 +127,7 @@ export const useArticleForm = ({
     extractKeywords,
     onSubmit,
     onBodyChange,
+    onChangeTitle,
     onAddKeyword,
     onRemoveKeyword,
     extractedKeywords,

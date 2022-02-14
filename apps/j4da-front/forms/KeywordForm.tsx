@@ -42,18 +42,18 @@ const KeywordForm = ({ keywordById }: IKeywordFormProps) => {
           />
         </div>
         <div className="form-group">
-          <h6>Keyword Description</h6>
+          <h6>Article</h6>
           <textarea
             {...register('article')}
-            defaultValue={keywordById?.article}
+            defaultValue={keywordById?.article?._id}
             className={`form-control ${errors.article ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
-          <h6>Keyword Count</h6>
+          <h6>Article Link</h6>
           <input
             {...register('articleLink')}
-            defaultValue={keywordById?.articleLink}
+            defaultValue={keywordById?.articleLink?._id}
             className={`form-control ${errors.articleLink ? 'is-invalid' : ''}`}
           />
         </div>
