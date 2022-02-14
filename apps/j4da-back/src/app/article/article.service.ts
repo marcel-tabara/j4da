@@ -78,16 +78,20 @@ export class ArticleService {
     )
     const newArticle = await new this.articleModel(articleDTO).save()
 
-    this.keywordService.insertMany({
+    await this.keywordService.insertMany({
       _id: newArticle._id,
       keywords: articleDTO.keywords,
     })
     const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
       article: articleDTO,
     })
-    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
-
-    this.generatCatSubcatFile({
+    await this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    await this.removeCatSubcatFile({
+      app: articleDTO.app.toString(),
+      catSlug: catSlug,
+      subcatSlug: subcatSlug,
+    })
+    await this.generatCatSubcatFile({
       app: articleDTO.app,
       catSlug,
       catId,
@@ -112,33 +116,33 @@ export class ArticleService {
     })
 
     // update keywords
-    this.keywordService.remove({ article: _id })
-    this.keywordService.insertMany({
+    await this.keywordService.remove({ article: _id })
+    await this.keywordService.insertMany({
       _id: _id,
       keywords: articleDTO.keywords,
     })
 
     // update files
-    this.removeCatSubcatFile({
+    await this.removeCatSubcatFile({
       app: article.app.toString(),
       catSlug: oldCatSlug,
       subcatSlug: oldSubcatSlug,
     })
-    this.removeArticleFile({
+    await this.removeArticleFile({
       article,
       catSlug: oldCatSlug,
       subcatSlug: oldSubcatSlug,
     })
-    this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    await this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
 
-    this.generatCatSubcatFile({
+    await this.generatCatSubcatFile({
       app: articleDTO.app,
       catSlug,
       catId,
       subcatSlug,
     })
     if (articleDTO._id !== article._id) {
-      this.generatCatSubcatFile({
+      await this.generatCatSubcatFile({
         app: article.app,
         catSlug: oldCatSlug,
         catId,
@@ -155,13 +159,13 @@ export class ArticleService {
     Logger.log(`ArticleService: findByIdAndRemove ${_id}`)
     const article = await this.articleModel.findById(_id)
     const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
-    this.removeCatSubcatFile({
+    await this.removeCatSubcatFile({
       app: article.app,
       catSlug,
       subcatSlug,
     })
-    this.keywordService.remove({ article: _id })
-    this.removeArticleFile({ article, catSlug, subcatSlug })
+    await this.keywordService.remove({ article: _id })
+    await this.removeArticleFile({ article, catSlug, subcatSlug })
 
     return await this.articleModel.findByIdAndRemove(_id)
   }
