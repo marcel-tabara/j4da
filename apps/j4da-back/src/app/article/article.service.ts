@@ -22,7 +22,7 @@ export class ArticleService {
     private readonly appService: AppService
   ) {}
 
-  async find(paginationQuery: PaginationDto, query): Promise<Article[]> {
+  find = async (paginationQuery: PaginationDto, query): Promise<Article[]> => {
     Logger.log(
       `ArticleService: Find articles ${JSON.stringify(query, null, 2)}`
     )
@@ -50,7 +50,7 @@ export class ArticleService {
       .exec()
   }
 
-  async findById(_id): Promise<Article> {
+  findById = async (_id): Promise<Article> => {
     Logger.log(`ArticleService: findById ${_id}`)
     return await this.articleModel
       .findById(_id)
@@ -72,7 +72,7 @@ export class ArticleService {
       .exec()
   }
 
-  async create(articleDTO: ArticleDTO): Promise<Article> {
+  create = async (articleDTO: ArticleDTO): Promise<Article> => {
     Logger.log(
       `ArticleService: Create article. ${JSON.stringify(articleDTO, null, 2)}`
     )
@@ -97,10 +97,10 @@ export class ArticleService {
     return newArticle
   }
 
-  async findByIdAndUpdate(
+  findByIdAndUpdate = async (
     _id: string,
     articleDTO: ArticleDTO
-  ): Promise<Article> {
+  ): Promise<Article> => {
     Logger.log(`ArticleService: findByIdAndUpdate ${_id}`)
     const article = await this.articleModel.findById(_id)
     const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
@@ -151,7 +151,7 @@ export class ArticleService {
     })
   }
 
-  async findByIdAndRemove(_id): Promise<Article> {
+  findByIdAndRemove = async (_id): Promise<Article> => {
     Logger.log(`ArticleService: findByIdAndRemove ${_id}`)
     const article = await this.articleModel.findById(_id)
     const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
@@ -166,7 +166,7 @@ export class ArticleService {
     return await this.articleModel.findByIdAndRemove(_id)
   }
 
-  async getCatSubCatPath({ app, catSlug, subcatSlug }) {
+  getCatSubCatPath = async ({ app, catSlug, subcatSlug }) => {
     Logger.log(`ArticleService: GetCatSubCatPath.`)
     const appData = await this.appService.findById(app)
     const dirPath = path.join(
@@ -183,6 +183,7 @@ export class ArticleService {
       subCatPath,
     }
   }
+
   generatCatSubcatFile = async ({ app, catId, catSlug, subcatSlug }) => {
     Logger.log(`ArticleService: GeneratCatSubcatFile.`)
     const { catPath, subCatPath } = await this.getCatSubCatPath({
@@ -214,17 +215,14 @@ export class ArticleService {
 
     const cat = path.join(catPath, 'byCat.json')
     const subcat = path.join(subCatPath, 'bySubCat.json')
-    if (fs.existsSync(cat)) {
-      fs.unlinkSync(cat)
-    }
-    if (fs.existsSync(subcat)) {
-      fs.unlinkSync(subcat)
-    }
-    this.cleanDir(subCatPath)
-    this.cleanDir(catPath)
+    fs.existsSync(cat) && fs.unlinkSync(cat)
+    fs.existsSync(subcat) && fs.unlinkSync(subcat)
+
+    await this.cleanDir(subCatPath)
+    await this.cleanDir(catPath)
   }
 
-  cleanDir(path) {
+  cleanDir = async (path) => {
     Logger.log(`ArticleService: Clean directory.`)
     if (fs.existsSync(path) && fs.readdirSync(path).length <= 1) {
       fs.rmSync(path, { recursive: true })
@@ -234,11 +232,9 @@ export class ArticleService {
   generateArticleFile = async ({ article, catSlug, subcatSlug }) => {
     Logger.log(`ArticleService: GenerateArticleFile.`)
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
-    this.getBody({ article, catSlug, subcatSlug }).then((e) => {
+    await this.getBody({ article, catSlug, subcatSlug }).then((e) => {
       const dirname = path.dirname(filePath)
-      if (!fs.existsSync(dirname)) {
-        fs.mkdirSync(dirname, { recursive: true })
-      }
+      !fs.existsSync(dirname) && fs.mkdirSync(dirname, { recursive: true })
       fs.writeFileSync(filePath, e)
     })
   }
@@ -247,12 +243,10 @@ export class ArticleService {
     Logger.log(`ArticleService: RemoveArticleFile.`)
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
 
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath)
-    }
+    fs.existsSync(filePath) && fs.unlinkSync(filePath)
   }
 
-  async getCatSubcatSlug({ article }) {
+  getCatSubcatSlug = async ({ article }) => {
     Logger.log(`ArticleService: GetCatSubcatSlug.`)
     const cat = await this.categoryService.findById(article.category)
     const subcat = await this.subcategoryService.findById(article.subcategory)
@@ -264,7 +258,7 @@ export class ArticleService {
     }
   }
 
-  async getFilePath(article, cat: string, subcat: string) {
+  getFilePath = async (article, cat: string, subcat: string) => {
     Logger.log(`ArticleService: GetFilePath.`)
     const app = await this.appService.findById(article.app)
     const dirPath = path.join(
@@ -272,8 +266,7 @@ export class ArticleService {
       '/apps/j4da-front/public/contents',
       app.slug
     )
-    const filePath = path.join(dirPath, cat, subcat, `${article.slug}.md`)
-    return filePath
+    return path.join(dirPath, cat, subcat, `${article.slug}.md`)
   }
 
   getBody = async ({ article, catSlug, subcatSlug }) => {

@@ -11,7 +11,7 @@ export class SubcategoryService {
     private readonly subcategoryModel: Model<Subcategory>
   ) {}
 
-  async find(query): Promise<Subcategory[]> {
+  find = async (query): Promise<Subcategory[]> => {
     Logger.log(`SubcategoryService: find ${JSON.stringify(query, null, 2)}`)
     return await this.subcategoryModel.find(query).populate({
       path: 'category',
@@ -20,7 +20,7 @@ export class SubcategoryService {
     })
   }
 
-  async findById(_id): Promise<Subcategory> {
+  findById = async (_id): Promise<Subcategory> => {
     Logger.log(`SubcategoryService: findById ${_id}`)
     return await this.subcategoryModel
       .findOne({ _id })
@@ -32,15 +32,15 @@ export class SubcategoryService {
       .exec()
   }
 
-  async add(subcategoryDTO: SubcategoryDTO): Promise<Subcategory> {
+  add = async (subcategoryDTO: SubcategoryDTO): Promise<Subcategory> => {
     const subcategory = await new this.subcategoryModel(subcategoryDTO)
     return subcategory.save()
   }
 
-  async findByIdAndUpdate(
+  findByIdAndUpdate = async (
     _id: string,
     subcategoryDTO: SubcategoryDTO & { _id: string }
-  ): Promise<Subcategory> {
+  ): Promise<Subcategory> => {
     Logger.log(`SubcategoryService: findByIdAndUpdate ${_id}`)
     const newCat = await this.subcategoryModel.findByIdAndUpdate(
       _id,
@@ -53,7 +53,7 @@ export class SubcategoryService {
     return newCat
   }
 
-  async findByIdAndRemove(_id): Promise<unknown> {
+  findByIdAndRemove = async (_id): Promise<unknown> => {
     Logger.log(`SubcategoryService: findByIdAndRemove ${_id}`)
     return await this.subcategoryModel.findByIdAndRemove(_id)
   }

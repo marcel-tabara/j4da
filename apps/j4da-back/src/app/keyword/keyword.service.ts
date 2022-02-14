@@ -12,7 +12,7 @@ export class KeywordService {
     @InjectModel('Keyword') private readonly keywordModel: Model<Keyword>
   ) {}
 
-  async extractKeywords({ _id, text }): Promise<Keyword[]> {
+  extractKeywords = async ({ _id, text }): Promise<Keyword[]> => {
     Logger.log(`ArticleService: Extrating keywords. _id: ${_id}`)
     const extractedKeywords = rake(text, { language: 'english' })
 
@@ -35,7 +35,7 @@ export class KeywordService {
     return keywords.concat(transformedExtractedKeywords)
   }
 
-  async find(query): Promise<Keyword[]> {
+  find = async (query): Promise<Keyword[]> => {
     Logger.log(
       `KeywordService: Find keywords ${JSON.stringify(query, null, 2)}.`
     )
@@ -54,40 +54,40 @@ export class KeywordService {
       .exec()
   }
 
-  async findById(_id): Promise<Keyword> {
+  findById = async (_id): Promise<Keyword> => {
     Logger.log(`KeywordService: findById keyword ${_id}.`)
     return await this.keywordModel.findById(_id).exec()
   }
 
-  async add(keywordDTO: KeywordDTO): Promise<Keyword> {
+  add = async (keywordDTO: KeywordDTO): Promise<Keyword> => {
     Logger.log(`KeywordService: Add keyword.`)
     const newKeyword = await new this.keywordModel(keywordDTO)
     return newKeyword.save()
   }
 
-  async findByIdAndUpdate(
+  findByIdAndUpdate = async (
     _id: string,
     keywordDTO: KeywordDTO
-  ): Promise<Keyword> {
+  ): Promise<Keyword> => {
     Logger.log(`KeywordService: findByIdAndUpdate ${_id}.`)
     return await this.keywordModel.findByIdAndUpdate(_id, keywordDTO, {
       new: true,
     })
   }
 
-  async findByIdAndRemove(_id): Promise<unknown> {
+  findByIdAndRemove = async (_id): Promise<unknown> => {
     Logger.log(`KeywordService: findByIdAndRemove.`)
     return await this.keywordModel.findByIdAndRemove(_id)
   }
 
-  async remove(query): Promise<unknown> {
+  remove = async (query): Promise<unknown> => {
     Logger.log(
       `KeywordService: Remove keywords ${JSON.stringify(query, null, 2)}.`
     )
     return await this.keywordModel.deleteMany(query).exec()
   }
 
-  async insertMany({ _id, keywords }): Promise<Keyword[]> {
+  insertMany = async ({ _id, keywords }): Promise<Keyword[]> => {
     Logger.log(
       `KeywordService: insertMany keywords ${JSON.stringify(
         keywords,

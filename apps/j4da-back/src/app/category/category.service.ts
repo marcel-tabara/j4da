@@ -10,7 +10,7 @@ export class CategoryService {
     @InjectModel('Category') private readonly categoryModel: Model<Category>
   ) {}
 
-  async find(query): Promise<Category[]> {
+  find = async (query): Promise<Category[]> => {
     Logger.log(
       `CategoryService: Find categories ${JSON.stringify(query, null, 2)}.`
     )
@@ -21,7 +21,7 @@ export class CategoryService {
     })
   }
 
-  async findById(_id): Promise<Category> {
+  findById = async (_id): Promise<Category> => {
     Logger.log(`CategoryService: Find category by id ${_id}.`)
     return await this.categoryModel
       .findOne({ _id })
@@ -33,16 +33,16 @@ export class CategoryService {
       .exec()
   }
 
-  async add(categoryDTO: CategoryDTO): Promise<Category> {
+  add = async (categoryDTO: CategoryDTO): Promise<Category> => {
     Logger.log(`CategoryService: Add category.`)
     const category = await new this.categoryModel(categoryDTO)
     return category.save()
   }
 
-  async findByIdAndUpdate(
+  findByIdAndUpdate = async (
     _id: string,
     categoryDTO: CategoryDTO & { _id: string }
-  ): Promise<Category> {
+  ): Promise<Category> => {
     Logger.log(`CategoryService: FindByIdAndUpdate ${_id}.`)
     const newCat = await this.categoryModel.findByIdAndUpdate(
       _id,
