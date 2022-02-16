@@ -39,9 +39,19 @@ export function* watchDeleteArticle({ payload }: TaskAction<string>) {
   }
 }
 
+export function* watchGenerateArticles() {
+  try {
+    const articles = yield http.get<string>('articles/generate')
+    yield put(articleService.actions.success(articles.data))
+  } catch (error) {
+    yield put(alertService.actions.success(error.message))
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest('articles/getArticles', watchGetArticles)
   yield takeLatest('articles/createArticle', watchCreateArticle)
   yield takeLatest('articles/updateArticle', watchUpdateArticle)
   yield takeLatest('articles/deleteArticle', watchDeleteArticle)
+  yield takeLatest('articles/generateArticles', watchGenerateArticles)
 }

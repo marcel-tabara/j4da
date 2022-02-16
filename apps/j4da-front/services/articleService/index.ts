@@ -25,6 +25,9 @@ const articleService = createGenericSlice({
     deleteArticle: (state, action: PayloadAction<string>) => {
       state.fetching = true
     },
+    generateArticles: (state) => {
+      state.fetching = true
+    },
   },
 })
 

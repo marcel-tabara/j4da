@@ -30,6 +30,12 @@ export class ArticleController {
       .json({ limit, skip, total: data.length, data: data.sort(sortByTitle) })
   }
 
+  @Get('/generate')
+  async generate(@Res() res) {
+    const data = await this.articleService.generate()
+    return res.status(HttpStatus.OK).json({ data })
+  }
+
   @Get('/:_id')
   async findById(@Res() res, @Param('_id', new ValidateObjectId()) _id) {
     const article = await this.articleService.findById(_id)
