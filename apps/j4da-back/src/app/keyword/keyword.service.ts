@@ -70,7 +70,7 @@ export class KeywordService {
     keywordDTO: KeywordDTO
   ): Promise<Keyword> => {
     Logger.log(`KeywordService: findByIdAndUpdate ${_id}.`)
-    return await this.keywordModel.findByIdAndUpdate(_id, keywordDTO, {
+    return await this.keywordModel.findByIdAndUpdate(_id, keywordDTO['_id'], {
       new: true,
     })
   }

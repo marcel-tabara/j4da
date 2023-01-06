@@ -5,8 +5,14 @@ import * as mongoose from 'mongoose'
 import { Model } from 'mongoose'
 import { AppService } from '../app/app.service'
 import { CategoryService } from '../category/category.service'
+import { Keyword } from '../keyword/interfaces/keyword.interface'
 import { KeywordService } from '../keyword/keyword.service'
 import { SubcategoryService } from '../subcategory/subcategory.service'
+import {
+  cleanDir,
+  generateArticlesFiles,
+  generateCatSubcatFile,
+} from './article.utils'
 import { ArticleDTO } from './dto/article.dto'
 import { PaginationDto } from './dto/pagination.dto'
 import { Article } from './interfaces/article.interface'
@@ -85,7 +91,12 @@ export class ArticleService {
     const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
       article: articleDTO,
     })
-    await this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    await this.generateArticleFile({
+      article: articleDTO,
+      catSlug,
+      subcatSlug,
+      keywords: articleDTO.keywords,
+    })
     await this.removeCatSubcatFile({
       app: articleDTO.app.toString(),
       catSlug: catSlug,
@@ -107,6 +118,7 @@ export class ArticleService {
   ): Promise<Article> => {
     Logger.log(`ArticleService: findByIdAndUpdate ${_id}`)
     const article = await this.articleModel.findById(_id)
+
     const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
       await this.getCatSubcatSlug({
         article,
@@ -133,7 +145,12 @@ export class ArticleService {
       catSlug: oldCatSlug,
       subcatSlug: oldSubcatSlug,
     })
-    await this.generateArticleFile({ article: articleDTO, catSlug, subcatSlug })
+    await this.generateArticleFile({
+      article: articleDTO,
+      catSlug,
+      subcatSlug,
+      keywords: articleDTO.keywords,
+    })
 
     await this.generateCatSubcatFile({
       app: articleDTO.app,
@@ -200,14 +217,24 @@ export class ArticleService {
       app: new mongoose.Types.ObjectId(app),
       catId,
     })
+
+    const articlesByCatWithKeywordsPromise = articlesByCat.map(async (a) => {
+      const keywords =
+        (await this.keywordService.find({ article: a._id })) || []
+      return { ...a, keywords: keywords.map((e) => e.title) }
+    })
+    const articlesByCatWithKeywords = await Promise.all(
+      articlesByCatWithKeywordsPromise
+    )
+
     const cat = path.join(catPath, 'byCat.json')
     const subcat = path.join(subCatPath, 'bySubCat.json')
     !fs.existsSync(subCatPath) && fs.mkdirSync(subCatPath, { recursive: true })
-    fs.writeFileSync(cat, JSON.stringify(articlesByCat, null, 2))
-    const articlesBySubCat = articlesByCat.filter(
-      (a) => a.subcategory.slug === subcatSlug
+    fs.writeFileSync(cat, JSON.stringify(articlesByCatWithKeywords, null, 2))
+    const articlesBySubCat = articlesByCatWithKeywords.filter(
+      (a) => a.subcategory?.slug === subcatSlug
     )
-    fs.writeFileSync(subcat, JSON.stringify(articlesBySubCat, null, 2))
+    fs.writeFileSync(subcat, JSON.stringify({ articlesBySubCat }, null, 2))
   }
 
   removeCatSubcatFile = async ({ app, catSlug, subcatSlug }) => {
@@ -227,17 +254,20 @@ export class ArticleService {
     await this.cleanDir(catPath)
   }
 
-  cleanDir = async (path) => {
+  cleanDir = async (path, removeAll = false) => {
     Logger.log(`ArticleService: Clean directory.`)
-    if (fs.existsSync(path) && fs.readdirSync(path).length <= 1) {
+    if (
+      fs.existsSync(path) &&
+      (fs.readdirSync(path).length <= 1 || removeAll)
+    ) {
       fs.rmSync(path, { recursive: true })
     }
   }
 
-  generateArticleFile = async ({ article, catSlug, subcatSlug }) => {
+  generateArticleFile = async ({ article, catSlug, subcatSlug, keywords }) => {
     Logger.log(`ArticleService: GenerateArticleFile.`)
     const filePath = await this.getFilePath(article, catSlug, subcatSlug)
-    await this.getBody({ article, catSlug, subcatSlug }).then((e) => {
+    await this.getBody({ article, catSlug, subcatSlug, keywords }).then((e) => {
       const dirname = path.dirname(filePath)
       !fs.existsSync(dirname) && fs.mkdirSync(dirname, { recursive: true })
       fs.writeFileSync(filePath, e)
@@ -271,11 +301,12 @@ export class ArticleService {
       '/apps/j4da-front/public/contents',
       app.slug
     )
-    return path.join(dirPath, cat, subcat, `${article.slug}.md`)
+    return path.join(dirPath, cat, subcat, `${article.slug}.mdx`)
   }
 
-  getBody = async ({ article, catSlug, subcatSlug }) => {
+  getBody = async ({ article, catSlug, subcatSlug, keywords }) => {
     Logger.log(`ArticleService: GetBody.`)
+
     const getValue = (value: string | string[]) => {
       if (Array.isArray(value)) {
         return value.map((e) => `  - ${e}`).join('\n')
@@ -297,7 +328,7 @@ ${get('title', article?.title)}${get('category', catSlug)}${get(
       article?.dateCreated
     )}${get('image', article?.images as string[])}${get(
       'tags',
-      (article?.keywords ?? []).map((e) => e.title)
+      (keywords ?? []).map((e) => e.title)
     )}${get('slug', article?.slug)}${get('author', article?.authorName)}---
 
 ${article.body}
@@ -309,34 +340,23 @@ ${article.body}
     Logger.log(`ArticleService: Generate Article Files.`)
     try {
       const articles = await this.find({} as PaginationDto, {})
-      // const data = articles.reduce((acc, a) => {
-      //   if (!acc[a.category.slug]?.[a.subcategory.slug]) {
-      //     acc[a.category.slug] = {
-      //       ...acc[a.category.slug],
-      //       [a.subcategory.slug]: [a],
-      //     }
-      //   } else {
-      //     acc[a.category.slug][a.subcategory.slug].push(a)
-      //   }
-      //   return acc
-      // }, {})
-
-      // Object.entries(data).map((cat) => {
-      //   console.log('########## cat', cat)
-      // })
       const appData = await this.appService.findById(articles[0].app)
       const dirPath = path.join(
         process.cwd(),
-        '/apps/j4da-front/public/contents',
+        '/apps/j4da-front/public/contents/',
         appData.slug
       )
-      this.cleanDir(dirPath)
+      this.cleanDir(dirPath, true)
 
-      articles.map((a) => {
+      articles.map(async (a) => {
+        const keywordsPromise =
+          (await this.keywordService.find({ article: a._id })) || []
+        const keywords = await Promise.all(keywordsPromise)
         this.generateArticleFile({
           article: a,
           catSlug: a.category.slug,
           subcatSlug: a.subcategory.slug,
+          keywords,
         })
         this.generateCatSubcatFile({
           app: a.app,
@@ -350,6 +370,87 @@ ${article.body}
     } catch (error) {
       Logger.log(`ArticleService Error: `, error)
       return error
+    }
+  }
+
+  generateContentByApp = async (_id: string) => {
+    Logger.log(`ArticleService: GenerateContentByApp.`)
+    try {
+      const app = await this.appService.findById(_id)
+      const articles = await this.find({} as PaginationDto, { app: _id })
+      const articleIds = articles.map((a) => a._id)
+      const allKeywords = await this.keywordService.find({
+        article: { $in: articleIds },
+      })
+
+      const dirPath = path.join(
+        process.cwd(),
+        '/apps/j4da-front/public/contents/',
+        app.slug
+      )
+      cleanDir(dirPath)
+
+      const data = articles.reduce((acc, a) => {
+        const keywords = allKeywords.filter((k) => k.article._id === a._id)
+
+        if (!acc[a.category.slug]?.[a.subcategory.slug]) {
+          acc[a.category.slug] = {
+            ...acc[a.category.slug],
+            [a.subcategory.slug]: [{ ...a, keywords }],
+          }
+        } else {
+          acc[a.category.slug][a.subcategory.slug].push({ ...a, keywords })
+        }
+
+        return acc
+      }, {})
+
+      Object.entries(data).map((e) => {
+        const cat = e[0]
+        const oSubcat = e[1]
+        const catPath = path.join(dirPath, cat)
+        const catArticles = articles.filter((a) => a.category.slug === cat)
+
+        generateCatSubcatFile({
+          folderPath: catPath,
+          articles: catArticles,
+          type: 'byCat.json',
+        })
+
+        Object.entries(oSubcat).map((e) => {
+          const subcat = e[0]
+          const subcatArticles: { _doc: Article; keywords: Keyword[] }[] = e[1]
+          const subcatPath = path.join(dirPath, cat, subcat)
+          generateCatSubcatFile({
+            folderPath: subcatPath,
+            articles: subcatArticles,
+            type: 'bySubCat.json',
+          })
+
+          subcatArticles.map(
+            async ({
+              _doc,
+              keywords,
+            }: {
+              _doc: Article
+              keywords: Keyword[]
+            }) => {
+              generateArticlesFiles({
+                article: _doc,
+                catSlug: _doc.category?.slug,
+                subcatSlug: _doc.subcategory?.slug,
+                keywords: keywords,
+                app,
+              })
+            }
+          )
+        })
+      })
+
+      return ''
+    } catch (error) {
+      Logger.log(`ArticleService Error: `, error)
+      return error.message
     }
   }
 }

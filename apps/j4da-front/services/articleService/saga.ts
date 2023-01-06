@@ -48,10 +48,22 @@ export function* watchGenerateArticles() {
   }
 }
 
+export function* watchGenerateContentByApp({ payload }: TaskAction<string>) {
+  try {
+    yield http.post<{ _id: string }>(`/articles/generateContentByApp`, {
+      _id: payload,
+    })
+    yield put(articleService.actions.reset())
+  } catch (error) {
+    yield put(alertService.actions.success(error.message))
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest('articles/getArticles', watchGetArticles)
   yield takeLatest('articles/createArticle', watchCreateArticle)
   yield takeLatest('articles/updateArticle', watchUpdateArticle)
   yield takeLatest('articles/deleteArticle', watchDeleteArticle)
   yield takeLatest('articles/generateArticles', watchGenerateArticles)
+  yield takeLatest('articles/generateContentByApp', watchGenerateContentByApp)
 }

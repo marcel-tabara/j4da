@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useCallback, useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
@@ -41,7 +41,7 @@ const ArticleById = () => {
   )
 
   const onChangeCategory = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (event: ChangeEvent<HTMLSelectElement>) => {
       const subcats = (allSubcategories || []).filter(
         (subcategory: ISubCategory) =>
           subcategory.category._id === event.target.value
@@ -52,7 +52,7 @@ const ArticleById = () => {
   )
 
   const onChangeApp = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (event: ChangeEvent<HTMLSelectElement>) => {
       const cats = allCategories.filter(
         (category: ICategory) => category.app._id === event.target.value
       )
@@ -60,7 +60,7 @@ const ArticleById = () => {
       setCategories(cats || [])
       onChangeCategory({
         target: { value: '' },
-      } as React.ChangeEvent<HTMLSelectElement>)
+      } as ChangeEvent<HTMLSelectElement>)
     },
     [allCategories, onChangeCategory]
   )

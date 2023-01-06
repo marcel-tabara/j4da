@@ -44,6 +44,14 @@ export class ArticleController {
       : res.status(HttpStatus.NOT_FOUND)
   }
 
+  @Post('/generateContentByApp')
+  async generateContentByApp(@Res() res, @Body() app: { _id: string }) {
+    const result = await this.articleService.generateContentByApp(app._id)
+    return res.status(HttpStatus.OK).json({
+      message: result,
+    })
+  }
+
   @Post('/add')
   async create(@Res() res, @Body() articleDTO: ArticleDTO) {
     const article = await this.articleService.create(articleDTO)

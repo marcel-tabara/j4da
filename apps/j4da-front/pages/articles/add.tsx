@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
 import { useCategories } from '../../hooks/useCategories'
@@ -20,7 +20,7 @@ const ArticleAdd = () => {
   const [subcategories, setSubcategories] = useState<ISubCategory[]>([])
 
   const onChangeCategory = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (event: ChangeEvent<HTMLSelectElement>) => {
       const subcats = allSubcategories.filter(
         (subcategory: ISubCategory) =>
           subcategory.category._id === event.target.value
@@ -31,7 +31,7 @@ const ArticleAdd = () => {
   )
 
   const onChangeApp = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
+    (event: ChangeEvent<HTMLSelectElement>) => {
       const cats = allCategories.filter(
         (category: ICategory) => category.app._id === event.target.value
       )
@@ -39,7 +39,7 @@ const ArticleAdd = () => {
       setCategories(cats || [])
       onChangeCategory({
         target: { value: '' },
-      } as React.ChangeEvent<HTMLSelectElement>)
+      } as ChangeEvent<HTMLSelectElement>)
     },
     [allCategories, onChangeCategory]
   )

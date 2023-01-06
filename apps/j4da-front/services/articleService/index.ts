@@ -28,6 +28,9 @@ const articleService = createGenericSlice({
     generateArticles: (state) => {
       state.fetching = true
     },
+    generateContentByApp: (state, action: PayloadAction<string>) => {
+      state.fetching = true
+    },
   },
 })
 
