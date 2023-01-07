@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit'
 
 export interface GenericState<T> {
+  [x: string]: any
   data?: T
   available: boolean
   fetching: boolean

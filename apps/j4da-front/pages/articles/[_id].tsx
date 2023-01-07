@@ -5,7 +5,6 @@ import { ArticleForm } from '../../forms/ArticleForm'
 import { useApps } from '../../hooks/useApps'
 import { useArticleById } from '../../hooks/useArticleById'
 import { useCategories } from '../../hooks/useCategories'
-import { useKeywordByArticleId } from '../../hooks/useKeywordByArticleId'
 import { useSelectors } from '../../hooks/useSelectors'
 import { useSubcategories } from '../../hooks/useSubcategories'
 import { Main } from '../../templates/Main'
@@ -19,7 +18,6 @@ const ArticleById = () => {
   useSubcategories()
   useApps()
   useArticleById(_id as string)
-  useKeywordByArticleId(_id as string)
 
   const { allApps, allCategories, allSubcategories, articleById } =
     useSelectors()

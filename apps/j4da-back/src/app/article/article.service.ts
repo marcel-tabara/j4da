@@ -18,6 +18,8 @@ import { PaginationDto } from './dto/pagination.dto'
 import { Article } from './interfaces/article.interface'
 import path = require('path')
 
+type ArticleWithKeywords = { _doc: Article; keywords: Keyword[] }
+
 @Injectable()
 export class ArticleService {
   constructor(
@@ -390,6 +392,12 @@ ${article.body}
       )
       cleanDir(dirPath)
 
+      generateCatSubcatFile({
+        folderPath: dirPath,
+        articles: articles,
+        type: 'all.json',
+      })
+
       const data = articles.reduce((acc, a) => {
         const keywords = allKeywords.filter((k) => k.article._id === a._id)
 
@@ -419,11 +427,11 @@ ${article.body}
 
         Object.entries(oSubcat).map((e) => {
           const subcat = e[0]
-          const subcatArticles: { _doc: Article; keywords: Keyword[] }[] = e[1]
+          const subcatArticles: ArticleWithKeywords[] = e[1]
           const subcatPath = path.join(dirPath, cat, subcat)
           generateCatSubcatFile({
             folderPath: subcatPath,
-            articles: subcatArticles,
+            articles: subcatArticles.map((e) => e._doc),
             type: 'bySubCat.json',
           })
 

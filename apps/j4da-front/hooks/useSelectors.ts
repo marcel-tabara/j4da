@@ -14,7 +14,11 @@ import {
   subcategorySelectors,
 } from '../services'
 
-export const useSelectors = () => {
+interface IUseSelectorsProps {
+  articleId?: string
+}
+
+export const useSelectors = (props: IUseSelectorsProps = {}) => {
   const {
     data: articleById,
     available: articleByIdAvailable,
@@ -56,11 +60,9 @@ export const useSelectors = () => {
     fetching: keywordByIdFetching,
   } = useSelector(keywordByIdSelectors.keywordByIdSelector)
 
-  const {
-    data: keywordsByArticleId,
-    available: keywordsByArticleIdAvailable,
-    fetching: keywordsByArticleIdFetching,
-  } = useSelector(keywordSelectors.keywordsSelector)
+  const keywordsByArticleId = useSelector(
+    keywordSelectors.keywordsByArticleSelector
+  )(props?.articleId)
 
   const {
     data: categoryById,
@@ -114,8 +116,6 @@ export const useSelectors = () => {
     keywordByIdAvailable,
     keywordByIdFetching,
     keywordsByArticleId,
-    keywordsByArticleIdAvailable,
-    keywordsByArticleIdFetching,
     //
     allCategories,
     allCategoriesAvailable,

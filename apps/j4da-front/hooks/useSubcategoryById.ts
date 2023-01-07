@@ -21,11 +21,6 @@ export const useSubcategoryById = (
       !subcategoryByIdFetching &&
       dispatch(subcategoryByIdService.actions.getSubcategoryById(_id))
   }, [_id, subcategoryByIdAvailable, dispatch, subcategoryByIdFetching])
-  useEffect(() => {
-    return () => {
-      dispatch(subcategoryByIdService.actions.reset())
-    }
-  }, [dispatch])
 
   return {
     subcategoryById,

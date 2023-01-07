@@ -30,13 +30,11 @@ export const useArticleForm = ({
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const { extractedKeywords, keywordsByArticleId } = useSelectors()
+  const { extractedKeywords, keywordsByArticleId } = useSelectors({
+    articleId: article._id,
+  })
   const [selectedKeywords, setSelectedKeywords] =
     useState<IKeyword[]>(keywordsByArticleId)
-
-  useEffect(() => {
-    setSelectedKeywords(keywordsByArticleId || [])
-  }, [keywordsByArticleId])
 
   useEffect(() => {
     Boolean(article?.app?._id) &&
@@ -65,12 +63,6 @@ export const useArticleForm = ({
     () => article?.body && extractKeywords(article?.body),
     [article?.body, extractKeywords]
   )
-
-  useEffect(() => {
-    return () => {
-      dispatch(keywordExtractionService.actions.reset())
-    }
-  }, [dispatch])
 
   const onChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     setValue('slug', slugify(event.target.value))

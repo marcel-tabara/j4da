@@ -1,12 +1,14 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useApps } from '../hooks/useApps'
+import { useKeywords } from '../hooks/useKeywords'
 import { articleService } from '../services'
 import { Main } from '../templates/Main'
 
 const Index = () => {
   const dispatch = useDispatch()
   const appsData = useApps()
+  useKeywords()
 
   const onGenerate = (event) => {
     event.preventDefault()
