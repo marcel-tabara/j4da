@@ -24,45 +24,31 @@ const getFilePath = ({ article, catSlug, subcatSlug, app }: IBaseFileProps) => {
   )
 }
 
-const getBody = async ({
+export const getBody = async ({
   article,
   catSlug,
   subcatSlug,
   keywords,
 }: IBaseFileProps): Promise<string> => {
   Logger.log(`ArticleService: GetBody.`)
-
-  const getValue = (value: string | string[]) => {
-    if (Array.isArray(value)) {
-      return value.map((e) => `  - ${e}`).join('\n')
-    } else {
-      return value
-    }
-  }
-  const get = (type: string, value: string | string[]) => {
-    const isArray = (value: string | string[]) =>
-      Array.isArray(value) ? `\n` : ' '
-    return value && `${type}:${isArray(value)}${getValue(value)}\n`
-  }
   return `---
-${get('title', article?.title)}${get('category', catSlug)}${get(
-    'subcategory',
-    subcatSlug
-  )}${get('description', article?.description)}${get(
-    'date',
-    article?.dateCreated.toISOString()
-  )}${get('image', article?.images as string[])}${get(
-    'tags',
-    (keywords ?? []).map((e) => e.title)
-  )}${get('slug', article?.slug)}${get('author', article?.authorName)}---
-
+title: ${article?.title}
+category: ${catSlug}
+subcategory: ${subcatSlug}
+description: ${article?.description}
+date: ${article?.dateCreated}
+image: ${article?.images}
+tags: ${keywords}
+slug: ${article?.slug}
+author1: ${article?.authorName}
+---
 ${article.body}
 `
 }
 
-export const cleanDir = async (path: string) => {
+export const cleanDir = async (path, removeAll = false) => {
   Logger.log(`ArticleService: Clean directory.`)
-  if (fs.existsSync(path)) {
+  if (fs.existsSync(path) && (fs.readdirSync(path).length <= 1 || removeAll)) {
     fs.rmSync(path, { recursive: true })
   }
 }

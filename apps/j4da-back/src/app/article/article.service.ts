@@ -90,14 +90,19 @@ export class ArticleService {
       _id: newArticle._id,
       keywords: articleDTO.keywords,
     })
+
+    const article = await this.articleModel.findById(newArticle._id)
+    const app = await this.appService.findById(newArticle.app._id)
+
     const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
       article: articleDTO,
     })
-    await this.generateArticleFile({
-      article: articleDTO,
+    await generateArticlesFiles({
+      article,
       catSlug,
       subcatSlug,
       keywords: articleDTO.keywords,
+      app,
     })
     await this.removeCatSubcatFile({
       app: articleDTO.app.toString(),
@@ -128,6 +133,7 @@ export class ArticleService {
     const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
       article: articleDTO,
     })
+    const app = await this.appService.findById(article.app._id)
 
     // update keywords
     await this.keywordService.remove({ article: _id })
@@ -147,11 +153,12 @@ export class ArticleService {
       catSlug: oldCatSlug,
       subcatSlug: oldSubcatSlug,
     })
-    await this.generateArticleFile({
-      article: articleDTO,
+    await generateArticlesFiles({
+      article,
       catSlug,
       subcatSlug,
       keywords: articleDTO.keywords,
+      app,
     })
 
     await this.generateCatSubcatFile({
@@ -252,8 +259,8 @@ export class ArticleService {
     fs.existsSync(cat) && fs.unlinkSync(cat)
     fs.existsSync(subcat) && fs.unlinkSync(subcat)
 
-    await this.cleanDir(subCatPath)
-    await this.cleanDir(catPath)
+    await cleanDir(subCatPath)
+    await cleanDir(catPath)
   }
 
   cleanDir = async (path, removeAll = false) => {
@@ -266,15 +273,15 @@ export class ArticleService {
     }
   }
 
-  generateArticleFile = async ({ article, catSlug, subcatSlug, keywords }) => {
-    Logger.log(`ArticleService: GenerateArticleFile.`)
-    const filePath = await this.getFilePath(article, catSlug, subcatSlug)
-    await this.getBody({ article, catSlug, subcatSlug, keywords }).then((e) => {
-      const dirname = path.dirname(filePath)
-      !fs.existsSync(dirname) && fs.mkdirSync(dirname, { recursive: true })
-      fs.writeFileSync(filePath, e)
-    })
-  }
+  // generateArticleFile = async ({ article, catSlug, subcatSlug, keywords }) => {
+  //   Logger.log(`ArticleService: GenerateArticleFile.`, keywords)
+  //   const filePath = await this.getFilePath(article, catSlug, subcatSlug)
+  //   await getBody({ article, catSlug, subcatSlug, keywords }).then((e) => {
+  //     const dirname = path.dirname(filePath)
+  //     !fs.existsSync(dirname) && fs.mkdirSync(dirname, { recursive: true })
+  //     fs.writeFileSync(filePath, e)
+  //   })
+  // }
 
   removeArticleFile = async ({ article, catSlug, subcatSlug }) => {
     Logger.log(`ArticleService: RemoveArticleFile.`)
@@ -306,74 +313,42 @@ export class ArticleService {
     return path.join(dirPath, cat, subcat, `${article.slug}.mdx`)
   }
 
-  getBody = async ({ article, catSlug, subcatSlug, keywords }) => {
-    Logger.log(`ArticleService: GetBody.`)
+  // generate = async () => {
+  //   Logger.log(`ArticleService: Generate Article Files.`)
+  //   try {
+  //     const articles = await this.find({} as PaginationDto, {})
+  //     const appData = await this.appService.findById(articles[0].app)
+  //     const dirPath = path.join(
+  //       process.cwd(),
+  //       '/apps/j4da-front/public/contents/',
+  //       appData.slug
+  //     )
+  //     cleanDir(dirPath, true)
 
-    const getValue = (value: string | string[]) => {
-      if (Array.isArray(value)) {
-        return value.map((e) => `  - ${e}`).join('\n')
-      } else {
-        return value
-      }
-    }
-    const get = (type: string, value: string | string[]) => {
-      const isArray = (value: string | string[]) =>
-        Array.isArray(value) ? `\n` : ' '
-      return value && `${type}:${isArray(value)}${getValue(value)}\n`
-    }
-    return `---
-${get('title', article?.title)}${get('category', catSlug)}${get(
-      'subcategory',
-      subcatSlug
-    )}${get('description', article?.description)}${get(
-      'date',
-      article?.dateCreated
-    )}${get('image', article?.images as string[])}${get(
-      'tags',
-      (keywords ?? []).map((e) => e.title)
-    )}${get('slug', article?.slug)}${get('author', article?.authorName)}---
+  //     articles.map(async (a) => {
+  //       const keywordsPromise =
+  //         (await this.keywordService.find({ article: a._id })) || []
+  //       const keywords = await Promise.all(keywordsPromise)
+  //       generateArticlesFiles({
+  //         article: a,
+  //         catSlug: a.category.slug,
+  //         subcatSlug: a.subcategory.slug,
+  //         keywords,
+  //       })
+  //       this.generateCatSubcatFile({
+  //         app: a.app,
+  //         catSlug: a.category.slug,
+  //         catId: a.category._id,
+  //         subcatSlug: a.subcategory.slug,
+  //       })
+  //     })
 
-${article.body}
-`
-    return ''
-  }
-
-  generate = async () => {
-    Logger.log(`ArticleService: Generate Article Files.`)
-    try {
-      const articles = await this.find({} as PaginationDto, {})
-      const appData = await this.appService.findById(articles[0].app)
-      const dirPath = path.join(
-        process.cwd(),
-        '/apps/j4da-front/public/contents/',
-        appData.slug
-      )
-      this.cleanDir(dirPath, true)
-
-      articles.map(async (a) => {
-        const keywordsPromise =
-          (await this.keywordService.find({ article: a._id })) || []
-        const keywords = await Promise.all(keywordsPromise)
-        this.generateArticleFile({
-          article: a,
-          catSlug: a.category.slug,
-          subcatSlug: a.subcategory.slug,
-          keywords,
-        })
-        this.generateCatSubcatFile({
-          app: a.app,
-          catSlug: a.category.slug,
-          catId: a.category._id,
-          subcatSlug: a.subcategory.slug,
-        })
-      })
-
-      return ''
-    } catch (error) {
-      Logger.log(`ArticleService Error: `, error)
-      return error
-    }
-  }
+  //     return ''
+  //   } catch (error) {
+  //     Logger.log(`ArticleService Error: `, error)
+  //     return error
+  //   }
+  // }
 
   generateContentByApp = async (_id: string) => {
     Logger.log(`ArticleService: GenerateContentByApp.`)
@@ -399,7 +374,11 @@ ${article.body}
       })
 
       const data = articles.reduce((acc, a) => {
-        const keywords = allKeywords.filter((k) => k.article._id === a._id)
+        const keywords = allKeywords
+          .filter((k) => {
+            return k.article._id.toString() === a._id.toString()
+          })
+          .map((e) => e.title)
 
         if (!acc[a.category.slug]?.[a.subcategory.slug]) {
           acc[a.category.slug] = {
@@ -447,7 +426,7 @@ ${article.body}
                 article: _doc,
                 catSlug: _doc.category?.slug,
                 subcatSlug: _doc.subcategory?.slug,
-                keywords: keywords,
+                keywords,
                 app,
               })
             }
