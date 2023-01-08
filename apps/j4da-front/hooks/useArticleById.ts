@@ -24,6 +24,12 @@ export const useArticleById = (
       dispatch(articleByIdService.actions.getArticleById(_id))
   }, [_id, articleByIdAvailable, dispatch, articleByIdFetching])
 
+  useEffect(() => {
+    return () => {
+      dispatch(articleByIdService.actions.reset())
+    }
+  }, [dispatch])
+
   return {
     articleById,
     articleByIdAvailable,

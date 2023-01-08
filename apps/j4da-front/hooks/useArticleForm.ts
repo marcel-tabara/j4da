@@ -33,6 +33,7 @@ export const useArticleForm = ({
   const { extractedKeywords, keywordsByArticleId } = useSelectors({
     articleId: article._id,
   })
+
   const [selectedKeywords, setSelectedKeywords] =
     useState<IKeyword[]>(keywordsByArticleId)
 
