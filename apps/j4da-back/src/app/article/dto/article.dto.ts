@@ -7,7 +7,7 @@ export class ArticleDTO {
   readonly keyOverride?: string
   readonly url: string
   readonly title: string
-  readonly images: ReadonlyArray<string>
+  readonly image: string
   readonly dateCreated: Date
   readonly datePublished: Date
   readonly dateModified?: Date

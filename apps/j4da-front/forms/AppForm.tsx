@@ -53,11 +53,11 @@ const AppForm = ({ appById }: IAppFormProps) => {
           />
         </div>
         <div className="form-group">
-          <h6>images</h6>
+          <h6>image</h6>
           <input
-            {...register('images')}
-            defaultValue={appById?.images}
-            className={`form-control ${errors.images ? 'is-invalid' : ''}`}
+            {...register('image')}
+            defaultValue={appById?.image}
+            className={`form-control ${errors.image ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">
@@ -72,7 +72,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           <h6>keywords</h6>
           <input
             {...register('keywords')}
-            defaultValue={appById?.keywords}
+            defaultValue={appById?.keywords.toString()}
             className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
           />
         </div>
@@ -126,7 +126,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
-            defaultValue={appById?.dateCreated}
+            defaultValue={appById?.dateCreated.toISOString()}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -134,7 +134,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           <h6>datePublished</h6>
           <input
             {...register('datePublished')}
-            defaultValue={appById?.datePublished}
+            defaultValue={appById?.datePublished.toISOString()}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
             }`}

@@ -16,7 +16,7 @@ export class App {
   @Prop()
   title: string
   @Prop()
-  images: [string]
+  image: string
   @Prop()
   section: string
   @Prop()

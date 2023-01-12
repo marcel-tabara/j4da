@@ -2,7 +2,7 @@ export class AppDTO {
   readonly keyOverride?: string
   readonly url: string
   readonly title: string
-  readonly images: ReadonlyArray<string>
+  readonly image: string
   readonly section: string
   readonly keywords: string
   readonly dateCreated: string

@@ -236,8 +236,8 @@ export class ArticleService {
       articlesByCatWithKeywordsPromise
     )
 
-    const cat = path.join(catPath, 'byCat.json')
-    const subcat = path.join(subCatPath, 'bySubCat.json')
+    const cat = path.join(catPath, 'all.json')
+    const subcat = path.join(subCatPath, 'all.json')
     !fs.existsSync(subCatPath) && fs.mkdirSync(subCatPath, { recursive: true })
     fs.writeFileSync(cat, JSON.stringify(articlesByCatWithKeywords, null, 2))
     const articlesBySubCat = articlesByCatWithKeywords.filter(
@@ -254,8 +254,8 @@ export class ArticleService {
       subcatSlug,
     })
 
-    const cat = path.join(catPath, 'byCat.json')
-    const subcat = path.join(subCatPath, 'bySubCat.json')
+    const cat = path.join(catPath, 'all.json')
+    const subcat = path.join(subCatPath, 'all.json')
     fs.existsSync(cat) && fs.unlinkSync(cat)
     fs.existsSync(subcat) && fs.unlinkSync(subcat)
 
@@ -313,42 +313,42 @@ export class ArticleService {
     return path.join(dirPath, cat, subcat, `${article.slug}.mdx`)
   }
 
-  // generate = async () => {
-  //   Logger.log(`ArticleService: Generate Article Files.`)
-  //   try {
-  //     const articles = await this.find({} as PaginationDto, {})
-  //     const appData = await this.appService.findById(articles[0].app)
-  //     const dirPath = path.join(
-  //       process.cwd(),
-  //       '/apps/j4da-front/public/contents/',
-  //       appData.slug
-  //     )
-  //     cleanDir(dirPath, true)
+  generate = async () => {
+    Logger.log(`ArticleService: Generate Article Files.`)
+    try {
+      const articles = await this.find({} as PaginationDto, {})
+      const appData = await this.appService.findById(articles[0].app)
+      const dirPath = path.join(
+        process.cwd(),
+        '/apps/j4da-front/public/contents/',
+        appData.slug
+      )
+      cleanDir(dirPath, true)
 
-  //     articles.map(async (a) => {
-  //       const keywordsPromise =
-  //         (await this.keywordService.find({ article: a._id })) || []
-  //       const keywords = await Promise.all(keywordsPromise)
-  //       generateArticlesFiles({
-  //         article: a,
-  //         catSlug: a.category.slug,
-  //         subcatSlug: a.subcategory.slug,
-  //         keywords,
-  //       })
-  //       this.generateCatSubcatFile({
-  //         app: a.app,
-  //         catSlug: a.category.slug,
-  //         catId: a.category._id,
-  //         subcatSlug: a.subcategory.slug,
-  //       })
-  //     })
+      articles.map(async (a) => {
+        const keywordsPromise =
+          (await this.keywordService.find({ article: a._id })) || []
+        const keywords = await Promise.all(keywordsPromise)
+        generateArticlesFiles({
+          article: a,
+          catSlug: a.category.slug,
+          subcatSlug: a.subcategory.slug,
+          keywords,
+        })
+        this.generateCatSubcatFile({
+          app: a.app,
+          catSlug: a.category.slug,
+          catId: a.category._id,
+          subcatSlug: a.subcategory.slug,
+        })
+      })
 
-  //     return ''
-  //   } catch (error) {
-  //     Logger.log(`ArticleService Error: `, error)
-  //     return error
-  //   }
-  // }
+      return ''
+    } catch (error) {
+      Logger.log(`ArticleService Error: `, error)
+      return error
+    }
+  }
 
   generateContentByApp = async (_id: string) => {
     Logger.log(`ArticleService: GenerateContentByApp.`)
@@ -401,7 +401,7 @@ export class ArticleService {
         generateCatSubcatFile({
           folderPath: catPath,
           articles: catArticles,
-          type: 'byCat.json',
+          type: 'all.json',
         })
 
         Object.entries(oSubcat).map((e) => {
@@ -411,7 +411,7 @@ export class ArticleService {
           generateCatSubcatFile({
             folderPath: subcatPath,
             articles: subcatArticles.map((e) => e._doc),
-            type: 'bySubCat.json',
+            type: 'all.json',
           })
 
           subcatArticles.map(

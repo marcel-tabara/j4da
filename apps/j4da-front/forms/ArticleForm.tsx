@@ -157,11 +157,11 @@ const ArticleForm = ({
           />
         </div>
         <div className="form-group">
-          <h6>images</h6>
+          <h6>image</h6>
           <input
-            {...register('images')}
-            defaultValue={article?.images}
-            className={`form-control ${errors.images ? 'is-invalid' : ''}`}
+            {...register('image')}
+            defaultValue={article?.image}
+            className={`form-control ${errors.image ? 'is-invalid' : ''}`}
           />
         </div>
         <div className="form-group">

@@ -37,7 +37,7 @@ category: ${catSlug}
 subcategory: ${subcatSlug}
 description: ${article?.description}
 date: ${article?.dateCreated}
-image: ${article?.images}
+image: ${article?.image}
 tags: ${keywords}
 slug: ${article?.slug}
 author1: ${article?.authorName}

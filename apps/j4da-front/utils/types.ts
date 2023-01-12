@@ -6,7 +6,7 @@ export interface IApp {
   keyOverride?: string
   url?: string
   title?: string
-  images?: string | string[]
+  image?: string
   section?: string
   keywords?: IKeyword[]
   dateCreated?: Date
@@ -38,7 +38,7 @@ export interface IArticle {
   keyOverride?: string
   url?: string
   title: string
-  images?: string | string[]
+  image?: string
   keywords?: IKeyword[]
   dateCreated?: Date
   datePublished?: Date
@@ -60,7 +60,7 @@ export interface IArticleSave {
   keyOverride?: string
   url?: string
   title: string
-  images?: string | string[]
+  image?: string
   keywords?: IKeyword[]
   dateCreated?: Date
   datePublished?: Date

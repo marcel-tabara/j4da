@@ -20,7 +20,7 @@ export class Article {
   @Prop()
   title: string
   @Prop()
-  images: [string]
+  image: string
   @Prop()
   dateCreated: Date
   @Prop()
