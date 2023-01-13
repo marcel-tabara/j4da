@@ -24,6 +24,12 @@ const getFilePath = ({ article, catSlug, subcatSlug, app }: IBaseFileProps) => {
   )
 }
 
+export const sanitizeText = (text: string) => {
+  return text
+    .replace(new RegExp(':', 'g'), '-')
+    .replace(new RegExp(/(\r\n?|\n|\t)/g), '-')
+}
+
 export const getBody = async ({
   article,
   catSlug,
@@ -35,7 +41,7 @@ export const getBody = async ({
 title: ${article?.title}
 category: ${catSlug}
 subcategory: ${subcatSlug}
-description: ${article?.description}
+description: ${sanitizeText(article?.description)}
 date: ${article?.dateCreated}
 image: ${article?.image}
 tags: ${keywords}

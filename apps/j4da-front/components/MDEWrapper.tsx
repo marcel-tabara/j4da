@@ -1,11 +1,14 @@
 import 'easymde/dist/easymde.min.css'
-import React from 'react'
-import SimpleMdeReact from 'react-simplemde-editor'
+import dynamic from 'next/dynamic'
+
+const SimpleMdeEditor = dynamic(() => import('react-simplemde-editor'), {
+  ssr: false,
+})
 
 const MDEWrapper = ({ value, onChange, onBlur }) => {
   return (
     <div>
-      <SimpleMdeReact value={value} onChange={onChange} onBlur={onBlur} />
+      <SimpleMdeEditor value={value} onChange={onChange} onBlur={onBlur} />
     </div>
   )
 }
