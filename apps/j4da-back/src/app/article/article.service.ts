@@ -440,4 +440,10 @@ export class ArticleService {
       return error.message
     }
   }
+
+  generateDataByApp = async (_id: string) => {
+    const app = await this.appService.findById(_id)
+    const cat = await this.categoryService.findById(_id)
+    const subcat = await this.subcategoryService.findById(_id)
+  }
 }

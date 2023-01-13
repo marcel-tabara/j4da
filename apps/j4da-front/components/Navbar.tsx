@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
@@ -7,28 +6,28 @@ const NavBar = () => {
   return (
     <Navbar>
       <Nav variant="pills">
-        <Link href="/" as="/" passHref>
-          <Nav.Link>Home</Nav.Link>
-        </Link>
-        <Link href="/apps" as="/apps" passHref>
-          <Nav.Link>Apps</Nav.Link>
-        </Link>
+        <Nav.Item>
+          <Nav.Link href="/">Home</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link href="/apps">Apps</Nav.Link>
+        </Nav.Item>
 
-        <Link href="/articles" as="/articles" passHref>
-          <Nav.Link>Articles</Nav.Link>
-        </Link>
+        <Nav.Item>
+          <Nav.Link href="/articles">Articles</Nav.Link>
+        </Nav.Item>
 
-        <Link href="/keywords" as="/keywords" passHref>
-          <Nav.Link>Keywords</Nav.Link>
-        </Link>
+        <Nav.Item>
+          <Nav.Link href="/keywords">Keywords</Nav.Link>
+        </Nav.Item>
 
-        <Link href="/categories" as="/categories" passHref>
-          <Nav.Link>Categories</Nav.Link>
-        </Link>
+        <Nav.Item>
+          <Nav.Link href="/categories">Categories</Nav.Link>
+        </Nav.Item>
 
-        <Link href="/subcategories" as="/subcategories" passHref>
-          <Nav.Link>Subcategories</Nav.Link>
-        </Link>
+        <Nav.Item>
+          <Nav.Link href="/subcategories">Subcategories</Nav.Link>
+        </Nav.Item>
       </Nav>
     </Navbar>
   )

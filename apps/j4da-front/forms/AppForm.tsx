@@ -19,8 +19,19 @@ const AppForm = ({ appById }: IAppFormProps) => {
   } = useForm<IApp>()
   const onSubmit = handleSubmit((data) => {
     appById._id
-      ? dispatch(appService.actions.updateApp({ ...data, _id: appById._id }))
-      : dispatch(appService.actions.createApp(data))
+      ? dispatch(
+          appService.actions.updateApp({
+            ...data,
+            _id: appById._id,
+            dateModified: new Date().toISOString(),
+          })
+        )
+      : dispatch(
+          appService.actions.createApp({
+            ...data,
+            dateModified: new Date().toISOString(),
+          })
+        )
 
     router.replace('/apps')
   })
@@ -126,7 +137,7 @@ const AppForm = ({ appById }: IAppFormProps) => {
           <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
-            defaultValue={appById?.dateCreated.toISOString()}
+            defaultValue={appById?.dateCreated}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -134,19 +145,9 @@ const AppForm = ({ appById }: IAppFormProps) => {
           <h6>datePublished</h6>
           <input
             {...register('datePublished')}
-            defaultValue={appById?.datePublished.toISOString()}
+            defaultValue={appById?.datePublished}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
-            }`}
-          />
-        </div>
-        <div className="form-group">
-          <h6>dateModified</h6>
-          <input
-            {...register('dateModified')}
-            defaultValue={new Date().toISOString()}
-            className={`form-control ${
-              errors.dateModified ? 'is-invalid' : ''
             }`}
           />
         </div>

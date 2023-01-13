@@ -76,12 +76,14 @@ export const useArticleForm = ({
             ...data,
             _id: article?._id,
             keywords: selectedKeywords,
+            dateModified: new Date().toISOString(),
           })
         )
       : dispatch(
           articleService.actions.createArticle({
             ...data,
             keywords: selectedKeywords,
+            dateModified: new Date().toISOString(),
           })
         )
 

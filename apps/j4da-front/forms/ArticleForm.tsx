@@ -284,7 +284,7 @@ const ArticleForm = ({
           <h6>dateCreated</h6>
           <input
             {...register('dateCreated')}
-            defaultValue={article?.dateCreated.toString()}
+            defaultValue={article?.dateCreated}
             className={`form-control ${errors.dateCreated ? 'is-invalid' : ''}`}
           />
         </div>
@@ -292,19 +292,9 @@ const ArticleForm = ({
           <h6>datePublished</h6>
           <input
             {...register('datePublished')}
-            defaultValue={new Date().toISOString()}
+            defaultValue={article.datePublished}
             className={`form-control ${
               errors.datePublished ? 'is-invalid' : ''
-            }`}
-          />
-        </div>
-        <div className="form-group">
-          <h6>dateModified</h6>
-          <input
-            {...register('dateModified')}
-            defaultValue={new Date().toISOString()}
-            className={`form-control ${
-              errors.dateModified ? 'is-invalid' : ''
             }`}
           />
         </div>

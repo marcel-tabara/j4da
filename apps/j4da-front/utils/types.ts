@@ -9,9 +9,9 @@ export interface IApp {
   image?: string
   section?: string
   keywords?: IKeyword[]
-  dateCreated?: Date
-  datePublished?: Date
-  dateModified?: Date
+  dateCreated?: string
+  datePublished?: string
+  dateModified?: string
   authorName?: string
   description?: string
   body?: string
@@ -40,9 +40,9 @@ export interface IArticle {
   title: string
   image?: string
   keywords?: IKeyword[]
-  dateCreated?: Date
-  datePublished?: Date
-  dateModified?: Date
+  dateCreated?: string
+  datePublished?: string
+  dateModified?: string
   authorName?: string
   description?: string
   body?: string
