@@ -1,16 +1,15 @@
-import React from 'react'
 import { Spinner } from 'react-bootstrap'
 import { Categories } from '../components/Categories'
-import { useCategories } from '../hooks/useCategories'
+import { useSelectors } from '../hooks/useSelectors'
 import { Main } from '../templates/Main'
 
 const CategoriesList = () => {
-  const { categories, categoriesAvailable } = useCategories()
+  const { categories, categoriesAvailable, categoriesFetching } = useSelectors()
   const pagination = {}
 
   return (
     <Main>
-      {!categoriesAvailable ? (
+      {!categoriesAvailable || categoriesFetching ? (
         <Spinner animation="grow" />
       ) : (
         <Categories categories={categories} pagination={pagination} />

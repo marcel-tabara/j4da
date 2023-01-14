@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { categorySelectors, categoryService } from '../services'
+import { useDispatch } from 'react-redux'
+import { categoryService } from '../services'
 import { ICategory } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useCategories = (): {
   categories: ICategory[]
@@ -9,11 +10,7 @@ export const useCategories = (): {
   categoriesFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    data: categories,
-    available: categoriesAvailable,
-    fetching: categoriesFetching,
-  } = useSelector(categorySelectors.categoriesSelector)
+  const { categories, categoriesAvailable, categoriesFetching } = useSelectors()
 
   useEffect(() => {
     !categoriesAvailable &&

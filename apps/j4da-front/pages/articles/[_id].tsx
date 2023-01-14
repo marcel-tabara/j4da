@@ -1,12 +1,9 @@
 import { useRouter } from 'next/router'
-import React, { ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import { ArticleForm } from '../../forms/ArticleForm'
-import { useApps } from '../../hooks/useApps'
 import { useArticleById } from '../../hooks/useArticleById'
-import { useCategories } from '../../hooks/useCategories'
 import { useSelectors } from '../../hooks/useSelectors'
-import { useSubcategories } from '../../hooks/useSubcategories'
 import { Main } from '../../templates/Main'
 import { ICategory, ISubCategory } from '../../utils/types'
 
@@ -14,67 +11,68 @@ const ArticleById = () => {
   const {
     query: { _id },
   } = useRouter()
-  useCategories()
-  useSubcategories()
-  useApps()
   useArticleById(_id as string)
 
-  const { allApps, allCategories, allSubcategories, articleById } =
-    useSelectors()
+  const {
+    apps,
+    categories,
+    subcategories,
+    articleById,
+    articleByIdAvailable,
+    articleByIdFetching,
+  } = useSelectors()
 
   const getDefaultCats = () =>
     articleById?.app
-      ? allCategories.filter((cat) => cat.app._id === articleById.app._id)
+      ? categories.filter((cat) => cat.app._id === articleById.app._id)
       : []
 
-  const [categories, setCategories] = useState<ICategory[]>(getDefaultCats())
+  const [cats, setCats] = useState<ICategory[]>(getDefaultCats())
   const getSubCat = (cat: string) => {
-    return (allSubcategories || []).filter(
-      (subcat) => subcat.category._id === cat
-    )
+    return (subcategories || []).filter((subcat) => subcat.category._id === cat)
   }
 
-  const [subcategories, setSubcategories] = useState<ISubCategory[]>(
+  const [subcats, setSubcats] = useState<ISubCategory[]>(
     getSubCat(articleById?.category._id)
   )
 
   const onChangeCategory = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
-      const subcats = (allSubcategories || []).filter(
+      const filteredSubcats = (subcategories || []).filter(
         (subcategory: ISubCategory) =>
           subcategory.category._id === event.target.value
       )
-      setSubcategories(subcats ?? [])
+      setSubcats(filteredSubcats ?? [])
     },
-    [allSubcategories]
+    [subcategories]
   )
 
   const onChangeApp = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
-      const cats = allCategories.filter(
+      const filteredCats = categories.filter(
         (category: ICategory) => category.app._id === event.target.value
       )
 
-      setCategories(cats || [])
+      setCats(filteredCats || [])
       onChangeCategory({
         target: { value: '' },
       } as ChangeEvent<HTMLSelectElement>)
     },
-    [allCategories, onChangeCategory]
+    [categories, onChangeCategory]
   )
 
   return (
     <Main>
-      {!articleById ? (
+      {!articleByIdAvailable || articleByIdFetching ? (
         <Spinner animation="grow" />
       ) : (
         <ArticleForm
           onChangeCategory={onChangeCategory}
           onChangeApp={onChangeApp}
-          categories={categories}
-          subcategories={subcategories}
+          categories={cats}
+          subcategories={subcats}
           article={articleById}
-          allApps={allApps}
+          allApps={apps}
         />
       )}
     </Main>

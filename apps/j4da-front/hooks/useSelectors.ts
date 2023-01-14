@@ -26,20 +26,20 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
   } = useSelector(articleByIdSelectors.articleByIdSelector)
 
   const {
-    data: allArticles,
-    available: allArticlesAvailable,
-    fetching: allArticlesFetching,
+    data: articles,
+    available: articlesAvailable,
+    fetching: articlesFetching,
   } = useSelector(articleSelectors.articlesSelector)
 
   const {
-    data: allApps,
-    available: allAppsAvailable,
-    fetching: allAppsFetching,
+    data: apps,
+    available: appsAvailable,
+    fetching: appsFetching,
   } = useSelector(appSelectors.appsSelector)
   const {
-    data: appsById,
-    available: appsByIdAvailable,
-    fetching: appsByIdFetching,
+    data: appById,
+    available: appByIdAvailable,
+    fetching: appByIdFetching,
   } = useSelector(appByIdSelectors.appByIdSelector)
 
   const {
@@ -71,9 +71,9 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
   } = useSelector(categoryByIdSelectors.categoryByIdSelector)
 
   const {
-    data: allCategories,
-    available: allCategoriesAvailable,
-    fetching: allCategoriesFetching,
+    data: categories,
+    available: categoriesAvailable,
+    fetching: categoriesFetching,
   } = useSelector(categorySelectors.categoriesSelector)
 
   const {
@@ -83,31 +83,31 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
   } = useSelector(subcategoryByIdSelectors.subcategoryByIdSelector)
 
   const {
-    data: allSubcategories,
-    available: allSubcategoriesAvailable,
-    fetching: allSubcategoriesFetching,
+    data: subcategories,
+    available: subcategoriesAvailable,
+    fetching: subcategoriesFetching,
   } = useSelector(subcategorySelectors.subcategoriesSelector)
 
   const {
-    data: allAlerts,
-    available: allAlertsAvailable,
-    fetching: allAlertsFetching,
+    data: alerts,
+    available: alertsAvailable,
+    fetching: alertsFetching,
   } = useSelector(alertSelectors.alertsSelector)
 
   return {
-    allArticles,
-    allArticlesAvailable,
-    allArticlesFetching,
+    articles,
+    articlesAvailable,
+    articlesFetching,
     articleById,
     articleByIdAvailable,
     articleByIdFetching,
     //
-    allApps,
-    allAppsAvailable,
-    allAppsFetching,
-    appsById,
-    appsByIdAvailable,
-    appsByIdFetching,
+    apps,
+    appsAvailable,
+    appsFetching,
+    appById,
+    appByIdAvailable,
+    appByIdFetching,
     //
     keywords,
     keywordsAvailable,
@@ -117,23 +117,23 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
     keywordByIdFetching,
     keywordsByArticleId,
     //
-    allCategories,
-    allCategoriesAvailable,
-    allCategoriesFetching,
+    categories,
+    categoriesAvailable,
+    categoriesFetching,
     categoryById,
     categoryByIdAvailable,
     categoryByIdFetching,
     //
-    allSubcategories,
-    allSubcategoriesAvailable,
-    allSubcategoriesFetching,
+    subcategories,
+    subcategoriesAvailable,
+    subcategoriesFetching,
     subcategoryById,
     subcategoryByIdAvailable,
     subcategoryByIdFetching,
     //
-    allAlerts,
-    allAlertsAvailable,
-    allAlertsFetching,
+    alerts,
+    alertsAvailable,
+    alertsFetching,
     //
     extractedKeywords,
     extractedKeywordsAvailable,

@@ -34,9 +34,6 @@ export const useArticleForm = ({
     articleId: article._id,
   })
 
-  const [selectedKeywords, setSelectedKeywords] =
-    useState<IKeyword[]>(keywordsByArticleId)
-
   useEffect(() => {
     Boolean(article?.app?._id) &&
       onChangeApp({
@@ -69,6 +66,9 @@ export const useArticleForm = ({
     setValue('slug', slugify(event.target.value))
   }
 
+  const [selectedKeywords, setSelectedKeywords] =
+    useState<IKeyword[]>(keywordsByArticleId)
+
   const onSubmit = handleSubmit((data: IArticle) => {
     article?._id
       ? dispatch(
@@ -86,7 +86,6 @@ export const useArticleForm = ({
             dateModified: new Date().toISOString(),
           })
         )
-
     router.replace('/articles')
   })
   const onBodyChange = useCallback(

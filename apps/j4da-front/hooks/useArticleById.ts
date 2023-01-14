@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { articleByIdSelectors, articleByIdService } from '../services'
+import { useDispatch } from 'react-redux'
+import { articleByIdService } from '../services'
 import { IArticle } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useArticleById = (
   _id: string
@@ -11,11 +12,8 @@ export const useArticleById = (
   articleByIdFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    data: articleById,
-    available: articleByIdAvailable,
-    fetching: articleByIdFetching,
-  } = useSelector(articleByIdSelectors.articleByIdSelector)
+  const { articleById, articleByIdAvailable, articleByIdFetching } =
+    useSelectors()
 
   useEffect(() => {
     _id &&

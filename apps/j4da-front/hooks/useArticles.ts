@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { articleSelectors, articleService } from '../services'
+import { useDispatch } from 'react-redux'
+import { articleService } from '../services'
 import { IArticles } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useArticles = (): {
   articles: IArticles
@@ -9,11 +10,7 @@ export const useArticles = (): {
   articlesFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    data: articles,
-    available: articlesAvailable,
-    fetching: articlesFetching,
-  } = useSelector(articleSelectors.articlesSelector)
+  const { articles, articlesAvailable, articlesFetching } = useSelectors()
 
   useEffect(() => {
     !articlesAvailable &&

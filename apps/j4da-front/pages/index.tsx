@@ -1,14 +1,11 @@
-import React from 'react'
 import { useDispatch } from 'react-redux'
-import { useApps } from '../hooks/useApps'
-import { useKeywords } from '../hooks/useKeywords'
+import { useSelectors } from '../hooks/useSelectors'
 import { articleService } from '../services'
 import { Main } from '../templates/Main'
 
 const Index = () => {
   const dispatch = useDispatch()
-  const appsData = useApps()
-  useKeywords()
+  const { apps } = useSelectors()
 
   const onGenerate = (event) => {
     event.preventDefault()
@@ -17,7 +14,7 @@ const Index = () => {
   return (
     <Main>
       <ul>
-        {(appsData?.apps ?? []).map((app) => (
+        {(apps ?? []).map((app) => (
           <li key={app._id} onClick={onGenerate}>
             <a href="" id={app._id}>
               Generate {app.slug}

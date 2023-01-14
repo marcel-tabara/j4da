@@ -8,8 +8,10 @@ export const keywordsSelector = createSelector(keywords, (items) => items)
 export const keywordsByArticleSelector = createSelector(
   keywords,
   (items) => (id: string) => {
-    return (items.data || []).filter(
-      (e: { article: { [x: string]: string } }) => e.article['_id'] === id
-    )
+    return id
+      ? (items.data || []).filter((e: { article: { [x: string]: string } }) => {
+          return e.article['_id'] === id
+        })
+      : items.data
   }
 )

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
-import { alertSelectors } from '../services'
+import { useSelectors } from '../hooks/useSelectors'
 
 const AlertWrapper = () => {
   const [show, setShow] = useState(false)
-  const alerts = useSelector(alertSelectors.alertsSelector)
+  const { alerts } = useSelectors()
+  const onClose = () => setShow(false)
+
   useEffect(() => {
     setShow(!alerts.length ? false : true)
-  }, [alerts])
-  const onClose = () => setShow(false)
+  }, [alerts.length])
+
   return (
     <>
       {show && (

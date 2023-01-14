@@ -4,27 +4,27 @@ import Container from 'react-bootstrap/Container'
 const NavBar = () => {
   return (
     <Container fluid>
-      <Link href="/" className="nav-bar">
+      <Link href="/" as="/" className="nav-bar">
         Home
       </Link>
 
-      <Link href="/apps" className="nav-bar">
+      <Link href="/apps" as="/apps" className="nav-bar">
         Apps
       </Link>
 
-      <Link href="/articles" className="nav-bar">
+      <Link href="/articles" as="/articles" className="nav-bar">
         Articles
       </Link>
 
-      <Link href="/keywords" className="nav-bar">
+      <Link href="/keywords" as="/keywords" className="nav-bar">
         Keywords
       </Link>
 
-      <Link href="/categories" className="nav-bar">
+      <Link href="/categories" as="/categories" className="nav-bar">
         Categories
       </Link>
 
-      <Link href="/subcategories" className="nav-bar">
+      <Link href="/subcategories" as="/subcategories" className="nav-bar">
         Subcategories
       </Link>
     </Container>

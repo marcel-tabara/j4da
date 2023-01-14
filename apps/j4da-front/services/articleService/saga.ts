@@ -1,5 +1,5 @@
 import { put, takeLatest } from 'redux-saga/effects'
-import { alertService, articleService } from '../'
+import { alertService, articleService, keywordService } from '../'
 import { IArticle, IArticles, TaskAction } from '../../utils/types'
 import { http } from '../utils/http'
 
@@ -16,6 +16,7 @@ export function* watchCreateArticle({ payload }: TaskAction<IArticle>) {
   try {
     yield http.post<IArticle>(`/articles/add`, payload)
     yield put(articleService.actions.reset())
+    yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
   }
@@ -25,6 +26,7 @@ export function* watchUpdateArticle({ payload }: TaskAction<IArticle>) {
   try {
     yield http.put<IArticle>(`/articles/${payload._id}/update`, payload)
     yield put(articleService.actions.reset())
+    yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
   }
@@ -34,6 +36,7 @@ export function* watchDeleteArticle({ payload }: TaskAction<string>) {
   try {
     yield http.delete<string>(`/articles/${payload}/delete`)
     yield put(articleService.actions.reset())
+    yield put(keywordService.actions.reset())
   } catch (error) {
     yield put(alertService.actions.success(error.message))
   }

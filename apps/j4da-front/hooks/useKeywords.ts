@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { keywordSelectors, keywordService } from '../services'
+import { useDispatch } from 'react-redux'
+import { keywordService } from '../services'
 import { IKeyword } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useKeywords = (): {
   keywords: IKeyword[]
@@ -9,11 +10,7 @@ export const useKeywords = (): {
   keywordsFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    data: keywords,
-    available: keywordsAvailable,
-    fetching: keywordsFetching,
-  } = useSelector(keywordSelectors.keywordsSelector)
+  const { keywords, keywordsAvailable, keywordsFetching } = useSelectors()
 
   useEffect(() => {
     !keywordsAvailable &&

@@ -1,15 +1,14 @@
-import React from 'react'
 import { Spinner } from 'react-bootstrap'
 import { Apps } from '../components/Apps'
-import { useApps } from '../hooks/useApps'
+import { useSelectors } from '../hooks/useSelectors'
 import { Main } from '../templates/Main'
 
 const AppsList = () => {
-  const { apps, appsAvailable } = useApps()
+  const { apps, appsAvailable, appsFetching } = useSelectors({})
   const pagination = {}
   return (
     <Main>
-      {!appsAvailable ? (
+      {!appsAvailable || appsFetching ? (
         <Spinner animation="grow" />
       ) : (
         <Apps apps={apps} pagination={pagination} />

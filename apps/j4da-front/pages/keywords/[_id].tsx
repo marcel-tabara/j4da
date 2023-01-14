@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import React from 'react'
 import { Spinner } from 'react-bootstrap'
 import { KeywordForm } from '../../forms/KeywordForm'
 import { useKeywordById } from '../../hooks/useKeywordById'
@@ -9,10 +8,11 @@ const Keyword = () => {
   const {
     query: { _id },
   } = useRouter()
-  const { keywordById, keywordByIdAvailable } = useKeywordById(_id as string)
+  const { keywordById, keywordByIdAvailable, keywordByIdFetching } =
+    useKeywordById(_id as string)
   return (
     <Main>
-      {!keywordByIdAvailable ? (
+      {!keywordByIdAvailable || keywordByIdFetching ? (
         <Spinner animation="grow" />
       ) : (
         <KeywordForm keywordById={keywordById} />

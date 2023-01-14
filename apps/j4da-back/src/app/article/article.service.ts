@@ -96,35 +96,35 @@ export class ArticleService {
     )
     const newArticle = await new this.articleModel(articleDTO).save()
 
-    await this.keywordService.insertMany({
-      _id: newArticle._id,
-      keywords: articleDTO.keywords,
-    })
+    // await this.keywordService.insertMany({
+    //   _id: newArticle._id,
+    //   keywords: articleDTO.keywords,
+    // })
 
-    const article = await this.articleModel.findById(newArticle._id)
-    const app = await this.appService.findById(newArticle.app._id)
+    // const article = await this.articleModel.findById(newArticle._id)
+    // const app = await this.appService.findById(newArticle.app._id)
 
-    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
-      article: articleDTO,
-    })
-    await generateArticlesFiles({
-      article,
-      catSlug,
-      subcatSlug,
-      keywords: articleDTO.keywords,
-      app,
-    })
-    await this.removeCatSubcatFile({
-      app: articleDTO.app.toString(),
-      catSlug: catSlug,
-      subcatSlug: subcatSlug,
-    })
-    await this.generateCatSubcatFile({
-      app: articleDTO.app,
-      catSlug,
-      catId,
-      subcatSlug,
-    })
+    // const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+    //   article: articleDTO,
+    // })
+    // await generateArticlesFiles({
+    //   article,
+    //   catSlug,
+    //   subcatSlug,
+    //   keywords: articleDTO.keywords,
+    //   app,
+    // })
+    // await this.removeCatSubcatFile({
+    //   app: articleDTO.app.toString(),
+    //   catSlug: catSlug,
+    //   subcatSlug: subcatSlug,
+    // })
+    // await this.generateCatSubcatFile({
+    //   app: articleDTO.app,
+    //   catSlug,
+    //   catId,
+    //   subcatSlug,
+    // })
 
     return newArticle
   }
@@ -134,16 +134,16 @@ export class ArticleService {
     articleDTO: ArticleDTO
   ): Promise<Article> => {
     Logger.log(`ArticleService: findByIdAndUpdate ${_id}`)
-    const article = await this.articleModel.findById(_id)
+    // const article = await this.articleModel.findById(_id)
 
-    const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
-      await this.getCatSubcatSlug({
-        article,
-      })
-    const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
-      article: articleDTO,
-    })
-    const app = await this.appService.findById(article.app._id)
+    // const { catSlug: oldCatSlug, subcatSlug: oldSubcatSlug } =
+    //   await this.getCatSubcatSlug({
+    //     article,
+    //   })
+    // const { catSlug, catId, subcatSlug } = await this.getCatSubcatSlug({
+    //   article: articleDTO,
+    // })
+    // const app = await this.appService.findById(article.app._id)
 
     // update keywords
     await this.keywordService.remove({ article: _id })
@@ -153,38 +153,38 @@ export class ArticleService {
     })
 
     // update files
-    await this.removeCatSubcatFile({
-      app: article.app.toString(),
-      catSlug: oldCatSlug,
-      subcatSlug: oldSubcatSlug,
-    })
-    await this.removeArticleFile({
-      article,
-      catSlug: oldCatSlug,
-      subcatSlug: oldSubcatSlug,
-    })
-    await generateArticlesFiles({
-      article,
-      catSlug,
-      subcatSlug,
-      keywords: articleDTO.keywords,
-      app,
-    })
+    // await this.removeCatSubcatFile({
+    //   app: article.app.toString(),
+    //   catSlug: oldCatSlug,
+    //   subcatSlug: oldSubcatSlug,
+    // })
+    // await this.removeArticleFile({
+    //   article,
+    //   catSlug: oldCatSlug,
+    //   subcatSlug: oldSubcatSlug,
+    // })
+    // await generateArticlesFiles({
+    //   article,
+    //   catSlug,
+    //   subcatSlug,
+    //   keywords: articleDTO.keywords,
+    //   app,
+    // })
 
-    await this.generateCatSubcatFile({
-      app: articleDTO.app,
-      catSlug,
-      catId,
-      subcatSlug,
-    })
-    if (articleDTO._id !== article._id) {
-      await this.generateCatSubcatFile({
-        app: article.app,
-        catSlug: oldCatSlug,
-        catId,
-        subcatSlug: oldSubcatSlug,
-      })
-    }
+    // await this.generateCatSubcatFile({
+    //   app: articleDTO.app,
+    //   catSlug,
+    //   catId,
+    //   subcatSlug,
+    // })
+    // if (articleDTO._id !== article._id) {
+    //   await this.generateCatSubcatFile({
+    //     app: article.app,
+    //     catSlug: oldCatSlug,
+    //     catId,
+    //     subcatSlug: oldSubcatSlug,
+    //   })
+    // }
 
     return await this.articleModel.findByIdAndUpdate(_id, articleDTO, {
       new: true,
@@ -193,15 +193,15 @@ export class ArticleService {
 
   findByIdAndRemove = async (_id): Promise<Article> => {
     Logger.log(`ArticleService: findByIdAndRemove ${_id}`)
-    const article = await this.articleModel.findById(_id)
-    const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
-    await this.removeCatSubcatFile({
-      app: article.app,
-      catSlug,
-      subcatSlug,
-    })
+    // const article = await this.articleModel.findById(_id)
+    // const { catSlug, subcatSlug } = await this.getCatSubcatSlug({ article })
+    // await this.removeCatSubcatFile({
+    //   app: article.app,
+    //   catSlug,
+    //   subcatSlug,
+    // })
     await this.keywordService.remove({ article: _id })
-    await this.removeArticleFile({ article, catSlug, subcatSlug })
+    // await this.removeArticleFile({ article, catSlug, subcatSlug })
 
     return await this.articleModel.findByIdAndRemove(_id)
   }

@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { appSelectors, appService } from '../services'
+import { useDispatch } from 'react-redux'
+import { appService } from '../services'
 import { IApp } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useApps = (): {
   apps: IApp[]
@@ -9,19 +10,15 @@ export const useApps = (): {
   appsFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    available: appsAvailable,
-    fetching: appsFetching,
-    data: apps,
-  } = useSelector(appSelectors.appsSelector)
+  const { apps, appsAvailable, appsFetching } = useSelectors({})
 
   useEffect(() => {
     !appsAvailable && !appsFetching && dispatch(appService.actions.getApps())
   }, [appsAvailable, dispatch, appsFetching])
 
   return {
-    apps,
-    appsAvailable,
-    appsFetching,
+    apps: apps,
+    appsAvailable: appsAvailable,
+    appsFetching: appsFetching,
   }
 }

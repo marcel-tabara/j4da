@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { appByIdSelectors, appByIdService } from '../services'
+import { useDispatch } from 'react-redux'
+import { appByIdService } from '../services'
 import { IApp } from '../utils/types'
+import { useSelectors } from './useSelectors'
 
 export const useAppById = (
   _id: string
@@ -11,11 +12,7 @@ export const useAppById = (
   appByIdFetching: boolean
 } => {
   const dispatch = useDispatch()
-  const {
-    data: appById,
-    available: appByIdAvailable,
-    fetching: appByIdFetching,
-  } = useSelector(appByIdSelectors.appByIdSelector)
+  const { appById, appByIdAvailable, appByIdFetching } = useSelectors()
 
   useEffect(() => {
     _id &&

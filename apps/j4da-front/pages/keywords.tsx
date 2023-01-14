@@ -1,16 +1,15 @@
-import React from 'react'
 import { Spinner } from 'react-bootstrap'
 import { Keywords } from '../components/Keywords'
-import { useKeywords } from '../hooks/useKeywords'
+import { useSelectors } from '../hooks/useSelectors'
 import { Main } from '../templates/Main'
 
 const KeywordsList = () => {
-  const { keywords, keywordsAvailable } = useKeywords()
+  const { keywords, keywordsAvailable, keywordsFetching } = useSelectors()
   const pagination = {}
 
   return (
     <Main>
-      {!keywordsAvailable ? (
+      {!keywordsAvailable || keywordsFetching ? (
         <Spinner animation="grow" />
       ) : (
         <Keywords keywords={keywords} pagination={pagination} />
