@@ -1,47 +1,33 @@
 import Link from 'next/link'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
 
 const NavBar = () => {
   return (
-    <Navbar>
-      <Nav variant="pills">
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/">Home</Link>
-          </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/apps">Apps</Link>
-          </Nav.Link>
-        </Nav.Item>
+    <Container fluid>
+      <Link href="/" className="nav-bar">
+        Home
+      </Link>
 
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/articles">Articles</Link>
-          </Nav.Link>
-        </Nav.Item>
+      <Link href="/apps" className="nav-bar">
+        Apps
+      </Link>
 
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/keywords">Keywords</Link>
-          </Nav.Link>
-        </Nav.Item>
+      <Link href="/articles" className="nav-bar">
+        Articles
+      </Link>
 
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/categories">Categories</Link>
-          </Nav.Link>
-        </Nav.Item>
+      <Link href="/keywords" className="nav-bar">
+        Keywords
+      </Link>
 
-        <Nav.Item>
-          <Nav.Link>
-            <Link href="/subcategories">Subcategories</Link>
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
-    </Navbar>
+      <Link href="/categories" className="nav-bar">
+        Categories
+      </Link>
+
+      <Link href="/subcategories" className="nav-bar">
+        Subcategories
+      </Link>
+    </Container>
   )
 }
 
