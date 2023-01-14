@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 import { Controller, useForm } from 'react-hook-form'
 import { MDEWrapper } from '../components/MDEWrapper'

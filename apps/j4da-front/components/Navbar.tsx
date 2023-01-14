@@ -1,4 +1,4 @@
-import React from 'react'
+import Link from 'next/link'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
@@ -7,26 +7,38 @@ const NavBar = () => {
     <Navbar>
       <Nav variant="pills">
         <Nav.Item>
-          <Nav.Link href="/">Home</Nav.Link>
+          <Nav.Link>
+            <Link href="/">Home</Link>
+          </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href="/apps">Apps</Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link href="/articles">Articles</Nav.Link>
-        </Nav.Item>
-
-        <Nav.Item>
-          <Nav.Link href="/keywords">Keywords</Nav.Link>
+          <Nav.Link>
+            <Link href="/apps">Apps</Link>
+          </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link href="/categories">Categories</Nav.Link>
+          <Nav.Link>
+            <Link href="/articles">Articles</Link>
+          </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link href="/subcategories">Subcategories</Nav.Link>
+          <Nav.Link>
+            <Link href="/keywords">Keywords</Link>
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item>
+          <Nav.Link>
+            <Link href="/categories">Categories</Link>
+          </Nav.Link>
+        </Nav.Item>
+
+        <Nav.Item>
+          <Nav.Link>
+            <Link href="/subcategories">Subcategories</Link>
+          </Nav.Link>
         </Nav.Item>
       </Nav>
     </Navbar>
