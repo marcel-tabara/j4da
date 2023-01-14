@@ -58,6 +58,16 @@ export class ArticleService {
       .exec()
   }
 
+  findAll = async (query): Promise<Article[]> => {
+    Logger.log(
+      `ArticleService: Find all articles ${JSON.stringify(query, null, 2)}`
+    )
+    return await this.articleModel
+      .find(query)
+      .sort({ datePublished: 'descending' })
+      .exec()
+  }
+
   findById = async (_id): Promise<Article> => {
     Logger.log(`ArticleService: findById ${_id}`)
     return await this.articleModel
@@ -351,30 +361,40 @@ export class ArticleService {
   }
 
   generateDataByApp = async (_id: string) => {
-    const app = await this.appService.findById(_id)
-    const cats = await this.categoryService.find({ app: _id })
+    Logger.log(`ArticleService: generateDataByApp.`)
+    try {
+      const app = await this.appService.findById(_id)
+      const cats = await this.categoryService.find({ app: _id })
+      const articles = await this.findAll({ app: _id })
+      const articleCats = articles.map((a) => a.category.toString())
 
-    const dirPath = path.join(
-      process.cwd(),
-      '/apps/j4da-front/public/contents/',
-      app.slug
-    )
-    const data = {
-      app,
-      cats,
+      const dirPath = path.join(
+        process.cwd(),
+        '/apps/j4da-front/public/contents/',
+        app.slug
+      )
+
+      const catsWithArticles = cats.filter((c) => articleCats.includes(c.id))
+      const data = {
+        app,
+        cats: catsWithArticles,
+      }
+
+      !fs.existsSync(dirPath) && fs.mkdirSync(dirPath, { recursive: true })
+      fs.writeFileSync(
+        path.join(dirPath, 'data.json'),
+        JSON.stringify(data, null, 2)
+      )
+    } catch (error) {
+      Logger.log(`ArticleService generateDataByApp Error: `, error)
     }
-    !fs.existsSync(dirPath) && fs.mkdirSync(dirPath, { recursive: true })
-    fs.writeFileSync(
-      path.join(dirPath, 'data.json'),
-      JSON.stringify(data, null, 2)
-    )
   }
 
   generateContentByApp = async (_id: string) => {
-    Logger.log(`ArticleService: GenerateContentByApp.`)
+    Logger.log(`ArticleService: generateContentByApp.`)
     try {
       const app = await this.appService.findById(_id)
-      const articles = await this.find({} as PaginationDto, { app: _id })
+      const articles = await this.findAll({ app: _id })
       const articleIds = articles.map((a) => a._id)
       const allKeywords = await this.keywordService.find({
         article: { $in: articleIds },
