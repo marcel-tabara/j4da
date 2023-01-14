@@ -350,6 +350,26 @@ export class ArticleService {
     }
   }
 
+  generateDataByApp = async (_id: string) => {
+    const app = await this.appService.findById(_id)
+    const cats = await this.categoryService.find({ app: _id })
+
+    const dirPath = path.join(
+      process.cwd(),
+      '/apps/j4da-front/public/contents/',
+      app.slug
+    )
+    const data = {
+      app,
+      cats,
+    }
+    !fs.existsSync(dirPath) && fs.mkdirSync(dirPath, { recursive: true })
+    fs.writeFileSync(
+      path.join(dirPath, 'data.json'),
+      JSON.stringify(data, null, 2)
+    )
+  }
+
   generateContentByApp = async (_id: string) => {
     Logger.log(`ArticleService: GenerateContentByApp.`)
     try {
@@ -366,6 +386,8 @@ export class ArticleService {
         app.slug
       )
       cleanDir(dirPath)
+
+      this.generateDataByApp(app.id)
 
       generateCatSubcatFile({
         folderPath: dirPath,
@@ -439,11 +461,5 @@ export class ArticleService {
       Logger.log(`ArticleService Error: `, error)
       return error.message
     }
-  }
-
-  generateDataByApp = async (_id: string) => {
-    const app = await this.appService.findById(_id)
-    const cat = await this.categoryService.findById(_id)
-    const subcat = await this.subcategoryService.findById(_id)
   }
 }
