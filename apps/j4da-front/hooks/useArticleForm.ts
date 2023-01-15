@@ -75,14 +75,14 @@ export const useArticleForm = ({
           articleService.actions.updateArticle({
             ...data,
             _id: article?._id,
-            keywords: selectedKeywords,
+            //keywords: selectedKeywords,
             dateModified: new Date().toISOString(),
           })
         )
       : dispatch(
           articleService.actions.createArticle({
             ...data,
-            keywords: selectedKeywords,
+            //keywords: selectedKeywords,
             dateModified: new Date().toISOString(),
           })
         )
@@ -99,7 +99,9 @@ export const useArticleForm = ({
   )
   const onAddKeyword = useCallback(
     (event) => {
-      const find = extractedKeywords.find((e) => e.title === event.target.id)
+      const find = extractedKeywords.find(
+        (e) => e.title === event.target?.id || e.title === event.target?.value
+      )
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
     },

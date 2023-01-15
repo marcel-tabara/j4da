@@ -187,21 +187,22 @@ const ArticleForm = ({
             <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                  Total Keywords: {extractedKeywords.length}
+                  Total Extracted Keywords: {extractedKeywords.length}
                 </Accordion.Header>
                 <Accordion.Body className="accordion-box">
                   <div className="container">
                     {extractedKeywords.map((e, idx) => {
+                      const existing = selectedKeywords
+                        .map((e) => e.title)
+                        .includes(e.title)
                       return (
                         <li
                           key={e.title + '_' + idx}
                           id={e.title}
-                          onClick={onAddKeyword}
+                          onClick={!existing ? onAddKeyword : undefined}
                         >
                           {e.title} <b>{e?.article?.url}</b> {e?.article?._id}
-                          {selectedKeywords
-                            .map((e) => e.title)
-                            .includes(e.title) && <b> existing</b>}
+                          {existing && <b> existing</b>}
                         </li>
                       )
                     })}
@@ -239,6 +240,18 @@ const ArticleForm = ({
                           .includes(e.title) && <b> non existing</b>}
                       </li>
                     ))}
+                  </div>
+                  <div className="form-group">
+                    <input
+                      {...register('keywords')}
+                      defaultValue={selectedKeywords.map((e) => e.title)}
+                      onBlur={(e) => {
+                        onAddKeyword(e.target.value)
+                      }}
+                      className={`form-control ${
+                        errors.keywords ? 'is-invalid' : ''
+                      }`}
+                    />
                   </div>
                 </Accordion.Body>
               </Accordion.Item>

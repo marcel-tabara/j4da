@@ -95,14 +95,16 @@ export class KeywordService {
         2
       )}.`
     )
-    const updatedKeywords = keywords.map((e) => {
-      return {
-        ...e,
-        article: _id,
-        articleLink: e.article,
-        _id: undefined,
-      }
-    })
+
+    const updatedKeywords = keywords
+    // .map((e) => {
+    //   return {
+    //     ...e,
+    //     article: _id,
+    //     articleLink: e.article,
+    //     _id: undefined,
+    //   }
+    // })
 
     return await this.keywordModel.insertMany(updatedKeywords, {
       ordered: false,
