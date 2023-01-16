@@ -28,7 +28,7 @@ export class KeywordService {
         return {
           title: e,
           article: _id || undefined,
-          articleLink: undefined,
+          //articleLink: undefined,
         }
       })
       .filter((e) => !keys.includes(e.title))
@@ -96,15 +96,14 @@ export class KeywordService {
       )}.`
     )
 
-    const updatedKeywords = keywords
-    // .map((e) => {
-    //   return {
-    //     ...e,
-    //     article: _id,
-    //     articleLink: e.article,
-    //     _id: undefined,
-    //   }
-    // })
+    const updatedKeywords = keywords.map((e) => {
+      return {
+        ...e,
+        // article: _id,
+        // articleLink: e.article,
+        // _id: undefined,
+      }
+    })
 
     return await this.keywordModel.insertMany(updatedKeywords, {
       ordered: false,

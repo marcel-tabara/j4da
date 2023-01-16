@@ -75,14 +75,14 @@ export const useArticleForm = ({
           articleService.actions.updateArticle({
             ...data,
             _id: article?._id,
-            //keywords: selectedKeywords,
+            keywords: selectedKeywords,
             dateModified: new Date().toISOString(),
           })
         )
       : dispatch(
           articleService.actions.createArticle({
             ...data,
-            //keywords: selectedKeywords,
+            keywords: selectedKeywords,
             dateModified: new Date().toISOString(),
           })
         )
@@ -99,14 +99,32 @@ export const useArticleForm = ({
   )
   const onAddKeyword = useCallback(
     (event) => {
-      const find = extractedKeywords.find(
-        (e) => e.title === event.target?.id || e.title === event.target?.value
-      )
+      const find = extractedKeywords.find((e) => e.title === event.target?.id)
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
     },
     [extractedKeywords, selectedKeywords]
   )
+
+  const onAddKeywords = useCallback(
+    (event) => {
+      const keyws = event.target?.value.split(',')
+      const newKeywords = keyws.map((k: string) => {
+        return (
+          extractedKeywords.find((e) => e.title === k) || {
+            article: {
+              _id: article._id,
+              url: article.url,
+            },
+            title: k,
+          }
+        )
+      })
+      setSelectedKeywords(newKeywords)
+    },
+    [article._id, article.url, extractedKeywords]
+  )
+
   const onRemoveKeyword = useCallback(
     (event) => {
       const newSelectedKeywords = selectedKeywords.filter(
@@ -125,6 +143,7 @@ export const useArticleForm = ({
     onBodyChange,
     onChangeTitle,
     onAddKeyword,
+    onAddKeywords,
     onRemoveKeyword,
     extractedKeywords,
   }

@@ -41,6 +41,7 @@ const ArticleForm = ({
     onBodyChange,
     onChangeTitle,
     onAddKeyword,
+    onAddKeywords,
     onRemoveKeyword,
     selectedKeywords,
     extractedKeywords,
@@ -241,23 +242,21 @@ const ArticleForm = ({
                       </li>
                     ))}
                   </div>
-                  <div className="form-group">
-                    <input
-                      {...register('keywords')}
-                      defaultValue={selectedKeywords.map((e) => e.title)}
-                      onBlur={(e) => {
-                        onAddKeyword(e.target.value)
-                      }}
-                      className={`form-control ${
-                        errors.keywords ? 'is-invalid' : ''
-                      }`}
-                    />
-                  </div>
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
           </div>
         )}
+        <div className="form-group">
+          <input
+            {...(register('keywords'),
+            {
+              onBlur: (e) => onAddKeywords(e),
+            })}
+            defaultValue={selectedKeywords.map((e) => e.title)}
+            className={`form-control ${errors.keywords ? 'is-invalid' : ''}`}
+          />
+        </div>
         <div className="form-group">
           <h6>body mde</h6>
           <Controller

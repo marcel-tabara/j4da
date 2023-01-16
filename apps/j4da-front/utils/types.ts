@@ -21,13 +21,13 @@ export interface IApp {
 }
 
 export interface IKeyword {
-  _id: string
+  _id?: string
   title?: string
   article: {
     _id: string
     url: string
   }
-  articleLink: {
+  articleLink?: {
     _id: string
     url: string
   }

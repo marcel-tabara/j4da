@@ -8,8 +8,8 @@ const AlertWrapper = () => {
   const onClose = () => setShow(false)
 
   useEffect(() => {
-    setShow(!alerts.length ? false : true)
-  }, [alerts.length])
+    setShow(!alerts?.length ? false : true)
+  }, [alerts?.length])
 
   return (
     <>
