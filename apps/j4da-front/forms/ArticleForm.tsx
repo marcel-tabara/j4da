@@ -194,7 +194,7 @@ const ArticleForm = ({
                   <div className="container">
                     {extractedKeywords.map((e, idx) => {
                       const existing = selectedKeywords
-                        .map((e) => e.title)
+                        .map((s) => s.title)
                         .includes(e.title)
                       return (
                         <li

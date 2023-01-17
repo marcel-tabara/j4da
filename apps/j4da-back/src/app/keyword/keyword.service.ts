@@ -18,7 +18,7 @@ export class KeywordService {
 
     const keywords = await this.find({
       title: { $in: extractedKeywords },
-      article: { $ne: _id },
+      //article: { $ne: _id },
     })
 
     const keys = keywords.map((e) => e.title)
@@ -28,7 +28,7 @@ export class KeywordService {
         return {
           title: e,
           article: _id || undefined,
-          //articleLink: undefined,
+          articleLink: undefined,
         }
       })
       .filter((e) => !keys.includes(e.title))

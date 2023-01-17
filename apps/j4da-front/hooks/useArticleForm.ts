@@ -89,7 +89,7 @@ export const useArticleForm = ({
     router.replace('/articles')
   })
   const onBodyChange = useCallback(
-    async (e) => {
+    async (e: string) => {
       if (e) {
         setValue('body', e)
         extractKeywords(e)
@@ -128,7 +128,7 @@ export const useArticleForm = ({
       setSelectedKeywords(newKeywords)
       setValue(
         'keywords',
-        newKeywords.map((e) => e.title)
+        newKeywords.map((e: IKeyword) => e.title)
       )
     },
     [article._id, article.url, extractedKeywords, setValue]

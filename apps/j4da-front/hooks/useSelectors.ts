@@ -89,10 +89,10 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
   } = useSelector(subcategorySelectors.subcategoriesSelector)
 
   const {
-    data: alerts,
-    available: alertsAvailable,
-    fetching: alertsFetching,
-  } = useSelector(alertSelectors.alertsSelector)
+    data: alert,
+    available: alertAvailable,
+    fetching: alertFetching,
+  } = useSelector(alertSelectors.alertSelector)
 
   return {
     articles,
@@ -131,9 +131,9 @@ export const useSelectors = (props: IUseSelectorsProps = {}) => {
     subcategoryByIdAvailable,
     subcategoryByIdFetching,
     //
-    alerts,
-    alertsAvailable,
-    alertsFetching,
+    alert,
+    alertAvailable,
+    alertFetching,
     //
     extractedKeywords,
     extractedKeywordsAvailable,

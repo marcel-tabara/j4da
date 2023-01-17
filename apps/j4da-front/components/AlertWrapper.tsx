@@ -4,19 +4,19 @@ import { useSelectors } from '../hooks/useSelectors'
 
 const AlertWrapper = () => {
   const [show, setShow] = useState(false)
-  const { alerts } = useSelectors()
+  const { alert } = useSelectors()
   const onClose = () => setShow(false)
 
   useEffect(() => {
-    setShow(!alerts?.length ? false : true)
-  }, [alerts?.length])
+    setShow(!alert ? false : true)
+  }, [alert])
 
   return (
     <>
       {show && (
         <Alert variant="danger" onClose={onClose} dismissible>
           <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-          <p>alerts[0]</p>
+          <p>{alert}</p>
         </Alert>
       )}
     </>
