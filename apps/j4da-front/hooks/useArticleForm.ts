@@ -102,8 +102,9 @@ export const useArticleForm = ({
       const find = extractedKeywords.find((e) => e.title === event.target?.id)
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
+      setValue('keywords', newSelectedKeywords.map((e) => e.title).toString())
     },
-    [extractedKeywords, selectedKeywords]
+    [extractedKeywords, selectedKeywords, setValue]
   )
 
   const onAddKeywords = useCallback(
@@ -111,8 +112,12 @@ export const useArticleForm = ({
       const keyws = event.target?.value.split(',')
       const newKeywords = keyws.map((k: string) => {
         return (
-          extractedKeywords.find((e) => e.title === k) || {
+          (k.length > 0 && extractedKeywords.find((e) => e.title === k)) || {
             article: {
+              _id: article._id,
+              url: article.url,
+            },
+            articleLink: {
               _id: article._id,
               url: article.url,
             },
@@ -121,18 +126,23 @@ export const useArticleForm = ({
         )
       })
       setSelectedKeywords(newKeywords)
+      setValue(
+        'keywords',
+        newKeywords.map((e) => e.title)
+      )
     },
-    [article._id, article.url, extractedKeywords]
+    [article._id, article.url, extractedKeywords, setValue]
   )
 
   const onRemoveKeyword = useCallback(
     (event) => {
       const newSelectedKeywords = selectedKeywords.filter(
-        (e) => e.title !== event.target.id
+        (e) => e.title !== event.target?.id
       )
       setSelectedKeywords(newSelectedKeywords)
+      setValue('keywords', newSelectedKeywords.map((e) => e.title).toString())
     },
-    [selectedKeywords]
+    [selectedKeywords, setValue]
   )
 
   return {
