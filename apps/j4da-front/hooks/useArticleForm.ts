@@ -50,11 +50,12 @@ export const useArticleForm = ({
       dispatch(
         keywordExtractionService.actions.extractKeywords({
           _id: article._id,
+          url: article.url,
           text,
         })
       )
     },
-    [article._id, dispatch]
+    [article._id, article.url, dispatch]
   )
 
   useEffect(

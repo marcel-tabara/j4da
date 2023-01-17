@@ -15,7 +15,7 @@ const keywordExtractionService = createGenericSlice({
   reducers: {
     extractKeywords: (
       state,
-      action: PayloadAction<{ _id: string; text: string }>
+      action: PayloadAction<{ _id: string; url: string; text: string }>
     ) => {
       state.fetching = true
     },

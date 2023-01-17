@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 // import * as mongoose from 'mongoose'
-import { Model } from 'mongoose'
+import { FilterQuery, Model } from 'mongoose'
 import rake from 'rake-js'
 import { KeywordDTO } from './dto/keyword.dto'
 import { Keyword } from './interfaces/keyword.interface'
@@ -12,30 +12,46 @@ export class KeywordService {
     @InjectModel('Keyword') private readonly keywordModel: Model<Keyword>
   ) {}
 
-  extractKeywords = async ({ _id, text }): Promise<Keyword[]> => {
+  extractKeywords = async ({
+    _id,
+    url,
+    text,
+  }: {
+    _id: string
+    url: string
+    text: string
+  }): Promise<Keyword[]> => {
     Logger.log(`ArticleService: Extrating keywords. _id: ${_id}`)
     const extractedKeywords = rake(text, { language: 'english' })
 
     const keywords = await this.find({
       title: { $in: extractedKeywords },
-      //article: { $ne: _id },
+      article: { $ne: _id },
     })
 
     const keys = keywords.map((e) => e.title)
-
     const transformedExtractedKeywords = extractedKeywords
-      .map((e) => {
+      .filter((e: string) => !keys.includes(e))
+      .map((e: Keyword) => {
         return {
           title: e,
-          article: _id || undefined,
-          articleLink: undefined,
+          article: { _id, url },
+          articleLink: { _id, url },
         }
       })
-      .filter((e) => !keys.includes(e.title))
-    return keywords.concat(transformedExtractedKeywords)
+
+    const transformedKeywords = keywords.map((e) => {
+      return {
+        title: e.title,
+        article: { _id, url },
+        articleLink: { _id: e.articleLink._id, url: e.articleLink.url },
+      }
+    })
+
+    return transformedExtractedKeywords.concat(transformedKeywords)
   }
 
-  find = async (query): Promise<Keyword[]> => {
+  find = async (query: FilterQuery<Keyword>): Promise<Keyword[]> => {
     Logger.log(
       `KeywordService: Find keywords ${JSON.stringify(query, null, 2)}.`
     )
@@ -54,7 +70,7 @@ export class KeywordService {
       .exec()
   }
 
-  findById = async (_id): Promise<Keyword> => {
+  findById = async (_id: string): Promise<Keyword> => {
     Logger.log(`KeywordService: findById keyword ${_id}.`)
     return await this.keywordModel.findById(_id).exec()
   }
@@ -75,7 +91,7 @@ export class KeywordService {
     })
   }
 
-  findByIdAndRemove = async (_id): Promise<unknown> => {
+  findByIdAndRemove = async (_id: string): Promise<unknown> => {
     Logger.log(`KeywordService: findByIdAndRemove.`)
     return await this.keywordModel.findByIdAndRemove(_id)
   }
@@ -87,7 +103,13 @@ export class KeywordService {
     return await this.keywordModel.deleteMany(query).exec()
   }
 
-  insertMany = async ({ _id, keywords }): Promise<Keyword[]> => {
+  insertMany = async ({
+    _id,
+    keywords,
+  }: {
+    _id
+    keywords
+  }): Promise<Keyword[]> => {
     Logger.log(
       `KeywordService: insertMany keywords ${JSON.stringify(
         keywords,

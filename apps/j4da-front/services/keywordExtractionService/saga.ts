@@ -6,12 +6,17 @@ import { http } from '../utils/http'
 export function* watchExtractKeywords({
   type,
   payload,
-}: TaskAction<{ _id: string; text: string }>) {
+}: TaskAction<{ _id: string; url: string; text: string }>) {
   try {
-    const extractedKeywords = yield http.post<{ _id: string; text: string }>(
-      '/keywords/extractKeywords',
-      { _id: payload._id, text: payload.text }
-    )
+    const extractedKeywords = yield http.post<{
+      _id: string
+      url: string
+      text: string
+    }>('/keywords/extractKeywords', {
+      _id: payload._id,
+      url: payload.url,
+      text: payload.text,
+    })
     yield put(keywordExtractionService.actions.success(extractedKeywords.data))
   } catch (error) {
     yield put(alertService.actions.success(error.message))

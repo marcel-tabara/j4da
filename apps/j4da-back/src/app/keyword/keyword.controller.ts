@@ -93,10 +93,11 @@ export class KeywordController {
   @Post('/extractKeywords')
   async extractKeywords(
     @Res() res,
-    @Body() article: { _id: string; text: string }
+    @Body() article: { _id: string; url: string; text: string }
   ) {
     const extractedKeywords = await this.keywordService.extractKeywords({
       _id: article._id,
+      url: article.url,
       text: article.text,
     })
     return res.status(HttpStatus.OK).json(extractedKeywords)

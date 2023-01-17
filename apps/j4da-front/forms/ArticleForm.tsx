@@ -202,7 +202,15 @@ const ArticleForm = ({
                           id={e.title}
                           onClick={!existing ? onAddKeyword : undefined}
                         >
-                          {e.title} <b>{e?.article?.url}</b> {e?.article?._id}
+                          {e.title}{' '}
+                          <b>
+                            {e?.articleLink?.url !== e.article.url
+                              ? e?.articleLink?.url
+                              : ''}
+                          </b>{' '}
+                          {e?.articleLink?._id !== e?.article?._id
+                            ? e?.articleLink?._id
+                            : ''}
                           {existing && <b> existing</b>}
                         </li>
                       )
