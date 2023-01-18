@@ -104,6 +104,19 @@ export const useArticleForm = ({
       const newSelectedKeywords = [...selectedKeywords].concat(find)
       setSelectedKeywords(newSelectedKeywords)
       setValue('keywords', newSelectedKeywords.map((e) => e.title).toString())
+
+      // find.articleLink._id !== find.article._id &&
+      //   setBody((prev) => {
+      //     return prev
+      //       .toLowerCase()
+      //       .replace(find.title, `[${find.title}](${find.articleLink.url})`)
+      //   })
+      // setValue(
+      //   'body',
+      //   body
+      //     .toLowerCase()
+      //     .replace(find.title, `[${find.title}](${find.articleLink.url})`)
+      // )
     },
     [extractedKeywords, selectedKeywords, setValue]
   )
@@ -147,6 +160,7 @@ export const useArticleForm = ({
   )
 
   return {
+    extractedKeywords,
     selectedKeywords,
     setSelectedKeywords,
     extractKeywords,
@@ -156,6 +170,5 @@ export const useArticleForm = ({
     onAddKeyword,
     onAddKeywords,
     onRemoveKeyword,
-    extractedKeywords,
   }
 }

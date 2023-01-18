@@ -43,8 +43,8 @@ const ArticleForm = ({
     onAddKeyword,
     onAddKeywords,
     onRemoveKeyword,
-    selectedKeywords,
     extractedKeywords,
+    selectedKeywords,
   } = useArticleForm({
     article,
     onChangeApp,
