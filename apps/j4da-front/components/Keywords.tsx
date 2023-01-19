@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
 import * as Icon from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/Table'
 import { useDispatch } from 'react-redux'
@@ -26,6 +25,9 @@ const Keywords = ({ keywords }: IKeywordsProps) => {
         <thead>
           <tr>
             <th>Keywords</th>
+            <th>Article</th>
+            <th>External link</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +36,23 @@ const Keywords = ({ keywords }: IKeywordsProps) => {
               <td>
                 <Link href="/keywords/[_id]" as={`/keywords/${keyword._id}`}>
                   {keyword.title}
+                </Link>
+              </td>
+              <td>
+                <Link
+                  href="/articles/[_id]"
+                  as={`/articles/${keyword.articleLink._id}`}
+                >
+                  {keyword.article._id}
+                </Link>
+              </td>
+              <td>
+                <Link
+                  href="/articles/[_id]"
+                  as={`/articles/${keyword.articleLink._id}`}
+                >
+                  {keyword.article._id !== keyword.articleLink._id &&
+                    keyword.articleLink._id}
                 </Link>
               </td>
               <td align="right">
