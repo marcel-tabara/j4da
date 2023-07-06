@@ -1,0 +1,55 @@
+{
+  "name": "j4df",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/j4df",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "apps/j4df",
+        "outputPath": "dist/apps/j4df"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/j4df"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "j4df:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "j4df:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "j4df:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nrwl/next:export",
+      "options": {
+        "buildTarget": "j4df:build:production"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/j4df/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "j4da-back": "apps/j4da-back",
-    "j4da-front": "apps/j4da-front"
+    "j4da-front": "apps/j4da-front",
+    "j4df": "apps/j4df"
   }
 }
